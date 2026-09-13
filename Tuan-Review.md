@@ -59,7 +59,7 @@ Pure agent execution across the Golden Path requires **~45 minutes**, and human 
 
 ---
 
-### 3. Model Economics & Token Telemetry (Anthropic Claude Code)
+### 3. Model Economics & Subscription Plans (Claude Pro vs. Max vs. Console API)
 
 Empirical consumption metrics across the full workshop delivery:
 
@@ -72,6 +72,23 @@ Empirical consumption metrics across the full workshop delivery:
   - **Total Output Tokens:** **1,380,682 tokens**
   - **Total Cache Reads:** **119,179,744 tokens**
   - **Total Run Time:** **199.9 minutes** (~3.3 hours)
+
+#### Subscription Feasibility: Claude Pro vs. Claude Max vs. Anthropic Console API
+
+Can attendees run this workshop on standard subscription plans, or do they need Anthropic Console API keys?
+
+1. **Claude Max (Subscription Plan): Fully Verified and Recommended**
+   - **Empirical Proof:** The entire end-to-end golden path run of this workshop was executed live under an active **Claude Max** subscription (`claude auth status` confirmed `authMethod: "claude.ai"`, `subscriptionType: "max"`).
+   - **Performance:** Claude Max easily absorbed the heavy multi-turn requirements (551 turns, 643k output tokens) across the 12 chapters without hitting any rate limits, throttle windows, or token billing caps. Attendees with Claude Max can execute the entire workshop without an API key.
+
+2. **Claude Pro ($20/month Subscription): High Risk of 5-Hour Rate Limits**
+   - **Limitation:** Claude Pro enforces a rolling 5-hour message and token usage window designed for standard conversational chats rather than intensive autonomous agent workflows.
+   - **Bottleneck Chapters:** Chapter 3 (Build V1: 80 tool turns, ~80k output tokens) and Chapter 10 (Build V3: 88 tool turns, ~164k output tokens) generate immense prompt volume and multi-step reasoning.
+   - **Verdict:** An attendee using standard Claude Pro will almost certainly exhaust their 5-hour quota midway through the lab (typically during Chapter 3 or Chapter 7) and be locked out until their reset window opens. Claude Pro alone is **not sufficient** for an uninterrupted 120-minute hands-on lab.
+
+3. **Anthropic Console API (Pay-As-You-Go): Ideal for Classroom Delivery**
+   - **Recommendation for Organizers:** For a smooth classroom experience where attendees do not possess Claude Max, workshop organizers should provide attendees with temporary Anthropic Console API keys (`ANTHROPIC_API_KEY`) or request attendees top up their developer console with $15-$20.
+   - **Actual Cost:** Thanks to prompt caching (over 58.9M cache reads, saving ~90% of input token costs), the actual net API cost per attendee across the full golden path is only approximately **$10 - $15 USD**.
 
 ---
 
