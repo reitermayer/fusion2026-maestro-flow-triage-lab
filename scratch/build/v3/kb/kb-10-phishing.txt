@@ -1,0 +1,7 @@
+HomeFix Supply IT Helpdesk — Reporting Phishing and Suspicious Email
+
+Use the "Report Phish" button in Outlook (top ribbon). This quarantines the message, submits it to the security team, and warns other recipients automatically. Do not forward suspicious mail to colleagues.
+
+If you clicked a link or entered credentials before realizing: change your password immediately at reset.homefixsupply.com and call the security hotline at extension 7233. Speed matters more than embarrassment; there is no penalty for self-reporting.
+
+The security team never asks for your password by email, chat, or phone.

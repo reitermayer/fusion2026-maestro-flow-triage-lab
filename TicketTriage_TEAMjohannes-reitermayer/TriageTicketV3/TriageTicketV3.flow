@@ -1,0 +1,3582 @@
+{
+  "id": "b881ebdf-a7ab-4e0f-88f1-eb0767e75b3c",
+  "version": "1.9",
+  "name": "TriageTicketV3",
+  "nodes": [
+    {
+      "id": "start",
+      "type": "core.trigger.manual",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "Support ticket received",
+        "icon": "play"
+      },
+      "inputs": {
+        "entryPointId": "944938f5-e32f-470c-aba1-2f0547ceebc2",
+        "isDefaultEntryPoint": true
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Data passed when manually triggering the process.",
+          "source": "null",
+          "var": "output"
+        }
+      }
+    },
+    {
+      "id": "classifyAndDraft",
+      "type": "uipath.agent.autonomous",
+      "typeVersion": "1.4",
+      "display": {
+        "label": "Classify, Draft & Assess KB Coverage",
+        "icon": "autonomous-agent"
+      },
+      "inputs": {
+        "source": "bf42e911-6500-4286-918b-2644bbfd096c",
+        "agentInputVariables": [
+          {
+            "id": "start__output__ticketId",
+            "type": "string",
+            "binding": "=$vars.start.output.ticketId",
+            "description": "Bound from $vars.start.output.ticketId"
+          },
+          {
+            "id": "start__output__subject",
+            "type": "string",
+            "binding": "=$vars.start.output.subject",
+            "description": "Bound from $vars.start.output.subject"
+          },
+          {
+            "id": "start__output__body",
+            "type": "string",
+            "binding": "=$vars.start.output.body",
+            "description": "Bound from $vars.start.output.body"
+          },
+          {
+            "id": "start__output__customerName",
+            "type": "string",
+            "binding": "=$vars.start.output.customerName",
+            "description": "Bound from $vars.start.output.customerName"
+          }
+        ],
+        "agentOutputVariables": [
+          {
+            "id": "category",
+            "type": "string"
+          },
+          {
+            "id": "priority",
+            "type": "string"
+          },
+          {
+            "id": "draftReply",
+            "type": "string"
+          },
+          {
+            "id": "rationale",
+            "type": "string"
+          },
+          {
+            "id": "confidence",
+            "type": "number"
+          },
+          {
+            "id": "recommendedApproach",
+            "type": "string"
+          },
+          {
+            "id": "kbCovered",
+            "type": "boolean"
+          },
+          {
+            "id": "kbSources",
+            "type": "array"
+          },
+          {
+            "id": "kbGaps",
+            "type": "array"
+          },
+          {
+            "id": "needsStaffAction",
+            "type": "boolean"
+          }
+        ]
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Agent response",
+          "var": "output",
+          "properties": {
+            "category": {
+              "type": "string"
+            },
+            "priority": {
+              "type": "string"
+            },
+            "draftReply": {
+              "type": "string"
+            },
+            "rationale": {
+              "type": "string"
+            },
+            "confidence": {
+              "type": "number"
+            },
+            "recommendedApproach": {
+              "type": "string"
+            },
+            "kbCovered": {
+              "type": "boolean"
+            },
+            "kbSources": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "kbGaps": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "needsStaffAction": {
+              "type": "boolean"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error"
+        }
+      }
+    },
+    {
+      "id": "draftSupportKb",
+      "type": "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+      "typeVersion": "1.0.0",
+      "display": {
+        "label": "SupportKB",
+        "icon": "context"
+      },
+      "inputs": {
+        "source": "0061b46f-bb8e-4c6d-acad-ea79c828752f"
+      }
+    },
+    {
+      "id": "checkSafetyGate",
+      "type": "core.action.script",
+      "typeVersion": "1.1",
+      "display": {
+        "label": "Safety Gate (deterministic)",
+        "icon": "code"
+      },
+      "inputs": {
+        "script": "// Deterministic safety gate for TriageTicketV3 (runs right after classifyAndDraft).\n// The agent's kbCovered / kbSources / kbGaps are claims, not proof. A ticket only\n// becomes an auto-resolve candidate when every check below passes; anything\n// missing, malformed, or unexpected fails closed to human review. Candidates are\n// then re-checked by the independent verifyGrounding agent before anything is sent.\nconst out = $vars.classifyAndDraft.output || {};\n\n// The 14 SupportKB articles (bucket SupportKBDocs, Shared folder) as of 2026-09-13.\n// A citation outside this list blocks auto-resolve, so adding an article only\n// costs autonomy until this list is updated; it can never let a ticket through.\nconst KB_DOCS = [\n  'kb-01-password-reset', 'kb-02-vpn-setup', 'kb-03-expense-reports', 'kb-04-mfa-enrollment',\n  'kb-05-software-requests', 'kb-06-email-signature', 'kb-07-printers', 'kb-08-guest-wifi',\n  'kb-09-laptop-hardware', 'kb-10-phishing', 'kb-11-onboarding', 'kb-12-meeting-rooms',\n  'kb-13-hr-portal-access', 'kb-14-service-desk'\n];\nconst AUTO_CATEGORIES = ['access', 'hardware', 'software', 'network', 'billing', 'other'];\nconst AUTO_PRIORITIES = ['low', 'medium'];\nconst URGENT_PRIORITIES = ['critical', 'high', 'urgent'];\nconst NOISE_MIN_CONFIDENCE = 0.8;\nconst AUTO_MIN_CONFIDENCE = 0.85;\n// A reply that escalates, promises follow-up, or leaks internal tooling is not a\n// resolution, whatever the flags say. Matched case-insensitively on the draft.\nconst BLOCKED_DRAFT_PHRASES = [\n  'escalat', 'specialist', 'on-call', 'get back to you', 'follow up with you', 'look into',\n  'supportkb', 'knowledge base', 'helpdesk article', 'runbook', 'published article',\n  \"i don't have\", 'i do not have', \"we don't have\", 'we do not have',\n  'unable to confirm', 'cannot confirm', \"can't confirm\",\n  '[', ']', '{' + '{', '}' + '}', 'placeholder', 'tbd'  // braces split: the validator flags literal mustaches\n];\n\nconst text = v => (typeof v === 'string' ? v.trim() : '');\nconst lower = v => text(v).toLowerCase();\nconst strictTrue = v => v === true || lower(v) === 'true';\nconst strictFalse = v => v === false || lower(v) === 'false';\nconst toNumber = v => {\n  if (typeof v === 'number') return v;\n  const s = text(v);\n  return s !== '' && !isNaN(Number(s)) ? Number(s) : NaN;\n};\nconst toList = v => (Array.isArray(v) ? v.map(x => text(x)).filter(x => x.length > 0) : null);\n// Accepts \"kb-01-password-reset\", \"kb-01-password-reset.txt\", \"kb-01\" or a path;\n// anything else (a title, a URL, an invented article) is not a citation.\nconst canonicalDoc = s => {\n  const name = s.toLowerCase().split('/').pop().split('\\\\').pop().trim();\n  const i = name.indexOf('kb-');\n  if (i !== 0) return null;\n  const prefix = name.substring(0, 5);\n  const doc = KB_DOCS.find(d => d.startsWith(prefix)) || null;\n  const rest = name.replace('.txt', '');\n  return doc && (rest === prefix || rest === doc) ? doc : null;\n};\n\nconst category = lower(out.category);\nconst priority = lower(out.priority);\nconst confidence = toNumber(out.confidence);\nconst kbSources = toList(out.kbSources);\nconst kbGaps = toList(out.kbGaps);\nconst draft = text(out.draftReply);\nconst draftForMatching = draft.toLowerCase().split('’').join(\"'\");\nconst kbSourcesText = kbSources && kbSources.length ? kbSources.join(', ') : '(none)';\nconst kbGapsText = kbGaps === null ? '(not reported)' : (kbGaps.length ? kbGaps.join('; ') : '(none)');\n\nlet route;\nconst failures = [];\nif (category === 'noise' && confidence >= NOISE_MIN_CONFIDENCE) {\n  route = 'noise';\n} else if (URGENT_PRIORITIES.includes(priority)) {\n  route = 'urgent';\n  failures.push('priority is ' + (text(out.priority) || '(missing)') + '; urgent tickets always get a human');\n} else {\n  if (!AUTO_CATEGORIES.includes(category)) failures.push('category \"' + text(out.category) + '\" is not auto-resolvable');\n  if (!AUTO_PRIORITIES.includes(priority)) failures.push('priority \"' + text(out.priority) + '\" is not Low or Medium');\n  if (!(confidence >= AUTO_MIN_CONFIDENCE && confidence <= 1)) failures.push('confidence ' + (isNaN(confidence) ? '(missing)' : confidence) + ' is below ' + AUTO_MIN_CONFIDENCE);\n  if (!strictTrue(out.kbCovered)) failures.push('agent did not mark the ticket as fully covered by SupportKB (kbCovered=' + JSON.stringify(out.kbCovered) + ')');\n  if (kbGaps === null) failures.push('agent did not report kbGaps');\n  else if (kbGaps.length) failures.push('agent flagged KB gaps: ' + kbGapsText);\n  if (!strictFalse(out.needsStaffAction)) failures.push('resolution needs staff action (needsStaffAction=' + JSON.stringify(out.needsStaffAction) + ')');\n  if (kbSources === null || kbSources.length === 0) failures.push('no SupportKB sources cited');\n  else {\n    const unknown = kbSources.filter(s => canonicalDoc(s) === null);\n    if (unknown.length) failures.push('cited sources that are not SupportKB articles: ' + unknown.join(', '));\n  }\n  if (!draft) failures.push('draft reply is empty');\n  else {\n    const hits = BLOCKED_DRAFT_PHRASES.filter(p => draftForMatching.includes(p));\n    if (hits.length) failures.push('draft contains wording that is not a self-contained answer: ' + hits.map(h => '\"' + h + '\"').join(', '));\n  }\n  route = failures.length ? 'review' : 'verify';\n}\n\nconst citedKbDocs = (kbSources || []).map(canonicalDoc).filter(d => d !== null)\n  .filter((d, i, all) => all.indexOf(d) === i);\n\nreturn {\n  route: route,\n  autoResolveCandidate: route === 'verify',\n  gateFailures: failures,\n  gateSummary: route === 'noise' ? 'Auto-skipped: automated noise (confidence ' + confidence + ')'\n    : route === 'verify' ? 'Passed the deterministic gate; sent to the independent grounding check'\n    : 'Not auto-resolved: ' + failures.join(' | '),\n  kbCovered: strictTrue(out.kbCovered) && kbGaps !== null && kbGaps.length === 0,\n  kbSourcesText: kbSourcesText,\n  kbGapsText: kbGapsText,\n  citedKbDocs: citedKbDocs.join(', ')\n};\n"
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Route (noise, urgent, verify, review), gate failures, and KB citation summary",
+          "source": "=result.response",
+          "var": "output"
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error"
+        }
+      }
+    },
+    {
+      "id": "routeTicket",
+      "type": "core.logic.switch",
+      "typeVersion": "1.1",
+      "display": {
+        "label": "Route by gate result",
+        "icon": "between-horizontal-start"
+      },
+      "inputs": {
+        "cases": [
+          {
+            "id": "noise",
+            "label": "Noise: auto-skip",
+            "expression": "$vars.checkSafetyGate.output.route === 'noise'"
+          },
+          {
+            "id": "urgent",
+            "label": "Critical / High: urgent review",
+            "expression": "$vars.checkSafetyGate.output.route === 'urgent'"
+          },
+          {
+            "id": "verify",
+            "label": "KB-covered candidate: verify grounding",
+            "expression": "$vars.checkSafetyGate.output.route === 'verify' && $vars.checkSafetyGate.output.autoResolveCandidate === true"
+          }
+        ]
+      },
+      "outputs": {
+        "matchedCase": {
+          "type": "string",
+          "description": "The label of the matched case",
+          "var": "matchedCase"
+        },
+        "matchedCaseId": {
+          "type": "string",
+          "description": "The ID of the matched case (\"default\" for the default branch)",
+          "var": "matchedCaseId"
+        }
+      }
+    },
+    {
+      "id": "verifyGrounding",
+      "type": "uipath.agent.autonomous",
+      "typeVersion": "1.4",
+      "display": {
+        "label": "Verify Draft Against SupportKB",
+        "icon": "autonomous-agent"
+      },
+      "inputs": {
+        "source": "8f46a36b-9558-41a7-a053-a889f8c4de25",
+        "agentInputVariables": [
+          {
+            "id": "start__output__subject",
+            "type": "string",
+            "binding": "=$vars.start.output.subject",
+            "description": "Bound from $vars.start.output.subject"
+          },
+          {
+            "id": "start__output__body",
+            "type": "string",
+            "binding": "=$vars.start.output.body",
+            "description": "Bound from $vars.start.output.body"
+          },
+          {
+            "id": "classifyAndDraft__output__draftReply",
+            "type": "string",
+            "binding": "=$vars.classifyAndDraft.output.draftReply",
+            "description": "Bound from $vars.classifyAndDraft.output.draftReply"
+          },
+          {
+            "id": "checkSafetyGate__output__citedKbDocs",
+            "type": "string",
+            "binding": "=$vars.checkSafetyGate.output.citedKbDocs",
+            "description": "Bound from $vars.checkSafetyGate.output.citedKbDocs"
+          }
+        ],
+        "agentOutputVariables": [
+          {
+            "id": "draftGrounded",
+            "type": "boolean"
+          },
+          {
+            "id": "answersEveryQuestion",
+            "type": "boolean"
+          },
+          {
+            "id": "unsupportedClaims",
+            "type": "array"
+          },
+          {
+            "id": "unansweredQuestions",
+            "type": "array"
+          },
+          {
+            "id": "verdictNotes",
+            "type": "string"
+          }
+        ]
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Agent response",
+          "var": "output",
+          "properties": {
+            "draftGrounded": {
+              "type": "boolean"
+            },
+            "answersEveryQuestion": {
+              "type": "boolean"
+            },
+            "unsupportedClaims": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "unansweredQuestions": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "verdictNotes": {
+              "type": "string"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error"
+        }
+      }
+    },
+    {
+      "id": "verifySupportKb",
+      "type": "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+      "typeVersion": "1.0.0",
+      "display": {
+        "label": "SupportKB",
+        "icon": "context"
+      },
+      "inputs": {
+        "source": "b9feb5ee-91b1-4414-a9e4-39a1b2dba95c"
+      }
+    },
+    {
+      "id": "checkVerification",
+      "type": "core.action.script",
+      "typeVersion": "1.1",
+      "display": {
+        "label": "Grounding Check (deterministic)",
+        "icon": "code"
+      },
+      "inputs": {
+        "script": "// Second, independent check (runs only for gate candidates, after verifyGrounding).\n// The verifier did not write the draft; it re-searches SupportKB and must confirm\n// every claim and every customer question. Both lists must be reported and empty,\n// and both booleans strictly true, or the ticket goes to human review.\nconst v = $vars.verifyGrounding.output || {};\n\nconst text = x => (typeof x === 'string' ? x.trim() : '');\nconst strictTrue = x => x === true || text(x).toLowerCase() === 'true';\nconst toList = x => (Array.isArray(x) ? x.map(i => text(i)).filter(i => i.length > 0) : null);\n\nconst unsupported = toList(v.unsupportedClaims);\nconst unanswered = toList(v.unansweredQuestions);\nconst failures = [];\nif (!strictTrue(v.draftGrounded)) failures.push('verifier did not confirm the draft is grounded (draftGrounded=' + JSON.stringify(v.draftGrounded) + ')');\nif (!strictTrue(v.answersEveryQuestion)) failures.push('verifier did not confirm every question is answered (answersEveryQuestion=' + JSON.stringify(v.answersEveryQuestion) + ')');\nif (unsupported === null) failures.push('verifier did not report unsupportedClaims');\nelse if (unsupported.length) failures.push('claims not found in SupportKB: ' + unsupported.join('; '));\nif (unanswered === null) failures.push('verifier did not report unansweredQuestions');\nelse if (unanswered.length) failures.push('questions the draft does not answer: ' + unanswered.join('; '));\n\nreturn {\n  verified: failures.length === 0,\n  verificationFailures: failures,\n  verificationSummary: failures.length === 0\n    ? 'Auto-resolved: deterministic gate passed and independent verifier confirmed every claim against SupportKB. ' + text(v.verdictNotes)\n    : 'Grounding check failed: ' + failures.join(' | ') + (text(v.verdictNotes) ? ' | Verifier notes: ' + text(v.verdictNotes) : '')\n};\n"
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Whether the independent verifier confirmed the draft, with failure reasons",
+          "source": "=result.response",
+          "var": "output"
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error"
+        }
+      }
+    },
+    {
+      "id": "autoResolveDecision",
+      "type": "core.logic.switch",
+      "typeVersion": "1.1",
+      "display": {
+        "label": "Auto-resolve only if verified",
+        "icon": "between-horizontal-start"
+      },
+      "inputs": {
+        "cases": [
+          {
+            "id": "verified",
+            "label": "Verified: auto-resolve",
+            "expression": "$vars.checkVerification.output.verified === true"
+          }
+        ]
+      },
+      "outputs": {
+        "matchedCase": {
+          "type": "string",
+          "description": "The label of the matched case",
+          "var": "matchedCase"
+        },
+        "matchedCaseId": {
+          "type": "string",
+          "description": "The ID of the matched case (\"default\" for the default branch)",
+          "var": "matchedCaseId"
+        }
+      }
+    },
+    {
+      "id": "urgentReview",
+      "type": "uipath.human-in-the-loop.quick-form",
+      "typeVersion": "1.1",
+      "display": {
+        "label": "Urgent Review",
+        "icon": "users"
+      },
+      "inputs": {
+        "title": "URGENT: Review Draft Reply (Critical/High impact)",
+        "recipient": {
+          "channels": [
+            "ActionCenter"
+          ],
+          "connections": {},
+          "assignee": {
+            "type": "user",
+            "value": "johannes.reitermayer@gmail.com"
+          }
+        },
+        "priority": "High",
+        "schema": {
+          "schemaId": "78caf8dd-1b02-45a4-88dc-37a0e8df8246",
+          "fields": [
+            {
+              "id": "priority",
+              "label": "Priority",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.priority"
+            },
+            {
+              "id": "recommendedapproach",
+              "label": "Recommended Approach (for reviewer)",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.recommendedApproach"
+            },
+            {
+              "id": "ticketid",
+              "label": "Ticket ID",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.ticketId"
+            },
+            {
+              "id": "customername",
+              "label": "Customer Name",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.customerName"
+            },
+            {
+              "id": "subject",
+              "label": "Subject",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.subject"
+            },
+            {
+              "id": "body",
+              "label": "Ticket Body",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.body"
+            },
+            {
+              "id": "autonomygate",
+              "label": "Why this was not auto-resolved",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkSafetyGate.output.gateSummary"
+            },
+            {
+              "id": "category",
+              "label": "Category",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.category"
+            },
+            {
+              "id": "confidence",
+              "label": "Confidence",
+              "type": "number",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.confidence"
+            },
+            {
+              "id": "rationale",
+              "label": "Agent Rationale",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.rationale"
+            },
+            {
+              "id": "kbsources",
+              "label": "SupportKB Sources Cited",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkSafetyGate.output.kbSourcesText"
+            },
+            {
+              "id": "kbgaps",
+              "label": "KB Gaps Flagged by the Agent",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkSafetyGate.output.kbGapsText"
+            },
+            {
+              "id": "draftreply",
+              "label": "Draft Reply (sent to the customer; edit before Modify & Send)",
+              "type": "string",
+              "direction": "inOut",
+              "binding": "vars.classifyAndDraft.output.draftReply",
+              "variable": "vars.urgentDraftReply"
+            },
+            {
+              "id": "reviewernote",
+              "label": "Reviewer Note (internal, never sent to the customer)",
+              "type": "string",
+              "direction": "output",
+              "variable": "vars.urgentReviewerNote"
+            }
+          ],
+          "outcomes": [
+            {
+              "id": "approve",
+              "name": "Approve",
+              "type": "string",
+              "isPrimary": true,
+              "action": "Continue"
+            },
+            {
+              "id": "modifyandsend",
+              "name": "Modify & Send",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            },
+            {
+              "id": "reject",
+              "name": "Reject",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Task result data",
+          "source": "=result",
+          "var": "output",
+          "properties": {
+            "draftreply": {
+              "type": "string"
+            },
+            "reviewernote": {
+              "type": "string"
+            },
+            "Action": {
+              "type": "string",
+              "enum": [
+                "Approve",
+                "Modify & Send",
+                "Reject"
+              ],
+              "default": "Approve"
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Task completion status",
+          "source": "=result.Action",
+          "var": "status",
+          "enum": [
+            "Approve",
+            "Modify & Send",
+            "Reject"
+          ],
+          "default": "Approve"
+        }
+      }
+    },
+    {
+      "id": "standardReview",
+      "type": "uipath.human-in-the-loop.quick-form",
+      "typeVersion": "1.1",
+      "display": {
+        "label": "Standard Review",
+        "icon": "users"
+      },
+      "inputs": {
+        "title": "Review Draft Reply",
+        "recipient": {
+          "channels": [
+            "ActionCenter"
+          ],
+          "connections": {},
+          "assignee": {
+            "type": "user",
+            "value": "johannes.reitermayer@gmail.com"
+          }
+        },
+        "priority": "Medium",
+        "schema": {
+          "schemaId": "a0ff1606-e84f-4fe3-9e34-582c15489863",
+          "fields": [
+            {
+              "id": "autonomygate",
+              "label": "Why this was not auto-resolved",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkSafetyGate.output.gateSummary"
+            },
+            {
+              "id": "recommendedapproach",
+              "label": "Recommended Approach (for reviewer)",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.recommendedApproach"
+            },
+            {
+              "id": "ticketid",
+              "label": "Ticket ID",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.ticketId"
+            },
+            {
+              "id": "customername",
+              "label": "Customer Name",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.customerName"
+            },
+            {
+              "id": "subject",
+              "label": "Subject",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.subject"
+            },
+            {
+              "id": "body",
+              "label": "Ticket Body",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.body"
+            },
+            {
+              "id": "category",
+              "label": "Category",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.category"
+            },
+            {
+              "id": "priority",
+              "label": "Priority",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.priority"
+            },
+            {
+              "id": "confidence",
+              "label": "Confidence",
+              "type": "number",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.confidence"
+            },
+            {
+              "id": "rationale",
+              "label": "Agent Rationale",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.rationale"
+            },
+            {
+              "id": "kbsources",
+              "label": "SupportKB Sources Cited",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkSafetyGate.output.kbSourcesText"
+            },
+            {
+              "id": "kbgaps",
+              "label": "KB Gaps Flagged by the Agent",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkSafetyGate.output.kbGapsText"
+            },
+            {
+              "id": "draftreply",
+              "label": "Draft Reply (sent to the customer; edit before Modify & Send)",
+              "type": "string",
+              "direction": "inOut",
+              "binding": "vars.classifyAndDraft.output.draftReply",
+              "variable": "vars.standardDraftReply"
+            },
+            {
+              "id": "reviewernote",
+              "label": "Reviewer Note (internal, never sent to the customer)",
+              "type": "string",
+              "direction": "output",
+              "variable": "vars.standardReviewerNote"
+            }
+          ],
+          "outcomes": [
+            {
+              "id": "approve",
+              "name": "Approve",
+              "type": "string",
+              "isPrimary": true,
+              "action": "Continue"
+            },
+            {
+              "id": "modifyandsend",
+              "name": "Modify & Send",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            },
+            {
+              "id": "reject",
+              "name": "Reject",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Task result data",
+          "source": "=result",
+          "var": "output",
+          "properties": {
+            "draftreply": {
+              "type": "string"
+            },
+            "reviewernote": {
+              "type": "string"
+            },
+            "Action": {
+              "type": "string",
+              "enum": [
+                "Approve",
+                "Modify & Send",
+                "Reject"
+              ],
+              "default": "Approve"
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Task completion status",
+          "source": "=result.Action",
+          "var": "status",
+          "enum": [
+            "Approve",
+            "Modify & Send",
+            "Reject"
+          ],
+          "default": "Approve"
+        }
+      }
+    },
+    {
+      "id": "groundingReview",
+      "type": "uipath.human-in-the-loop.quick-form",
+      "typeVersion": "1.1",
+      "display": {
+        "label": "Grounding Review",
+        "icon": "users"
+      },
+      "inputs": {
+        "title": "Review Draft Reply (KB grounding check failed)",
+        "recipient": {
+          "channels": [
+            "ActionCenter"
+          ],
+          "connections": {},
+          "assignee": {
+            "type": "user",
+            "value": "johannes.reitermayer@gmail.com"
+          }
+        },
+        "priority": "Medium",
+        "schema": {
+          "schemaId": "4fe8d241-f922-4e9c-85fe-f920053a02ea",
+          "fields": [
+            {
+              "id": "autonomygate",
+              "label": "Why the grounding check blocked auto-resolve",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkVerification.output.verificationSummary"
+            },
+            {
+              "id": "recommendedapproach",
+              "label": "Recommended Approach (for reviewer)",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.recommendedApproach"
+            },
+            {
+              "id": "ticketid",
+              "label": "Ticket ID",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.ticketId"
+            },
+            {
+              "id": "customername",
+              "label": "Customer Name",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.customerName"
+            },
+            {
+              "id": "subject",
+              "label": "Subject",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.subject"
+            },
+            {
+              "id": "body",
+              "label": "Ticket Body",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.body"
+            },
+            {
+              "id": "category",
+              "label": "Category",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.category"
+            },
+            {
+              "id": "priority",
+              "label": "Priority",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.priority"
+            },
+            {
+              "id": "confidence",
+              "label": "Confidence",
+              "type": "number",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.confidence"
+            },
+            {
+              "id": "rationale",
+              "label": "Agent Rationale",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.classifyAndDraft.output.rationale"
+            },
+            {
+              "id": "kbsources",
+              "label": "SupportKB Sources Cited",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkSafetyGate.output.kbSourcesText"
+            },
+            {
+              "id": "kbgaps",
+              "label": "KB Gaps Flagged by the Agent",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.checkSafetyGate.output.kbGapsText"
+            },
+            {
+              "id": "draftreply",
+              "label": "Draft Reply (sent to the customer; edit before Modify & Send)",
+              "type": "string",
+              "direction": "inOut",
+              "binding": "vars.classifyAndDraft.output.draftReply",
+              "variable": "vars.groundingDraftReply"
+            },
+            {
+              "id": "reviewernote",
+              "label": "Reviewer Note (internal, never sent to the customer)",
+              "type": "string",
+              "direction": "output",
+              "variable": "vars.groundingReviewerNote"
+            }
+          ],
+          "outcomes": [
+            {
+              "id": "approve",
+              "name": "Approve",
+              "type": "string",
+              "isPrimary": true,
+              "action": "Continue"
+            },
+            {
+              "id": "modifyandsend",
+              "name": "Modify & Send",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            },
+            {
+              "id": "reject",
+              "name": "Reject",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Task result data",
+          "source": "=result",
+          "var": "output",
+          "properties": {
+            "draftreply": {
+              "type": "string"
+            },
+            "reviewernote": {
+              "type": "string"
+            },
+            "Action": {
+              "type": "string",
+              "enum": [
+                "Approve",
+                "Modify & Send",
+                "Reject"
+              ],
+              "default": "Approve"
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Task completion status",
+          "source": "=result.Action",
+          "var": "status",
+          "enum": [
+            "Approve",
+            "Modify & Send",
+            "Reject"
+          ],
+          "default": "Approve"
+        }
+      }
+    },
+    {
+      "id": "autoSkipped",
+      "type": "core.control.end",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "Auto-Skipped (noise)",
+        "icon": "circle-check"
+      },
+      "inputs": {},
+      "outputs": {
+        "decision": {
+          "type": "string",
+          "source": "=js:\"AutoSkipped\""
+        },
+        "finalReply": {
+          "type": "string",
+          "source": "=js:\"None - Auto-reply noise filtered\""
+        },
+        "category": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.category"
+        },
+        "priority": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.priority"
+        },
+        "recommendedApproach": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.recommendedApproach"
+        },
+        "reviewerNote": {
+          "type": "string",
+          "source": "=js:\"\""
+        },
+        "kbCovered": {
+          "type": "boolean",
+          "source": "=js:$vars.checkSafetyGate.output.kbCovered === true"
+        },
+        "kbSources": {
+          "type": "string",
+          "source": "=js:$vars.checkSafetyGate.output.kbSourcesText"
+        },
+        "autonomyGate": {
+          "type": "string",
+          "source": "=js:$vars.checkSafetyGate.output.gateSummary"
+        }
+      }
+    },
+    {
+      "id": "autoResolved",
+      "type": "core.control.end",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "Auto-Resolved (KB-verified)",
+        "icon": "circle-check"
+      },
+      "inputs": {},
+      "outputs": {
+        "decision": {
+          "type": "string",
+          "source": "=js:\"AutoResolved\""
+        },
+        "finalReply": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.draftReply"
+        },
+        "category": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.category"
+        },
+        "priority": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.priority"
+        },
+        "recommendedApproach": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.recommendedApproach"
+        },
+        "reviewerNote": {
+          "type": "string",
+          "source": "=js:\"\""
+        },
+        "kbCovered": {
+          "type": "boolean",
+          "source": "=js:$vars.checkSafetyGate.output.kbCovered === true"
+        },
+        "kbSources": {
+          "type": "string",
+          "source": "=js:$vars.checkSafetyGate.output.kbSourcesText"
+        },
+        "autonomyGate": {
+          "type": "string",
+          "source": "=js:$vars.checkVerification.output.verificationSummary"
+        }
+      }
+    },
+    {
+      "id": "urgentReviewed",
+      "type": "core.control.end",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "Urgent Review Recorded",
+        "icon": "circle-check"
+      },
+      "inputs": {},
+      "outputs": {
+        "decision": {
+          "type": "string",
+          "source": "=js:$vars.urgentReview.status"
+        },
+        "finalReply": {
+          "type": "string",
+          "source": "=js:$vars.urgentReview.status === 'Reject' ? '' : ($vars.urgentReview.output.draftreply || '')"
+        },
+        "category": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.category"
+        },
+        "priority": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.priority"
+        },
+        "recommendedApproach": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.recommendedApproach"
+        },
+        "reviewerNote": {
+          "type": "string",
+          "source": "=js:$vars.urgentReview.output.reviewernote || ''"
+        },
+        "kbCovered": {
+          "type": "boolean",
+          "source": "=js:$vars.checkSafetyGate.output.kbCovered === true"
+        },
+        "kbSources": {
+          "type": "string",
+          "source": "=js:$vars.checkSafetyGate.output.kbSourcesText"
+        },
+        "autonomyGate": {
+          "type": "string",
+          "source": "=js:$vars.checkSafetyGate.output.gateSummary"
+        }
+      }
+    },
+    {
+      "id": "standardReviewed",
+      "type": "core.control.end",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "Standard Review Recorded",
+        "icon": "circle-check"
+      },
+      "inputs": {},
+      "outputs": {
+        "decision": {
+          "type": "string",
+          "source": "=js:$vars.standardReview.status"
+        },
+        "finalReply": {
+          "type": "string",
+          "source": "=js:$vars.standardReview.status === 'Reject' ? '' : ($vars.standardReview.output.draftreply || '')"
+        },
+        "category": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.category"
+        },
+        "priority": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.priority"
+        },
+        "recommendedApproach": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.recommendedApproach"
+        },
+        "reviewerNote": {
+          "type": "string",
+          "source": "=js:$vars.standardReview.output.reviewernote || ''"
+        },
+        "kbCovered": {
+          "type": "boolean",
+          "source": "=js:$vars.checkSafetyGate.output.kbCovered === true"
+        },
+        "kbSources": {
+          "type": "string",
+          "source": "=js:$vars.checkSafetyGate.output.kbSourcesText"
+        },
+        "autonomyGate": {
+          "type": "string",
+          "source": "=js:$vars.checkSafetyGate.output.gateSummary"
+        }
+      }
+    },
+    {
+      "id": "groundingReviewed",
+      "type": "core.control.end",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "Grounding Review Recorded",
+        "icon": "circle-check"
+      },
+      "inputs": {},
+      "outputs": {
+        "decision": {
+          "type": "string",
+          "source": "=js:$vars.groundingReview.status"
+        },
+        "finalReply": {
+          "type": "string",
+          "source": "=js:$vars.groundingReview.status === 'Reject' ? '' : ($vars.groundingReview.output.draftreply || '')"
+        },
+        "category": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.category"
+        },
+        "priority": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.priority"
+        },
+        "recommendedApproach": {
+          "type": "string",
+          "source": "=js:$vars.classifyAndDraft.output.recommendedApproach"
+        },
+        "reviewerNote": {
+          "type": "string",
+          "source": "=js:$vars.groundingReview.output.reviewernote || ''"
+        },
+        "kbCovered": {
+          "type": "boolean",
+          "source": "=js:$vars.checkSafetyGate.output.kbCovered === true"
+        },
+        "kbSources": {
+          "type": "string",
+          "source": "=js:$vars.checkSafetyGate.output.kbSourcesText"
+        },
+        "autonomyGate": {
+          "type": "string",
+          "source": "=js:$vars.checkVerification.output.verificationSummary"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_start_output_classifyAndDraft_input",
+      "sourceNodeId": "start",
+      "sourcePort": "output",
+      "targetNodeId": "classifyAndDraft",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_classifyAndDraft_context_draftSupportKb_input",
+      "sourceNodeId": "classifyAndDraft",
+      "sourcePort": "context",
+      "targetNodeId": "draftSupportKb",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_classifyAndDraft_success_checkSafetyGate_input",
+      "sourceNodeId": "classifyAndDraft",
+      "sourcePort": "success",
+      "targetNodeId": "checkSafetyGate",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_checkSafetyGate_success_routeTicket_input",
+      "sourceNodeId": "checkSafetyGate",
+      "sourcePort": "success",
+      "targetNodeId": "routeTicket",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_routeTicket_caseNoise_autoSkipped_input",
+      "sourceNodeId": "routeTicket",
+      "sourcePort": "case-noise",
+      "targetNodeId": "autoSkipped",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_routeTicket_caseUrgent_urgentReview_input",
+      "sourceNodeId": "routeTicket",
+      "sourcePort": "case-urgent",
+      "targetNodeId": "urgentReview",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_routeTicket_caseVerify_verifyGrounding_input",
+      "sourceNodeId": "routeTicket",
+      "sourcePort": "case-verify",
+      "targetNodeId": "verifyGrounding",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_routeTicket_default_standardReview_input",
+      "sourceNodeId": "routeTicket",
+      "sourcePort": "default",
+      "targetNodeId": "standardReview",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_verifyGrounding_context_verifySupportKb_input",
+      "sourceNodeId": "verifyGrounding",
+      "sourcePort": "context",
+      "targetNodeId": "verifySupportKb",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_verifyGrounding_success_checkVerification_input",
+      "sourceNodeId": "verifyGrounding",
+      "sourcePort": "success",
+      "targetNodeId": "checkVerification",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_checkVerification_success_autoResolveDecision_input",
+      "sourceNodeId": "checkVerification",
+      "sourcePort": "success",
+      "targetNodeId": "autoResolveDecision",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_autoResolveDecision_caseVerified_autoResolved_input",
+      "sourceNodeId": "autoResolveDecision",
+      "sourcePort": "case-verified",
+      "targetNodeId": "autoResolved",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_autoResolveDecision_default_groundingReview_input",
+      "sourceNodeId": "autoResolveDecision",
+      "sourcePort": "default",
+      "targetNodeId": "groundingReview",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_urgentReview_outcomeApprove_urgentReviewed_input",
+      "sourceNodeId": "urgentReview",
+      "sourcePort": "outcome-approve",
+      "targetNodeId": "urgentReviewed",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_urgentReview_outcomeModifyandsend_urgentReviewed_input",
+      "sourceNodeId": "urgentReview",
+      "sourcePort": "outcome-modifyandsend",
+      "targetNodeId": "urgentReviewed",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_urgentReview_outcomeReject_urgentReviewed_input",
+      "sourceNodeId": "urgentReview",
+      "sourcePort": "outcome-reject",
+      "targetNodeId": "urgentReviewed",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_standardReview_outcomeApprove_standardReviewed_input",
+      "sourceNodeId": "standardReview",
+      "sourcePort": "outcome-approve",
+      "targetNodeId": "standardReviewed",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_standardReview_outcomeModifyandsend_standardReviewed_input",
+      "sourceNodeId": "standardReview",
+      "sourcePort": "outcome-modifyandsend",
+      "targetNodeId": "standardReviewed",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_standardReview_outcomeReject_standardReviewed_input",
+      "sourceNodeId": "standardReview",
+      "sourcePort": "outcome-reject",
+      "targetNodeId": "standardReviewed",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_groundingReview_outcomeApprove_groundingReviewed_input",
+      "sourceNodeId": "groundingReview",
+      "sourcePort": "outcome-approve",
+      "targetNodeId": "groundingReviewed",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_groundingReview_outcomeModifyandsend_groundingReviewed_input",
+      "sourceNodeId": "groundingReview",
+      "sourcePort": "outcome-modifyandsend",
+      "targetNodeId": "groundingReviewed",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_groundingReview_outcomeReject_groundingReviewed_input",
+      "sourceNodeId": "groundingReview",
+      "sourcePort": "outcome-reject",
+      "targetNodeId": "groundingReviewed",
+      "targetPort": "input"
+    }
+  ],
+  "definitions": [
+    {
+      "nodeType": "core.trigger.manual",
+      "version": "1.0",
+      "category": "trigger",
+      "description": "Start the process manually",
+      "tags": [
+        "trigger",
+        "start",
+        "manual"
+      ],
+      "sortOrder": 80,
+      "display": {
+        "label": "Manual trigger",
+        "icon": "play",
+        "shape": "circle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "output",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              }
+            }
+          ],
+          "visible": true
+        }
+      ],
+      "model": {
+        "type": "bpmn:StartEvent",
+        "entryPointId": true
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "Data passed when manually triggering the process.",
+          "source": "null",
+          "var": "output"
+        }
+      },
+      "toolbarExtensions": {
+        "design": {
+          "actions": [
+            {
+              "id": "change-trigger-type",
+              "icon": "square-mouse-pointer",
+              "label": "Change trigger type"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "nodeType": "uipath.agent.autonomous",
+      "version": "1.4",
+      "category": "agent",
+      "description": "AI agent that completes tasks autonomously",
+      "tags": [
+        "agentic",
+        "ai",
+        "autonomous",
+        "agent"
+      ],
+      "sortOrder": 10,
+      "supportsErrorHandling": true,
+      "display": {
+        "label": "Autonomous agent",
+        "icon": "autonomous-agent",
+        "shape": "rectangle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "top",
+          "handles": [
+            {
+              "id": "escalation",
+              "type": "source",
+              "handleType": "artifact",
+              "label": "Escalations",
+              "showButton": true,
+              "constraints": {
+                "allowedTargets": [
+                  {
+                    "nodeType": "uipath.agent.resource.escalation"
+                  },
+                  {
+                    "nodeType": "uipath.agent.resource.escalation.*"
+                  }
+                ],
+                "validationMessage": "Only Agent Escalation nodes can connect here",
+                "addNodePanel": {
+                  "searchScope": "deep",
+                  "searchProviders": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "position": "bottom",
+          "handles": [
+            {
+              "id": "context",
+              "type": "source",
+              "handleType": "artifact",
+              "label": "Context",
+              "showButton": true,
+              "constraints": {
+                "allowedTargets": [
+                  {
+                    "nodeType": "uipath.agent.resource.context.*"
+                  }
+                ],
+                "validationMessage": "Only Context resource nodes can connect here",
+                "addNodePanel": {
+                  "searchScope": "deep",
+                  "searchProviders": [],
+                  "refreshOnFocus": "context",
+                  "createNewActions": [
+                    {
+                      "label": "Create new Context",
+                      "icon": "plus",
+                      "description": "Opens in a new tab",
+                      "urlTemplate": "/{org}/agents_/indexes/add",
+                      "categoryId": "agent"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "tool",
+              "type": "source",
+              "handleType": "artifact",
+              "label": "Tools",
+              "showButton": true,
+              "constraints": {
+                "allowedTargets": [
+                  {
+                    "nodeType": "uipath.agent.resource.tool.*"
+                  }
+                ],
+                "validationMessage": "Only Tool resource nodes can connect here",
+                "addNodePanel": {
+                  "searchScope": "deep",
+                  "searchProviders": [],
+                  "refreshOnFocus": "mcp",
+                  "createNewActions": [
+                    {
+                      "label": "Create new MCP server",
+                      "icon": "plus",
+                      "urlTemplate": "/{org}/{tenant}/orchestrator_/mcp",
+                      "categoryId": "agent.tool.mcp"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ]
+        },
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "success",
+              "type": "source",
+              "handleType": "output",
+              "isDefaultForType": true
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "type": "source",
+              "handleType": "output",
+              "visible": "{inputs.errorHandlingEnabled}",
+              "constraints": {
+                "maxConnections": 1
+              }
+            }
+          ]
+        }
+      ],
+      "form": {
+        "id": "settings-form",
+        "title": "Agent settings",
+        "metadata": {
+          "propertyPanel": {
+            "sectionTabs": {
+              "section-advanced": "advanced"
+            }
+          }
+        },
+        "mode": "onChange",
+        "reValidateMode": "onChange",
+        "sections": [
+          {
+            "id": "section-1",
+            "title": "Agent settings",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.mode",
+                "type": "custom",
+                "component": "agent-harness-picker",
+                "label": ""
+              },
+              {
+                "name": "inputs.model",
+                "type": "custom",
+                "component": "agent-model-picker",
+                "label": "Model",
+                "componentProps": {
+                  "placeholder": "gpt-4o-2024-11-20"
+                }
+              },
+              {
+                "name": "inputs.systemPrompt",
+                "type": "custom",
+                "component": "prompt-editor",
+                "label": "System prompt",
+                "componentProps": {
+                  "multiline": true,
+                  "minRows": 4,
+                  "maxRows": 20,
+                  "placeholder": "Enter the system prompt"
+                }
+              },
+              {
+                "name": "inputs.userPrompt",
+                "type": "custom",
+                "component": "prompt-editor",
+                "label": "User prompt",
+                "componentProps": {
+                  "multiline": true,
+                  "minRows": 3,
+                  "maxRows": 15,
+                  "placeholder": "Enter the user prompt"
+                }
+              }
+            ]
+          },
+          {
+            "id": "section-advanced",
+            "title": "Advanced settings",
+            "collapsible": true,
+            "defaultExpanded": false,
+            "fields": [
+              {
+                "name": "inputs.temperature",
+                "type": "slider",
+                "label": "Temperature",
+                "defaultValue": 0,
+                "min": 0,
+                "max": 1,
+                "step": 0.01
+              },
+              {
+                "name": "inputs.maxTokenPerResponse",
+                "type": "slider",
+                "label": "Maximum tokens per response",
+                "defaultValue": 16384,
+                "min": 0,
+                "step": 1,
+                "maxRef": {
+                  "fromField": "inputs.modelMaxTokens",
+                  "fallback": 16384
+                }
+              },
+              {
+                "name": "inputs.maxIterations",
+                "type": "slider",
+                "label": "Maximum iterations",
+                "defaultValue": 25,
+                "min": 1,
+                "max": 100,
+                "step": 1
+              }
+            ]
+          },
+          {
+            "id": "guardrails",
+            "collapsible": false,
+            "fields": [
+              {
+                "name": "inputs.guardrails",
+                "type": "custom",
+                "component": "guardrails-editor",
+                "label": "",
+                "componentProps": {
+                  "toolName": "Agent",
+                  "scope": "Agent"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "inputDefinition": {
+        "type": "object",
+        "properties": {
+          "systemPrompt": {
+            "type": "string",
+            "minLength": 1,
+            "errorMessage": {
+              "minLength": "System prompt is required"
+            }
+          },
+          "userPrompt": {
+            "type": "string",
+            "minLength": 1,
+            "errorMessage": {
+              "minLength": "User prompt is required"
+            }
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "errorMessage": {
+              "minLength": "Model is required"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "advanced"
+            ]
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "maxTokenPerResponse": {
+            "type": "number",
+            "minimum": 0
+          },
+          "modelMaxTokens": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxIterations": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "guardrails": {
+            "type": "array"
+          },
+          "agentInputVariables": {
+            "type": "array"
+          },
+          "agentOutputVariables": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "systemPrompt",
+          "userPrompt",
+          "model"
+        ]
+      },
+      "inputDefaults": {
+        "systemPrompt": "You are an agentic assistant.",
+        "userPrompt": "What is the current date?",
+        "model": "gpt-4o-2024-11-20",
+        "mode": "standard",
+        "agentInputVariables": [],
+        "agentOutputVariables": [
+          {
+            "id": "content",
+            "type": "string"
+          }
+        ]
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "Agent response",
+          "var": "output",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "The agent response text"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error",
+          "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "code",
+              "message",
+              "detail",
+              "category",
+              "status"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code as a string"
+              },
+              "message": {
+                "type": "string",
+                "description": "High-level error message"
+              },
+              "detail": {
+                "type": "string",
+                "description": "Detailed error description"
+              },
+              "category": {
+                "type": "string",
+                "description": "Error category"
+              },
+              "status": {
+                "type": "integer",
+                "description": "HTTP status code"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "model": {
+        "source": true,
+        "type": "bpmn:ServiceTask",
+        "serviceType": "Orchestrator.StartInlineAgentJob",
+        "version": "v2",
+        "context": [
+          {
+            "name": "_label",
+            "type": "string",
+            "value": ""
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "value": ""
+          },
+          {
+            "name": "entryPoint",
+            "type": "string",
+            "value": ""
+          }
+        ]
+      },
+      "debug": {
+        "runtime": "bpmnEngine"
+      }
+    },
+    {
+      "nodeType": "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+      "version": "1.0.0",
+      "category": "agent",
+      "tags": [
+        "agent-context",
+        "index"
+      ],
+      "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+      "sortOrder": 510,
+      "display": {
+        "label": "SupportKB",
+        "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+        "icon": "context",
+        "shape": "circle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "top",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "artifact",
+              "constraints": {
+                "maxConnections": 1,
+                "allowedSources": [
+                  {
+                    "nodeType": "uipath.agent.autonomous",
+                    "handleId": "context"
+                  },
+                  {
+                    "nodeType": "uipath.agent.conversational",
+                    "handleId": "context"
+                  },
+                  {
+                    "nodeType": "uipath.agent.voice",
+                    "handleId": "context"
+                  }
+                ],
+                "validationMessage": "Only Agent's context handle can connect here"
+              }
+            }
+          ]
+        }
+      ],
+      "model": {
+        "source": true
+      },
+      "form": {
+        "id": "context-index-form",
+        "title": "Context index",
+        "sections": [
+          {
+            "id": "index-settings",
+            "title": "Index settings",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs",
+                "type": "custom",
+                "component": "index-settings-editor",
+                "label": ""
+              }
+            ]
+          }
+        ]
+      },
+      "inputDefinition": {
+        "type": "object",
+        "properties": {
+          "indexId": {
+            "type": "string"
+          },
+          "indexName": {
+            "type": "string"
+          },
+          "folderKey": {
+            "type": "string"
+          },
+          "folderPath": {
+            "type": "string"
+          },
+          "retrievalMode": {
+            "type": "string"
+          },
+          "query": {
+            "type": "object"
+          },
+          "threshold": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "resultCount": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 40
+          },
+          "fileExtension": {
+            "type": "string"
+          },
+          "folderPathPrefix": {
+            "type": "object"
+          },
+          "citations": {
+            "type": "string"
+          },
+          "outputColumns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "webSearchGrounding": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "not": {
+                    "enum": [
+                      "deeprag",
+                      "batchtransform"
+                    ]
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "Query is required"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "const": "deeprag"
+                }
+              },
+              "required": [
+                "retrievalMode"
+              ]
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "DeepRAG task is required"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "const": "batchtransform"
+                }
+              },
+              "required": [
+                "retrievalMode"
+              ]
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "Batch transform task is required"
+                },
+                "outputColumns": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "description": {
+                        "type": "string",
+                        "minLength": 1,
+                        "errorMessage": "Description is required for every output column"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "description"
+                    ]
+                  },
+                  "errorMessage": {
+                    "minItems": "At least one output column is required"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "inputDefaults": {
+        "indexId": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+        "indexName": "SupportKB",
+        "folderKey": "38e61b75-2699-4b7e-bafb-e2656e4955c9",
+        "folderPath": "Shared",
+        "retrievalMode": "semantic",
+        "query": {
+          "mode": "prompt",
+          "textValue": "",
+          "promptValue": "The query for the Semantic strategy",
+          "argumentPath": ""
+        },
+        "threshold": 0,
+        "resultCount": 3,
+        "fileExtension": "All",
+        "folderPathPrefix": {
+          "mode": "text-builder",
+          "textValue": "",
+          "promptValue": "",
+          "argumentPath": ""
+        },
+        "citations": "enabled",
+        "outputColumns": [],
+        "webSearchGrounding": {
+          "value": "enabled"
+        }
+      }
+    },
+    {
+      "nodeType": "core.action.script",
+      "version": "1.1",
+      "category": "data-operations",
+      "description": "Run custom JavaScript code",
+      "tags": [
+        "code",
+        "javascript",
+        "python"
+      ],
+      "sortOrder": 70,
+      "supportsErrorHandling": true,
+      "display": {
+        "label": "Script",
+        "icon": "code"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ]
+        },
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "success",
+              "type": "source",
+              "handleType": "output"
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "type": "source",
+              "handleType": "output",
+              "visible": "{inputs.errorHandlingEnabled}",
+              "constraints": {
+                "maxConnections": 1
+              }
+            }
+          ]
+        }
+      ],
+      "debug": {
+        "runtime": "clientScript"
+      },
+      "model": {
+        "type": "bpmn:ScriptTask"
+      },
+      "inputDefinition": {
+        "type": "object",
+        "properties": {
+          "script": {
+            "type": "string",
+            "minLength": 1,
+            "errorMessage": "Add a script function",
+            "validationSeverity": "warning"
+          }
+        },
+        "required": [
+          "script"
+        ]
+      },
+      "inputDefaults": {
+        "script": ""
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "any",
+          "description": "The return value of the script",
+          "source": "=result.response",
+          "var": "output"
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error",
+          "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "code",
+              "message",
+              "detail",
+              "category",
+              "status"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code as a string"
+              },
+              "message": {
+                "type": "string",
+                "description": "High-level error message"
+              },
+              "detail": {
+                "type": "string",
+                "description": "Detailed error description"
+              },
+              "category": {
+                "type": "string",
+                "description": "Error category"
+              },
+              "status": {
+                "type": "integer",
+                "description": "HTTP status code"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "form": {
+        "id": "script-properties",
+        "title": "Script configuration",
+        "sections": [
+          {
+            "id": "script",
+            "title": "Script",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.script",
+                "type": "custom",
+                "component": "script-editor",
+                "componentProps": {
+                  "language": "javascript",
+                  "returnType": "any",
+                  "validationMode": "script",
+                  "minHeight": 200,
+                  "placeholder": " // Return any value\nreturn {\n  message: \"Web request response\",\n  data: $vars.httpRequest1.output\n};"
+                },
+                "label": "Code",
+                "description": "JavaScript expression that returns a result"
+              }
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "nodeType": "core.logic.switch",
+      "version": "1.1",
+      "category": "control-flow",
+      "description": "Route to one of many branches by condition",
+      "tags": [
+        "control-flow",
+        "switch",
+        "case",
+        "when"
+      ],
+      "sortOrder": 62,
+      "display": {
+        "label": "Switch",
+        "icon": "between-horizontal-start"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ],
+          "visible": true
+        },
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "case-{item.id}",
+              "type": "source",
+              "handleType": "output",
+              "label": "{item.label || 'Case ' + (index + 1)}",
+              "repeat": "inputs.cases"
+            },
+            {
+              "id": "default",
+              "type": "source",
+              "handleType": "output",
+              "label": "Default"
+            }
+          ],
+          "visible": true
+        }
+      ],
+      "debug": {
+        "runtime": "clientScript"
+      },
+      "model": {
+        "type": "bpmn:ExclusiveGateway"
+      },
+      "inputDefinition": {
+        "type": "object",
+        "properties": {
+          "cases": {
+            "type": "array",
+            "minItems": 1,
+            "errorMessage": "At least one case is required",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "label": {
+                  "type": "string"
+                },
+                "expression": {
+                  "type": "string",
+                  "minLength": 1,
+                  "errorMessage": "Add a condition"
+                }
+              },
+              "required": [
+                "expression"
+              ]
+            }
+          }
+        },
+        "required": [
+          "cases"
+        ]
+      },
+      "outputDefinition": {
+        "matchedCase": {
+          "type": "string",
+          "description": "The label of the matched case",
+          "var": "matchedCase"
+        },
+        "matchedCaseId": {
+          "type": "string",
+          "description": "The ID of the matched case (\"default\" for the default branch)",
+          "var": "matchedCaseId"
+        }
+      },
+      "inputDefaults": {
+        "cases": [
+          {
+            "id": "default-1",
+            "label": "Case 1",
+            "expression": ""
+          },
+          {
+            "id": "default-2",
+            "label": "Case 2",
+            "expression": ""
+          }
+        ]
+      },
+      "form": {
+        "id": "switch-properties",
+        "title": "Switch configuration",
+        "sections": [
+          {
+            "id": "cases",
+            "title": "Cases",
+            "description": "Each case is evaluated in order. The first condition that returns true is taken.",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.cases",
+                "type": "custom",
+                "label": "Switch cases",
+                "component": "case-list-editor",
+                "componentProps": {
+                  "minCases": 1,
+                  "maxCases": 10,
+                  "expressionPlaceholder": "$vars.httpRequest1.output.statusCode >= 200 && $vars.httpRequest1.output.statusCode < 300",
+                  "expressionValidationFields": [
+                    {
+                      "subPath": "expression",
+                      "validationMode": "expression",
+                      "expectedType": "boolean"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "runtimeConstraints": {
+        "exclude": [
+          "api-function"
+        ]
+      }
+    },
+    {
+      "nodeType": "uipath.human-in-the-loop.quick-form",
+      "version": "1.1",
+      "category": "human-task",
+      "description": "Fast inline approvals with inline debug",
+      "tags": [
+        "human-task",
+        "hitl",
+        "human-in-the-loop",
+        "quick-form",
+        "approval"
+      ],
+      "sortOrder": 50,
+      "display": {
+        "label": "Quick Form",
+        "icon": "users",
+        "shape": "square"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ],
+          "visible": true
+        },
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "completed",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              }
+            },
+            {
+              "id": "outcome-approve",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              },
+              "label": "Approve"
+            },
+            {
+              "id": "outcome-modifyandsend",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              },
+              "label": "Modify & Send"
+            },
+            {
+              "id": "outcome-reject",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              },
+              "label": "Reject"
+            }
+          ],
+          "visible": true
+        }
+      ],
+      "model": {
+        "type": "bpmn:UserTask",
+        "serviceType": "Actions.HITL"
+      },
+      "inputDefaults": {
+        "schema": {
+          "fields": [],
+          "outcomes": [
+            {
+              "id": "submit",
+              "name": "Submit",
+              "type": "string",
+              "isPrimary": true,
+              "action": "Continue"
+            }
+          ]
+        },
+        "recipient": {
+          "channels": [
+            "Email",
+            "ActionCenter"
+          ],
+          "connections": {},
+          "assignee": {
+            "type": "group"
+          }
+        }
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "Task result data",
+          "source": "=result",
+          "var": "output"
+        },
+        "status": {
+          "type": "string",
+          "description": "Task completion status (completed, cancelled, timeout)",
+          "source": "=result.Action",
+          "var": "status"
+        }
+      },
+      "form": {
+        "id": "hitl-quick-form-properties",
+        "title": "Quick Form Task Configuration",
+        "sections": [
+          {
+            "id": "delivery",
+            "title": "Task delivery",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.recipient",
+                "type": "custom",
+                "component": "hitl-channel-selector",
+                "label": "Delivery Channels",
+                "description": "Select where the task should be sent"
+              }
+            ]
+          },
+          {
+            "id": "schema",
+            "title": "Schema",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.schema",
+                "type": "custom",
+                "component": "hitl-schema-editor",
+                "label": "Task Schema",
+                "description": "Define the input and output parameters for this task"
+              }
+            ]
+          },
+          {
+            "id": "additional-properties",
+            "title": "Additional properties",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.title",
+                "type": "text",
+                "label": "Task title"
+              },
+              {
+                "name": "inputs.priority",
+                "type": "select",
+                "label": "Priority",
+                "options": [
+                  {
+                    "label": "Low",
+                    "value": "Low"
+                  },
+                  {
+                    "label": "Medium",
+                    "value": "Medium"
+                  },
+                  {
+                    "label": "High",
+                    "value": "High"
+                  }
+                ]
+              },
+              {
+                "name": "inputs.labels",
+                "type": "text",
+                "label": "Labels",
+                "placeholder": "Comma-separated (e.g. finance,approval)"
+              },
+              {
+                "name": "inputs.memorySpace",
+                "type": "custom",
+                "component": "hitl-memory-space-picker",
+                "label": "Memory space",
+                "description": "Attach a memory space so this task's inputs and outputs are written to it"
+              }
+            ]
+          }
+        ]
+      },
+      "runtimeConstraints": {
+        "exclude": [
+          "api-function"
+        ]
+      }
+    },
+    {
+      "nodeType": "core.control.end",
+      "version": "1.0",
+      "category": "control-flow",
+      "description": "Mark the end of a process path",
+      "tags": [
+        "control-flow",
+        "end",
+        "finish",
+        "complete"
+      ],
+      "sortOrder": 66,
+      "display": {
+        "label": "End",
+        "icon": "circle-check",
+        "shape": "circle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ]
+        }
+      ],
+      "model": {
+        "type": "bpmn:EndEvent"
+      },
+      "runtimeConstraints": {
+        "exclude": [
+          "api-function"
+        ]
+      }
+    }
+  ],
+  "runtime": "maestro",
+  "variables": {
+    "globals": [
+      {
+        "id": "ticketId",
+        "direction": "in",
+        "type": "string",
+        "description": "Support ticket identifier",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "subject",
+        "direction": "in",
+        "type": "string",
+        "description": "Ticket subject line",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "body",
+        "direction": "in",
+        "type": "string",
+        "description": "Ticket body text",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "customerName",
+        "direction": "in",
+        "type": "string",
+        "description": "Name of the customer who raised the ticket",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "decision",
+        "direction": "out",
+        "type": "string",
+        "description": "AutoSkipped (noise), AutoResolved (KB-verified, no human), or the reviewer outcome: Approve, Modify & Send, Reject"
+      },
+      {
+        "id": "finalReply",
+        "direction": "out",
+        "type": "string",
+        "description": "Reply to send: the verified draft for AutoResolved, the approved or edited draft after review, empty after Reject, a fixed marker for auto-skipped noise"
+      },
+      {
+        "id": "category",
+        "direction": "out",
+        "type": "string",
+        "description": "Ticket category assigned by the agent (includes Noise)"
+      },
+      {
+        "id": "priority",
+        "direction": "out",
+        "type": "string",
+        "description": "Ticket priority assigned by the agent"
+      },
+      {
+        "id": "recommendedApproach",
+        "direction": "out",
+        "type": "string",
+        "description": "Agent guidance to the reviewer on the next action"
+      },
+      {
+        "id": "reviewerNote",
+        "direction": "out",
+        "type": "string",
+        "description": "Internal note from the reviewer; empty when no human reviewed the ticket"
+      },
+      {
+        "id": "kbCovered",
+        "direction": "out",
+        "type": "boolean",
+        "description": "true only if the agent reported full SupportKB coverage with no gaps"
+      },
+      {
+        "id": "kbSources",
+        "direction": "out",
+        "type": "string",
+        "description": "SupportKB article ids the agent cited"
+      },
+      {
+        "id": "autonomyGate",
+        "direction": "out",
+        "type": "string",
+        "description": "Why the ticket was or was not auto-resolved (gate and verifier findings)"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "start.output",
+        "type": "object",
+        "description": "Data passed when manually triggering the process.",
+        "binding": {
+          "nodeId": "start",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "classifyAndDraft.output",
+        "type": "object",
+        "description": "Agent response",
+        "binding": {
+          "nodeId": "classifyAndDraft",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "classifyAndDraft.error",
+        "type": "object",
+        "description": "Error information if the node fails",
+        "binding": {
+          "nodeId": "classifyAndDraft",
+          "outputId": "error"
+        }
+      },
+      {
+        "id": "checkSafetyGate.output",
+        "type": "object",
+        "description": "Route (noise, urgent, verify, review), gate failures, and KB citation summary",
+        "binding": {
+          "nodeId": "checkSafetyGate",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "checkSafetyGate.error",
+        "type": "object",
+        "description": "Error information if the node fails",
+        "binding": {
+          "nodeId": "checkSafetyGate",
+          "outputId": "error"
+        }
+      },
+      {
+        "id": "routeTicket.matchedCase",
+        "type": "string",
+        "description": "The label of the matched case",
+        "binding": {
+          "nodeId": "routeTicket",
+          "outputId": "matchedCase"
+        }
+      },
+      {
+        "id": "routeTicket.matchedCaseId",
+        "type": "string",
+        "description": "The ID of the matched case (\"default\" for the default branch)",
+        "binding": {
+          "nodeId": "routeTicket",
+          "outputId": "matchedCaseId"
+        }
+      },
+      {
+        "id": "verifyGrounding.output",
+        "type": "object",
+        "description": "Agent response",
+        "binding": {
+          "nodeId": "verifyGrounding",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "verifyGrounding.error",
+        "type": "object",
+        "description": "Error information if the node fails",
+        "binding": {
+          "nodeId": "verifyGrounding",
+          "outputId": "error"
+        }
+      },
+      {
+        "id": "checkVerification.output",
+        "type": "object",
+        "description": "Whether the independent verifier confirmed the draft, with failure reasons",
+        "binding": {
+          "nodeId": "checkVerification",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "checkVerification.error",
+        "type": "object",
+        "description": "Error information if the node fails",
+        "binding": {
+          "nodeId": "checkVerification",
+          "outputId": "error"
+        }
+      },
+      {
+        "id": "autoResolveDecision.matchedCase",
+        "type": "string",
+        "description": "The label of the matched case",
+        "binding": {
+          "nodeId": "autoResolveDecision",
+          "outputId": "matchedCase"
+        }
+      },
+      {
+        "id": "autoResolveDecision.matchedCaseId",
+        "type": "string",
+        "description": "The ID of the matched case (\"default\" for the default branch)",
+        "binding": {
+          "nodeId": "autoResolveDecision",
+          "outputId": "matchedCaseId"
+        }
+      },
+      {
+        "id": "urgentReview.output",
+        "type": "object",
+        "description": "Task result data",
+        "binding": {
+          "nodeId": "urgentReview",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "urgentReview.status",
+        "type": "string",
+        "description": "Task completion status",
+        "binding": {
+          "nodeId": "urgentReview",
+          "outputId": "status"
+        }
+      },
+      {
+        "id": "standardReview.output",
+        "type": "object",
+        "description": "Task result data",
+        "binding": {
+          "nodeId": "standardReview",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "standardReview.status",
+        "type": "string",
+        "description": "Task completion status",
+        "binding": {
+          "nodeId": "standardReview",
+          "outputId": "status"
+        }
+      },
+      {
+        "id": "groundingReview.output",
+        "type": "object",
+        "description": "Task result data",
+        "binding": {
+          "nodeId": "groundingReview",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "groundingReview.status",
+        "type": "string",
+        "description": "Task completion status",
+        "binding": {
+          "nodeId": "groundingReview",
+          "outputId": "status"
+        }
+      },
+      {
+        "id": "autoSkipped.decision",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "decision"
+        }
+      },
+      {
+        "id": "autoSkipped.finalReply",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "finalReply"
+        }
+      },
+      {
+        "id": "autoSkipped.category",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "category"
+        }
+      },
+      {
+        "id": "autoSkipped.priority",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "priority"
+        }
+      },
+      {
+        "id": "autoSkipped.recommendedApproach",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "recommendedApproach"
+        }
+      },
+      {
+        "id": "autoSkipped.reviewerNote",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "reviewerNote"
+        }
+      },
+      {
+        "id": "autoSkipped.kbCovered",
+        "type": "boolean",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "kbCovered"
+        }
+      },
+      {
+        "id": "autoSkipped.kbSources",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "kbSources"
+        }
+      },
+      {
+        "id": "autoSkipped.autonomyGate",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoSkipped",
+          "outputId": "autonomyGate"
+        }
+      },
+      {
+        "id": "autoResolved.decision",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "decision"
+        }
+      },
+      {
+        "id": "autoResolved.finalReply",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "finalReply"
+        }
+      },
+      {
+        "id": "autoResolved.category",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "category"
+        }
+      },
+      {
+        "id": "autoResolved.priority",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "priority"
+        }
+      },
+      {
+        "id": "autoResolved.recommendedApproach",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "recommendedApproach"
+        }
+      },
+      {
+        "id": "autoResolved.reviewerNote",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "reviewerNote"
+        }
+      },
+      {
+        "id": "autoResolved.kbCovered",
+        "type": "boolean",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "kbCovered"
+        }
+      },
+      {
+        "id": "autoResolved.kbSources",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "kbSources"
+        }
+      },
+      {
+        "id": "autoResolved.autonomyGate",
+        "type": "string",
+        "binding": {
+          "nodeId": "autoResolved",
+          "outputId": "autonomyGate"
+        }
+      },
+      {
+        "id": "urgentReviewed.decision",
+        "type": "string",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "decision"
+        }
+      },
+      {
+        "id": "urgentReviewed.finalReply",
+        "type": "string",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "finalReply"
+        }
+      },
+      {
+        "id": "urgentReviewed.category",
+        "type": "string",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "category"
+        }
+      },
+      {
+        "id": "urgentReviewed.priority",
+        "type": "string",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "priority"
+        }
+      },
+      {
+        "id": "urgentReviewed.recommendedApproach",
+        "type": "string",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "recommendedApproach"
+        }
+      },
+      {
+        "id": "urgentReviewed.reviewerNote",
+        "type": "string",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "reviewerNote"
+        }
+      },
+      {
+        "id": "urgentReviewed.kbCovered",
+        "type": "boolean",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "kbCovered"
+        }
+      },
+      {
+        "id": "urgentReviewed.kbSources",
+        "type": "string",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "kbSources"
+        }
+      },
+      {
+        "id": "urgentReviewed.autonomyGate",
+        "type": "string",
+        "binding": {
+          "nodeId": "urgentReviewed",
+          "outputId": "autonomyGate"
+        }
+      },
+      {
+        "id": "standardReviewed.decision",
+        "type": "string",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "decision"
+        }
+      },
+      {
+        "id": "standardReviewed.finalReply",
+        "type": "string",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "finalReply"
+        }
+      },
+      {
+        "id": "standardReviewed.category",
+        "type": "string",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "category"
+        }
+      },
+      {
+        "id": "standardReviewed.priority",
+        "type": "string",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "priority"
+        }
+      },
+      {
+        "id": "standardReviewed.recommendedApproach",
+        "type": "string",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "recommendedApproach"
+        }
+      },
+      {
+        "id": "standardReviewed.reviewerNote",
+        "type": "string",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "reviewerNote"
+        }
+      },
+      {
+        "id": "standardReviewed.kbCovered",
+        "type": "boolean",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "kbCovered"
+        }
+      },
+      {
+        "id": "standardReviewed.kbSources",
+        "type": "string",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "kbSources"
+        }
+      },
+      {
+        "id": "standardReviewed.autonomyGate",
+        "type": "string",
+        "binding": {
+          "nodeId": "standardReviewed",
+          "outputId": "autonomyGate"
+        }
+      },
+      {
+        "id": "groundingReviewed.decision",
+        "type": "string",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "decision"
+        }
+      },
+      {
+        "id": "groundingReviewed.finalReply",
+        "type": "string",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "finalReply"
+        }
+      },
+      {
+        "id": "groundingReviewed.category",
+        "type": "string",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "category"
+        }
+      },
+      {
+        "id": "groundingReviewed.priority",
+        "type": "string",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "priority"
+        }
+      },
+      {
+        "id": "groundingReviewed.recommendedApproach",
+        "type": "string",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "recommendedApproach"
+        }
+      },
+      {
+        "id": "groundingReviewed.reviewerNote",
+        "type": "string",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "reviewerNote"
+        }
+      },
+      {
+        "id": "groundingReviewed.kbCovered",
+        "type": "boolean",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "kbCovered"
+        }
+      },
+      {
+        "id": "groundingReviewed.kbSources",
+        "type": "string",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "kbSources"
+        }
+      },
+      {
+        "id": "groundingReviewed.autonomyGate",
+        "type": "string",
+        "binding": {
+          "nodeId": "groundingReviewed",
+          "outputId": "autonomyGate"
+        }
+      }
+    ]
+  },
+  "layout": {
+    "nodes": {
+      "start": {
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "classifyAndDraft": {
+        "position": {
+          "x": 192,
+          "y": -96
+        },
+        "size": {
+          "width": 288,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "draftSupportKb": {
+        "position": {
+          "x": 240,
+          "y": 96
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "checkSafetyGate": {
+        "position": {
+          "x": 576,
+          "y": 48
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "routeTicket": {
+        "position": {
+          "x": 768,
+          "y": 32
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "verifyGrounding": {
+        "position": {
+          "x": 976,
+          "y": -48
+        },
+        "size": {
+          "width": 288,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "verifySupportKb": {
+        "position": {
+          "x": 1024,
+          "y": 144
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "checkVerification": {
+        "position": {
+          "x": 1360,
+          "y": 96
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "autoResolveDecision": {
+        "position": {
+          "x": 1552,
+          "y": 80
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "urgentReview": {
+        "position": {
+          "x": 1120,
+          "y": -240
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "standardReview": {
+        "position": {
+          "x": 1120,
+          "y": 336
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "groundingReview": {
+        "position": {
+          "x": 1744,
+          "y": 256
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "autoSkipped": {
+        "position": {
+          "x": 976,
+          "y": -432
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "autoResolved": {
+        "position": {
+          "x": 1744,
+          "y": 64
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "urgentReviewed": {
+        "position": {
+          "x": 1360,
+          "y": -224
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "standardReviewed": {
+        "position": {
+          "x": 1360,
+          "y": 352
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "groundingReviewed": {
+        "position": {
+          "x": 1936,
+          "y": 272
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      }
+    }
+  }
+}

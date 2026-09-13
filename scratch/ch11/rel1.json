@@ -1,0 +1,76 @@
+200
+{
+  "@odata.context": "https://staging.uipath.com/uipathlabsworkshop/MVPSummit26/orchestrator_/odata/$metadata#Releases(UiPath.Server.Configuration.OData.ReleaseGetModel/EntryPointV2())/$entity",
+  "TargetRuntime": null,
+  "IsConversational": false,
+  "ProcessVersion": "1.0.3",
+  "ProjectKey": "a1cbf809-d1b3-4139-8a8c-8303012e8ac6",
+  "PublisherLicense": "Production",
+  "RuntimeProfile": "Lite",
+  "IsLatestVersion": false,
+  "IsProcessDeleted": false,
+  "EnvironmentId": null,
+  "EnvironmentName": null,
+  "Key": "0064213f-3561-4017-8bbb-72ce78422088",
+  "ProcessKey": "TicketTriage_TEAMjohannes-reitermayer.7.flow.TriageTicketV3",
+  "Description": null,
+  "Name": "TriageTicketV3",
+  "EntryPointId": 15920364,
+  "EntryPointPath": null,
+  "InputArguments": null,
+  "EnvironmentVariables": "",
+  "ProcessType": "Flow",
+  "SupportsMultipleEntryPoints": true,
+  "RequiresUserInteraction": false,
+  "Slug": null,
+  "MinRequiredRobotVersion": null,
+  "IsAttended": false,
+  "IsCompiled": true,
+  "AutomationHubIdeaUrl": null,
+  "AutoUpdate": false,
+  "HiddenForAttendedUser": false,
+  "FeedId": "ba210878-a737-420a-b95f-57a19e1b29d1",
+  "JobPriority": "Normal",
+  "SpecificPriorityValue": 45,
+  "FolderKey": null,
+  "OrganizationUnitId": 3565643,
+  "OrganizationUnitFullyQualifiedName": null,
+  "TargetFramework": "Portable",
+  "RobotSize": null,
+  "AutoCreateConnectedTriggers": true,
+  "RemoteControlAccess": "None",
+  "LastModificationTime": null,
+  "LastModifierUserId": null,
+  "CreationTime": "2026-09-13T13:50:34.24Z",
+  "CreatorUserId": null,
+  "Id": 2657182,
+  "Arguments": {
+    "Input": null,
+    "Output": null
+  },
+  "ProcessSettings": null,
+  "VideoRecordingSettings": null,
+  "Tags": [],
+  "ResourceOverwrites": [
+    {
+      "ResourceType": "Index",
+      "ResourceKey": "SupportKB",
+      "EntityId": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+      "EntityKey": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+      "Source": "Solutions",
+      "EntityDisplayName": "SupportKB",
+      "EntityFolderId": 3054134,
+      "Properties2": [
+        {
+          "Name": "name",
+          "Value": "SupportKB"
+        },
+        {
+          "Name": "folderPath",
+          "Value": "Shared"
+        }
+      ],
+      "Properties": null
+    }
+  ]
+}

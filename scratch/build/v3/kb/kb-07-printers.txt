@@ -1,0 +1,9 @@
+HomeFix Supply IT Helpdesk — Printing
+
+Office printers use FollowMe printing:
+1. Print to the single queue named "HomeFix-Print" (installed by default on company laptops).
+2. Badge in at any printer to release your job. Jobs are held for 24 hours.
+
+If "HomeFix-Print" is missing, reinstall it from Company Portal ("FollowMe Print Queue"). Warehouse label printers are managed by Operations, not IT; contact the shift lead for label printer issues.
+
+Print quotas: color printing is limited to 200 pages/month per employee; monochrome is unlimited.

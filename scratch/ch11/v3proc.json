@@ -1,0 +1,27 @@
+{
+  "Result": "Success",
+  "Code": "ProcessGet",
+  "Data": {
+    "Key": "0064213f-3561-4017-8bbb-72ce78422088",
+    "Name": "TriageTicketV3",
+    "ProcessKey": "TicketTriage_TEAMjohannes-reitermayer.7.flow.TriageTicketV3",
+    "ProcessVersion": "1.0.3",
+    "Description": "",
+    "IsLatestVersion": false,
+    "ProcessType": "Flow",
+    "EntryPointPath": "",
+    "InputArguments": "",
+    "FolderKey": "",
+    "FolderPath": "",
+    "AutoUpdate": false,
+    "TargetFramework": "Portable",
+    "JobPriority": "Normal",
+    "SpecificPriorityValue": 45,
+    "RetentionPeriod": 30,
+    "RetentionAction": "Delete",
+    "StaleRetentionPeriod": 180,
+    "StaleRetentionAction": "Delete",
+    "HiddenForAttendedUser": false,
+    "AutoCreateConnectedTriggers": true
+  }
+}

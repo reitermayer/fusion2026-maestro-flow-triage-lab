@@ -1,0 +1,26 @@
+{
+  "$resourceType": "context",
+  "name": "SupportKB",
+  "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+  "folderPath": "Shared",
+  "indexName": "SupportKB",
+  "id": "b933812c-2231-4a56-8f6f-3c771b08e559",
+  "referenceKey": "",
+  "settings": {
+    "query": {
+      "description": "The support problem described in the ticket, phrased as a knowledge base search query",
+      "variant": "dynamic"
+    },
+    "folderPathPrefix": {
+      "variant": "static",
+      "value": ""
+    },
+    "threshold": 0,
+    "resultCount": 5,
+    "retrievalMode": "semantic",
+    "fileExtension": {
+      "value": "All"
+    }
+  },
+  "contextType": "index"
+}

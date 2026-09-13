@@ -1,0 +1,9 @@
+HomeFix Supply IT Helpdesk — New Hire IT Onboarding
+
+Day-1 checklist for new employees:
+1. Collect your laptop from the IT desk (badge required) or via courier for remote hires.
+2. Sign in with the temporary password from your welcome email; you will be forced to set a new one.
+3. Enroll in MFA (see the MFA article) within 7 days.
+4. Install role-specific software from Company Portal; your manager's onboarding template pre-approves the standard set.
+
+Access to line-of-business systems (ERP, CRM, WMS) is granted by role template. Missing access after day 3 means your role template was not applied; your manager should file an Access Request in the IT catalog.

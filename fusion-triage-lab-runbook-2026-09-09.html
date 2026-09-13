@@ -1,0 +1,276 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body>
+<title>Fusion Triage Lab Runbook</title>
+<style>
+:root {
+  --paper: #f6f5f2;
+  --card: #ffffff;
+  --ink: #1d1f1e;
+  --muted: #5b605d;
+  --line: #dedcd6;
+  --accent: #e03e00;
+  --prompt-bg: #eef1ee;
+  --prompt-line: #d3dad3;
+  --good: #177245;
+  --warn: #9a5b00;
+  --warn-bg: #f7efe0;
+  --mono: ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #191b1a; --card: #212423; --ink: #ecebe7; --muted: #a3a8a4;
+    --line: #353937; --accent: #ff6a33; --prompt-bg: #232a26; --prompt-line: #38423b;
+    --good: #4cc07f; --warn: #dfa958; --warn-bg: #2a2418;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #191b1a; --card: #212423; --ink: #ecebe7; --muted: #a3a8a4;
+  --line: #353937; --accent: #ff6a33; --prompt-bg: #232a26; --prompt-line: #38423b;
+  --good: #4cc07f; --warn: #dfa958; --warn-bg: #2a2418;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+  font-size: 15.5px; line-height: 1.55; margin: 0;
+}
+.wrap { max-width: 760px; margin: 0 auto; padding: 48px 24px 72px; }
+header { margin-bottom: 36px; }
+.eyebrow {
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 12px; font-weight: 600;
+  letter-spacing: 1.8px; text-transform: uppercase; color: var(--accent); margin-bottom: 10px;
+}
+h1 {
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-weight: 700; font-size: 34px;
+  line-height: 1.1; margin: 0 0 10px; text-wrap: balance;
+}
+.lede { color: var(--muted); margin: 0; max-width: 60ch; }
+.facts {
+  display: flex; flex-wrap: wrap; gap: 8px 22px; margin-top: 20px; padding: 12px 16px;
+  border: 1px solid var(--line); border-radius: 6px; background: var(--card);
+  font-size: 13px;
+}
+.facts div { display: flex; gap: 6px; }
+.facts dt { color: var(--muted); font-weight: 600; }
+.facts dd { margin: 0; font-family: var(--mono); font-size: 12.5px; }
+h2 {
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 20px;
+  margin: 44px 0 6px; text-wrap: balance;
+}
+.step { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--line); }
+.step-head { display: flex; align-items: baseline; gap: 12px; }
+.clock {
+  font-family: var(--mono); font-size: 13px; font-weight: 500; color: var(--accent);
+  min-width: 44px; font-variant-numeric: tabular-nums;
+}
+.step-head h3 {
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-weight: 600; font-size: 17px; margin: 0;
+}
+.step p { margin: 8px 0 0 56px; max-width: 62ch; }
+.prompt, .cmd {
+  margin: 12px 0 0 56px; padding: 13px 16px; border-radius: 6px;
+  background: var(--prompt-bg); border: 1px solid var(--prompt-line);
+  font-family: var(--mono); font-size: 13px; line-height: 1.55;
+  white-space: pre-wrap; overflow-x: auto; position: relative;
+}
+.prompt::before, .cmd::before {
+  display: block;
+  font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 10px; font-weight: 600;
+  letter-spacing: 1.4px; color: var(--muted); margin-bottom: 8px;
+}
+.prompt::before { content: "SAY TO YOUR CODING AGENT"; }
+.cmd::before { content: "TYPE IN CLAUDE CODE"; }
+.cmd.term::before { content: "TYPE IN YOUR TERMINAL"; }
+.check {
+  margin: 12px 0 0 56px; padding-left: 14px; border-left: 3px solid var(--good);
+  font-size: 14px; max-width: 62ch;
+}
+.check strong { color: var(--good); font-weight: 600; }
+.note {
+  margin: 12px 0 0 56px; padding: 10px 14px; border-radius: 6px;
+  background: var(--warn-bg); border: 1px solid transparent; font-size: 13.5px; max-width: 62ch;
+}
+.note strong { color: var(--warn); }
+code { font-family: var(--mono); font-size: 0.88em; background: var(--prompt-bg); padding: 1px 5px; border-radius: 4px; }
+table { width: 100%; border-collapse: collapse; margin-top: 14px; background: var(--card); font-size: 13.5px; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif; font-size: 11px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); }
+tr:last-child td { border-bottom: none; }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: 6px; }
+footer { margin-top: 56px; padding-top: 16px; border-top: 1px solid var(--line); font-size: 12.5px; color: var(--muted); }
+@media (max-width: 560px) {
+  .step p, .prompt, .cmd, .check, .note { margin-left: 0; }
+}
+.wait {
+  display: inline-flex; align-items: center; gap: 8px; margin: 10px 0 0 56px;
+  font-family: var(--mono); font-size: 12px; color: var(--muted);
+  padding: 4px 10px; border: 1px dashed var(--line); border-radius: 999px; background: var(--card);
+}
+.wait b { color: var(--ink); font-weight: 500; }
+.wait .you { color: var(--accent); }
+.tight { margin-top: 6px; }
+@media (max-width: 560px) { .wait { margin-left: 0; } }
+@media print { :root { color-scheme: light; } .step { break-inside: avoid; } .table-scroll { overflow: visible; } body { font-size: 13px; } }
+</style>
+
+<div class="wrap">
+<header>
+  <div class="eyebrow">Fusion 2026 · Hands-on Lab · 120 min</div>
+  <h1>Fusion Triage Lab Runbook</h1>
+  <p class="lede">You and your coding agent will build a support-ticket triage flow for HomeFix Supply, review its work in Action Center, and let the agent mine your decisions to ship two better versions. Everyone builds against the same shared knowledge base, <code>SupportKB</code> in the Shared folder; there is no per-team index to create. Type the prompts in your own words — only the <strong>bold anchors</strong> inside them must survive your paraphrase. Every step shows how long the agent works and what you do meanwhile, so nobody sits watching a spinner.</p>
+  <dl class="facts">
+    <div><dt>Tenant</dt><dd>staging.uipath.com/uipathlabsworkshop/MVPSummit26</dd></div>
+    <div><dt>Your team code</dt><dd>TEAM<i>firstname-lastname</i> — e.g. TEAMjane-doe</dd></div>
+    <div><dt>Prebuilt for you</dt><dd>TicketsV1/V2/V3 · SupportKB index (Shared, one for the whole room)</dd></div>
+    <div><dt>Hands-on time</dt><dd>~65 min of the 120 · the rest is discussion</dd></div>
+  </dl>
+</header>
+
+<div class="step">
+  <div class="step-head"><span class="clock">prep</span><h3>0 · Install the tools</h3></div>
+  <p>Do this before the session if you can. You need Node.js 20+ installed, then:</p>
+  <div class="cmd term">npm install -g @anthropic-ai/claude-code @uipath/cli
+claude plugin marketplace add https://github.com/UiPath/skills.git
+claude plugin install uipath@uipath-marketplace</div>
+  <div class="check"><strong>Checkpoint —</strong> <code>uip --version</code> prints a version and <code>claude --version</code> works. Pairs need only one working laptop — if yours fights you, lean on your partner's.</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:00</span><h3>1 · Connect to the workshop tenant</h3></div>
+  <div class="wait">⏱ <b>~3 min</b> · browser sign-in</div>
+  <p>Pick your team code first: <strong>TEAM</strong> followed by your first and last name, lowercase with a hyphen, for example <code>TEAMjane-doe</code>. Everyone shares one tenant, so this code is what keeps your solution, deployment folder, and tasks from colliding with the person next to you. Use it everywhere the guide says TEAM<i>firstname-lastname</i>. Then make an empty folder for your build and start Claude Code inside it — everything you create today lives here:</p>
+  <div class="cmd term">mkdir triage-lab-TEAM<i>firstname-lastname</i> &amp;&amp; cd triage-lab-TEAM<i>firstname-lastname</i>
+claude</div>
+  <p>Inside Claude Code, the <code>!</code> prefix runs a command directly. Log the UiPath CLI into the workshop environment (a browser window opens — sign in with the workshop account on your table card):</p>
+  <div class="cmd">! uip login --authority "https://staging.uipath.com/identity_" --organization uipathlabsworkshop --tenant MVPSummit26</div>
+  <p>Then verify you landed in the right place:</p>
+  <div class="cmd">! uip login status</div>
+  <div class="check"><strong>Checkpoint —</strong> status shows BaseUrl <code>staging.uipath.com</code>, org <code>uipathlabsworkshop</code>, tenant <code>MVPSummit26</code>. Anything else (cloud.uipath.com, your own org): rerun the login line above before going further.</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:05</span><h3>2 · Preflight the room's data</h3></div>
+  <div class="wait">⏱ agent works <b>2–3 min</b> · <span class="you">you:</span> open a second tab at staging.uipath.com for Studio Web</div>
+  <p>Your first words to the coding agent — make it prove the shared workshop resources are reachable before you build anything on them:</p>
+  <div class="prompt">Verify my UiPath setup on this tenant: confirm the login is uipathlabsworkshop/MVPSummit26, that the shared Data Fabric entities TicketsV1, TicketsV2, and TicketsV3 exist and each holds 8 tickets (query the records, don't just list entities), and that the SupportKB knowledge index in the Shared folder exists and answers a test search. Report what you find; don't create or change anything.</div>
+  <div class="check"><strong>Checkpoint —</strong> three entities × 8 tickets, and the shared SupportKB index returns a HomeFix help article for a test query. Anything missing is a room problem, not yours — raise a hand. If it can't be fixed in 3 minutes, a TA will move you to the backstop tenant.</div>
+  <div class="note"><strong>Known slow spot:</strong> the agent's knowledge-index search tool may report a 401 and spend a minute working around a stale token file. That's normal; it recovers on its own. If it's still stuck after 3 minutes, tell it: "skip the index search, just confirm the index exists".</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:10</span><h3>3 · Build V1</h3></div>
+  <div class="wait">⏱ agent works <b>4–6 min</b> · <span class="you">you:</span> read step 5 so you're ready to deploy</div>
+  <div class="prompt">Build a Maestro Flow solution TicketTriage_TEAM<i>firstname-lastname</i> with a flow TriageTicketV1. It takes a support ticket (ticketId, subject, body, customerName) as inputs. An agent classifies it and drafts a reply grounded in the existing SupportKB index in the Shared folder, then an Action Center task assigned to me lets me Approve, Modify &amp; Send, or Reject (look up my email with uip or users current; don't ask me for it). Validate it, refresh the solution resources so the index links up, and upload it to Studio Web.</div>
+  <div class="check"><strong>Checkpoint —</strong> the agent reports a designer URL, <code>flow validate</code> passed, and <code>solution resources refresh</code> imported the index (it should say "Imported 1", not "Created"). Open the URL: trigger → agent (with a knowledge attachment) → review task → end. In the task node's recipient, the assignee should be type "user" with <em>your</em> email, not the default "group". The designer may show warnings about outcomes without downstream nodes — that's fine, they don't block anything.</div>
+  <div class="note"><strong>Anchors:</strong> the solution and flow names, the shared index name <code>SupportKB</code> + Shared folder, the three review outcomes, "assigned to me" with the <code>uip or users current</code> hint, "refresh the solution resources", "upload" (not publish). Never type your email into the prompt; the agent reads it from your login so the same prompt works for everyone in the room. The agent scaffolds everything in the empty folder from step 1 — you never create project files by hand. If it offers to run <code>flow debug</code>, say no.</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:18</span><h3>4 · Deploy</h3></div>
+  <div class="wait">⏱ <b>2–3 min</b> · the deploy log runs for about a minute</div>
+  <p>The one browser step you'll repeat three times today. In the designer, click <strong>Deploy</strong>, switch "Pack to" from Personal to <strong>Shared</strong>, and click Deploy in the wizard. This creates your team's own folder <code>Shared/TicketTriage_TEAM<i>firstname-lastname</i></code>, publishes the package, and links your knowledge index — watch the log for "All services activated successfully". Later deploys are the same button labelled <strong>Pack and upgrade</strong> with a bumped version.</p>
+  <div class="check"><strong>Checkpoint —</strong> "Deployment successful" with your version number, and a new folder <code>Shared/TicketTriage_TEAM<i>firstname-lastname</i></code> exists on the tenant. If publish fails with "version already exists", bump the Version field in the wizard and retry.</div>
+  <div class="note"><strong>Deploy button greyed out?</strong> The resource refresh in step 3 normally writes the index pointer the designer needs, so Deploy should already be active. If it's grey after a fresh tab, see the breakage table — it's a one-call fix.</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:22</span><h3>5 · Run batch A</h3></div>
+  <div class="wait">⏱ <b>~1 min</b> to start 8 jobs · tasks appear <b>20–50 s</b> after each start</div>
+  <div class="prompt">Run every ticket in the shared TicketsV1 entity through my deployed flow, one job each. Flows start with uip maestro flow process run &lt;processKey&gt; &lt;folderKey&gt; --release-key &lt;releaseKey&gt;, not with jobs start. The batch is settled when every instance is either Completed or has an open Action Center task — check that, don't wait on job state.</div>
+  <div class="check"><strong>Checkpoint —</strong> 8 review tasks in Action Center about a minute after the first job started, each already assigned to you (they show under "My tasks", not "Unassigned"). Measured in the dry run: 21–52 seconds from job start to task, whole batch settled in 67 seconds. The error <em>"Couldn't find any user with unattended robot permissions"</em> should not happen (the robot account is inherited from Shared) — if it does, raise a hand.</div>
+  <div class="note"><strong>Why the last sentence matters:</strong> Orchestrator shows a flow job as <em>Running</em> the whole time it waits for a human, so an agent that polls job state will sit there for five minutes reporting "still running" while your tasks have been waiting since the first minute. Task count plus completed instances is the real signal.</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:25</span><h3>6 · Review the agent's work by hand, then tell it what's wrong</h3></div>
+  <div class="wait">⏱ <b>~10 min</b> of reading · then the agent works <b>~1 min</b></div>
+  <p>Open Action Center (Product launcher → Action Center, your team's folder). Work all 8 tasks honestly — approve drafts you'd send (leave the final response empty to send the draft unchanged), modify the ones that miss (the outage, the angry customer, the question the KB can't answer), reject what deserves no reply. Notice what V1 <em>can't</em> see: nothing is marked urgent, and the out-of-office auto-reply got a task like everything else. This is the only batch you review by hand; it's where you learn what the agent gets wrong. Then:</p>
+  <div class="prompt">Leave trace feedback on three of those runs (uip traces feedback create needs --positive or --negative plus --comment): the outage ticket should have been treated as urgent, the auto-reply is noise that never needed review, and every draft should come with a recommended approach for the reviewer.</div>
+  <div class="check"><strong>Checkpoint —</strong> 8 tasks completed, 3 feedback entries readable via <code>uip traces feedback list</code>. Your score so far: <strong>8 human touches for 8 tickets.</strong></div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:37</span><h3>7 · V2 — mine your decisions</h3></div>
+  <div class="wait">⏱ agent works <b>4–6 min</b> · <span class="you">you:</span> keep the designer tab open for the deploy</div>
+  <div class="prompt">Look at my review decisions and trace feedback from the V1 runs, figure out what's weak in V1, and build TriageTicketV2 as a second flow in the same solution that fixes it. Validate and upload it; I'll deploy from the designer.</div>
+  <div class="check"><strong>Checkpoint —</strong> the agent names the weaknesses from <em>your</em> decisions (no urgency path, noise reviewed for nothing, no reviewer guidance) and reports a second flow with urgent and noise routing plus a recommended-approach field, with both review tasks still assigned to you. Upload needs <code>--force</code> this time; that's expected.</div>
+  <p class="tight">Now deploy again (step 4, <strong>Pack and upgrade</strong>, bump the version) and wait for "Deployment successful" before the next prompt — if you ask too early the agent finds no V2 release and stops.</p>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:47</span><h3>8 · Run batch B</h3></div>
+  <div class="wait">⏱ agent works <b>~2 min</b> · tasks appear within <b>~1 min</b> of the start</div>
+  <div class="prompt">Before running anything, check the V2 release's index ResourceOverwrites and patch folderPath to "Shared" if it points at my team folder. Then run every ticket in the shared TicketsV2 entity through V2, one job each, and report when every instance is Completed or has an open task.</div>
+  <div class="check"><strong>Checkpoint —</strong> the 2 urgent tickets arrive as <strong>High-priority escalation tasks</strong>, the newsletter auto-closes with no task, and every draft now carries a recommended approach. Score: <strong>7 touches.</strong></div>
+  <div class="note"><strong>Why the first sentence:</strong> only the flow that existed at the very first deploy inherits the Shared index mapping. Every flow added later is born pointing at your team folder, where no index lives, and the agent step faults with "Context grounding index not found". In the dry run, letting it fault and retry cost 4½ minutes; checking first costs 10 seconds. The fix is <code>PATCH orchestrator_/odata/Releases(&lt;id&gt;)</code> with ResourceOverwrites → folderPath "Shared", and every Pack and upgrade resets it — for <em>all</em> flows added after the first deploy, not just the newest one.</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:52</span><h3>9 · Delegate the review</h3></div>
+  <div class="wait">⏱ agent works <b>~1 min</b> · instances close within <b>30 s</b> of the last completion</div>
+  <p>You reviewed batch A yourself so you know what good looks like. This time let the agent do it and check its judgement:</p>
+  <div class="prompt">Complete the Action Center tasks on my behalf.</div>
+  <div class="check"><strong>Checkpoint —</strong> the agent tells you which drafts it approved as-is and which it rewrote before sending, and why. Expect it to rewrite the ones that restate policy without steps, or that tell an urgent requester what the knowledge base doesn't contain. 0 open tasks afterwards. Because the tasks are already yours, the agent completes them directly; it should not need to assign them first.</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">0:56</span><h3>10 · V3 — earn some autonomy</h3></div>
+  <div class="wait">⏱ agent works <b>4–6 min</b> · then you deploy (<b>2–3 min</b>)</div>
+  <div class="prompt">Build TriageTicketV3 that safely auto-resolves the approved tickets, and make sure it can never auto-send an answer the knowledge base doesn't cover.</div>
+  <div class="check"><strong>Checkpoint —</strong> the agent describes a gate with more than a confidence threshold: a KB-covered flag, the KB sources actually used, or both, and it says what happens when a check fails (human review). Then Pack and upgrade, bump the version, wait for "Deployment successful".</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">1:07</span><h3>11 · Run batch C</h3></div>
+  <div class="wait">⏱ <b>~1 min</b> · auto-resolved tickets finish in <b>6–16 s</b>, review tasks appear in <b>~15 s</b></div>
+  <div class="prompt">Check the V3 release's index folderPath and patch it to "Shared" if needed, then run every ticket in TicketsV3 through V3 and report when every instance is Completed or has an open task.</div>
+  <div class="check"><strong>Checkpoint —</strong> 3–4 tickets auto-resolve with a cited KB article, noise auto-closes, 2 urgent escalate, and 1–2 land in review — always including the question the KB doesn't cover. Score: <strong>3–4 touches.</strong> If the KB-uncovered ticket was auto-sent instead, your gate trusts confidence alone — ask your agent how it knows the KB actually covered the answer. Then finish the remaining tasks with the step-9 prompt.</div>
+</div>
+
+<div class="step">
+  <div class="step-head"><span class="clock">1:12</span><h3>12 · Scoreboard</h3></div>
+  <div class="wait">⏱ agent works <b>3–5 min</b> · <span class="you">you:</span> compare notes with the next table</div>
+  <div class="prompt">Create me a report that shows the V1/V2/V3 comparison: tickets processed, human touches, and what changed between versions.</div>
+  <div class="check"><strong>Checkpoint —</strong> 8 → 7 → 3&nbsp;or&nbsp;4. Two improvement rounds driven entirely by your own decisions and feedback. That's the pattern to take home: any triage queue, same loop.</div>
+</div>
+
+<h2>How long things actually take</h2>
+<p class="lede">Measured on the 2026-09-09 dry run (gpt-5.4, staging). Use these to know when to nudge your agent instead of waiting.</p>
+<div class="table-scroll">
+<table>
+  <tr><th>What</th><th>Measured</th><th>What to do meanwhile</th></tr>
+  <tr><td>Agent step per ticket (classify + KB search + draft)</td><td>V1: 21–52 s to a task, median 41 s · V3: 13–14 s to a task, 6–16 s to auto-resolve</td><td>Nothing. Eight jobs run in parallel, so a batch settles in about a minute, not eight.</td></tr>
+  <tr><td>Whole batch, first job start to last task or completion</td><td>V1: 67 s · V3: 36 s · V2: 412 s only because of the unpatched release fault and retry</td><td>If the agent is still "polling" after 2 minutes, tell it to count open tasks and completed instances and report.</td></tr>
+  <tr><td>Completing tasks → flow instances finish</td><td>Under 30 s</td><td>Ask for the report right away.</td></tr>
+  <tr><td>Build a flow version (scaffold, author, validate, upload)</td><td>4–6 min of agent time</td><td>Open the designer, read the next step, look at the previous version's tasks.</td></tr>
+  <tr><td>Designer deploy / Pack and upgrade</td><td>1–2 min of log, 2–3 min with clicks</td><td>Wait for "Deployment successful" before the run prompt.</td></tr>
+  <tr><td>Trace feedback, task completion, release patch</td><td>Under 1 min each</td><td>These are single API calls; a long wait here means the agent is stuck on auth, not working.</td></tr>
+</table>
+</div>
+
+<h2>If something breaks</h2>
+<div class="table-scroll">
+<table>
+  <tr><th>Symptom</th><th>Do this</th></tr>
+  <tr><td>Agent has been "waiting for jobs" for more than 2 minutes</td><td>The jobs are almost certainly done. Flow jobs show <em>Running</em> while they wait on a human. Say: "stop polling job state — list open Action Center tasks and completed instances and report".</td></tr>
+  <tr><td>Deploy button is greyed out</td><td>The index debug overwrite is missing — <code>solution resources refresh</code> normally writes it, but it resets on every upload. Have your agent GET <code>studio_/backend/api/resourcebuilder/solutions/&lt;solutionId&gt;/overwrites</code> and PATCH the index resource's overwrite to type "Reference", kind "Index", your index name, and the Shared folder key (expect 204). Then refresh the designer in a fresh tab.</td></tr>
+  <tr><td>Review tasks arrive Unassigned instead of under "My tasks"</td><td>The task node kept the default <code>assignee: {type: "group"}</code>. Have the agent set the recipient assignee to type "user" with your email (from <code>uip or users current</code>), re-upload with <code>--force</code>, and Pack and upgrade. Meanwhile, tasks can still be opened from the Unassigned list.</td></tr>
+  <tr><td>Agent wants to run <code>flow debug</code></td><td>Say no. Debug runs execute in your personal workspace where the index doesn't resolve. Deployed runs only.</td></tr>
+  <tr><td>Agent packs or publishes from the CLI</td><td>Stop it — CLI packaging silently drops the agent's knowledge attachment. Deploys go through the designer button only.</td></tr>
+  <tr><td>"Run TicketsV2 through it" → agent says there is no V2 release</td><td>The deploy hasn't finished (or you skipped it). Wait for "Deployment successful" in the designer, then say "try again".</td></tr>
+  <tr><td>Publish fails: "version already exists"</td><td>Bump the Version field in the deploy wizard (1.0.0 → 1.0.1) and retry. Never delete and recreate your solution — the old package name keeps its versions.</td></tr>
+  <tr><td>Jobs won't start (<code>uip or jobs start</code> returns 409)</td><td>Flows use <code>uip maestro flow process run &lt;processKey&gt; &lt;folderKey&gt; --release-key &lt;rk&gt;</code>. Your agent knows this if you nudge it.</td></tr>
+  <tr><td>V2/V3 agent faults: "Context grounding index … was not found"</td><td>A flow added after the first deploy gets its release index mapping pointed at your team folder instead of Shared, and every redeploy resets it. Have your agent PATCH the release's ResourceOverwrites (folderPath "Shared"), then <code>uip maestro flow instance retry</code> the faulted instances — no need to start new jobs. Raise a hand if unsure; it's a TA one-liner.</td></tr>
+  <tr><td>Task completion returns HTTP 403 with a bare "error code: 1010"</td><td>Not a permissions problem — it's the web application firewall rejecting a non-browser client. Tell the agent to send a browser User-Agent header (or use curl).</td></tr>
+  <tr><td>Agent faults: "Missing static query value"</td><td>The knowledge attachment's query variant is "static" with no value. It must be <code>dynamic</code> (the agent supplies the query at runtime) — fix the resource's <code>settings.query</code> and re-upload.</td></tr>
+  <tr><td>Agent runs but answers nonsense / says it got no message</td><td>The flow node's prompt or the agent's message templates still reference variables that don't exist (a template ported from another flow). Regenerate the prompts from your actual inputs — and if your agent edits <code>agent.json</code> messages directly, it must update <code>contentTokens</code> to match <code>content</code>, because the runtime renders from the tokens.</td></tr>
+  <tr><td>Job faults instantly: "no user with unattended robot permissions"</td><td>The robot account should be inherited from Shared. Raise a hand — a TA runs one <code>uip or users assign</code> for your folder.</td></tr>
+  <tr><td>Agent answers questions the KB shouldn't cover</td><td>The index isn't attached. Check the flow shows a knowledge attachment on the agent node, and that step 2's test search worked.</td></tr>
+  <tr><td>Designer goes blank or shows a stale deploy screen</td><td>Known Studio Web quirk — open a fresh tab and confirm the tenant picker shows MVPSummit26.</td></tr>
+  <tr><td>You're behind the room</td><td>Raise a hand — TAs carry reference builds of V1/V2/V3 and can drop you into the room's current step in one command.</td></tr>
+</table>
+</div>
+
+<footer>Fusion Triage Lab · HomeFix Supply scenario · everything you build lives in your team's own folder, so you can't break anyone else's run. · Prompts and timings updated 2026-09-09 from a full end-to-end dry run.</footer>
+</div>
+
+</body></html>

@@ -1,0 +1,10 @@
+HomeFix Supply IT Helpdesk — Expense Reports and Duplicate Charges
+
+Expense reports are filed in the Concur portal (expenses.homefixsupply.com).
+
+Duplicate or double charges:
+If a corporate-card transaction appears twice in your expense feed, do NOT submit both lines. Mark the duplicate line as "Disputed - duplicate" in Concur; the duplicate is removed from your feed within 3 business days and the bank reverses the pending charge automatically. You do not need to contact the bank yourself.
+
+If a personal card was double-charged by a vendor through a company purchase, file the dispute with the vendor first, then attach the vendor's confirmation to a reimbursement claim.
+
+Standard reimbursement timelines: approved reports pay out on the next weekly cycle (Thursdays). Reports over 90 days old require VP approval.

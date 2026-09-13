@@ -1,0 +1,15 @@
+HomeFix Supply IT Helpdesk — VPN Setup
+
+Setting up the HomeFix VPN (GlobalProtect) on a company laptop:
+
+1. Open the Company Portal app and install "GlobalProtect VPN" from the Approved list.
+2. Launch GlobalProtect and enter the portal address: vpn.homefixsupply.com
+3. Sign in with your network credentials and approve the MFA push notification.
+4. The status icon turns blue when connected.
+
+Personal devices are not permitted on the VPN. Contractors receive a scoped VPN profile from their sponsoring manager instead.
+
+Common issues:
+- "Gateway unreachable" usually means hotel or guest Wi-Fi is blocking the tunnel; switch to a mobile hotspot.
+- If the client sits on "Connecting" for more than two minutes, restart the PanGPS service from Task Manager or reboot.
+- VPN sessions cap at 12 hours; reconnect after that.

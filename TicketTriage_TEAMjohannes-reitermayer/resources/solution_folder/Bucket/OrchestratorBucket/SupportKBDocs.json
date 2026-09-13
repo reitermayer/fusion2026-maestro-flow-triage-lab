@@ -1,0 +1,26 @@
+{
+  "docVersion": "1.0.0",
+  "resource": {
+    "name": "SupportKBDocs",
+    "kind": "bucket",
+    "type": "orchestratorBucket",
+    "apiVersion": "orchestrator.uipath.com/v1",
+    "isOverridable": true,
+    "dependencies": [],
+    "runtimeDependencies": [],
+    "folders": [
+      {
+        "fullyQualifiedName": "solution_folder"
+      }
+    ],
+    "spec": {
+      "type": "Orchestrator",
+      "name": "SupportKBDocs",
+      "description": "HomeFix Supply IT helpdesk KB for the Fusion Triage Lab",
+      "tags": []
+    },
+    "locks": [],
+    "key": "c650edad-bf39-4529-b00c-7bb8055d7270",
+    "files": []
+  }
+}

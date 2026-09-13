@@ -1,0 +1,30 @@
+Execute Batch C for Chapter 11 in our team workspace:
+
+1. Preflight Verification:
+   - Target Folder: "TicketTriage_TEAMjohannes-reitermayer 8" (Folder Key: f19c7f55-614a-4d7e-9d9e-b1461b8f4e11).
+   - Target Process: "TriageTicketV3" (Release Key: 0064213f-3561-4017-8bbb-72ce78422088, ProcessKey: TicketTriage_TEAMjohannes-reitermayer.7.flow.TriageTicketV3).
+   - Inspect the release ResourceOverwrites and confirm SupportKB points to "Shared". (It is already configured, so no PATCH is needed unless missing).
+
+2. Query Batch C Records:
+   - Query all 8 records from Data Fabric entity TicketsV3 (ID: a93f6ef9-37a4-f111-9b32-000d3a69a13b) using:
+     uip df records list a93f6ef9-37a4-f111-9b32-000d3a69a13b --output json
+
+3. Dispatch 8 Jobs:
+   - For each ticket (HF-3001 through HF-3008), run one job of TriageTicketV3 in folder f19c7f55-614a-4d7e-9d9e-b1461b8f4e11 with inputs:
+     {"ticketId": "<ticketId>", "subject": "<subject>", "body": "<body>", "customerName": "<customerName>"}
+   - You can start jobs using:
+     uip maestro flow process run TicketTriage_TEAMjohannes-reitermayer.7.flow.TriageTicketV3 f19c7f55-614a-4d7e-9d9e-b1461b8f4e11 --inputs '...'
+     or:
+     uip or jobs start 0064213f-3561-4017-8bbb-72ce78422088 --folder-key f19c7f55-614a-4d7e-9d9e-b1461b8f4e11 --input-arguments '...'
+
+4. Poll Until Settlement:
+   - Monitor the jobs in folder f19c7f55-614a-4d7e-9d9e-b1461b8f4e11 and the Action Center tasks (uip tasks list --folder-key f19c7f55-614a-4d7e-9d9e-b1461b8f4e11) until all 8 jobs have settled (either Completed/Successful or suspended in a task).
+
+5. Output Grand Batch C Scorecard:
+   - Report the status, decision, priority, and Action Center task (if created) for each ticket.
+   - Confirm that:
+     * 4 routine tickets (HF-3001, HF-3002, HF-3003, HF-3004) auto-resolved with zero tasks.
+     * 1 noise ticket (HF-3008) auto-skipped with zero tasks.
+     * 2 urgent tickets (HF-3006, HF-3007) created High-priority Action Center tasks.
+     * 1 uncovered ticket (HF-3005) failed safe to a Medium-priority Action Center task.
+     * Total human touches required is exactly 3.

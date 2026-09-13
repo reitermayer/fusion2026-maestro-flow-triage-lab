@@ -1,0 +1,196 @@
+[
+  {
+    "ticket": "HF-3001",
+    "job": "77cea77d-f67c-40ab-8fcb-023fbaa53a2e",
+    "state": "Successful",
+    "out": {
+      "decision": "AutoResolved",
+      "finalReply": "Hi Nadia,\n\nYou can get the visiting contractor connected through guest Wi-Fi:\n\n1. Sponsor the guest at wifi.homefixsupply.com/guest.\n2. Have her join the \u201cHomeFix-Guest\u201d network and use the code she receives.\n3. Guest access provides internet access only and does not include internal HomeFix resources.\n\nThe standard guest code is valid for 24 hours, but access can be extended to 5 days for auditors and contractors by any people-manager, so it can cover her four-day visit.\n\nBest,\nHomeFix Supply Support Team",
+      "category": "Network",
+      "priority": "Low",
+      "recommendedApproach": "Approve the draft as-is because the retrieved guest Wi-Fi guidance directly answers both questions. No IT operational action is needed unless Nadia cannot access the guest sponsorship page or needs help identifying a people-manager to extend the code. Verify only whether Nadia or another onsite people-manager can apply the 5-day contractor extension.",
+      "reviewerNote": "",
+      "kbCovered": true,
+      "kbSources": "kb-08-guest-wifi",
+      "autonomyGate": "Auto-resolved: deterministic gate passed and independent verifier confirmed every claim against SupportKB. Checked kb-08-guest-wifi. The draft's guest sponsorship URL, HomeFix-Guest network, 24-hour code validity, internet-only limitation, and 5-day extension for auditors and contractors by any people-manager are all supported; the four-day visit is covered by the supported 5-day maximum."
+    },
+    "tasks": [],
+    "info": "Job finished."
+  },
+  {
+    "ticket": "HF-3002",
+    "job": "3e857358-a941-4a0c-92c0-a960e8af0f37",
+    "state": "Running",
+    "out": null,
+    "tasks": [
+      {
+        "Id": 101475778,
+        "Title": "URGENT: Review Draft Reply (Critical/High impact)",
+        "Priority": "High",
+        "Status": "Pending",
+        "IsCompleted": false,
+        "Type": "QuickFormTask",
+        "AssignedToUser": {
+          "Name": "Johannes",
+          "Surname": "Reitermayer",
+          "UserName": "johannes.reitermayer@gmail.com",
+          "EmailAddress": "johannes.reitermayer@gmail.com",
+          "DisplayName": "Johannes Reitermayer",
+          "Key": "d6aae5e3-3c55-4bfb-b5f8-6b17248bca11",
+          "Type": null,
+          "AuthenticationSource": "local",
+          "Id": 0
+        }
+      }
+    ],
+    "info": "Job running in workflow-id: 3e857358-a941-4a0c-92c0-a960e8af0f37, attempt:1"
+  },
+  {
+    "ticket": "HF-3003",
+    "job": "d505adc6-b825-4175-b472-5e860852ecd4",
+    "state": "Successful",
+    "out": {
+      "decision": "AutoResolved",
+      "finalReply": "Hi Laura,\n\nYou can get your final payslips through the former employee portal rather than your disabled network account.\n\n1. Go to alumni.homefixsupply.com.\n2. Sign in using the personal email address you registered before leaving HomeFix.\n3. Open My Documents to find your payslips.\n\nFormer employees keep payslip access for 24 months. Please note that the IT Service Desk cannot see or change payroll data; payroll corrections go through your HR business partner.\n\nBest regards,\nHomeFix Supply Support Team",
+      "category": "Access",
+      "priority": "Low",
+      "recommendedApproach": "Approve the draft as-is; it answers the access path and avoids offering unsupported account reactivation. No operational staff action is needed unless Laura replies that her personal email was not registered or she needs a payroll correction; kb-13 says corrections go through the HR business partner and IT cannot see or change payroll data. Verify only that the ticket does not include a separate payroll correction request before closing.",
+      "reviewerNote": "",
+      "kbCovered": true,
+      "kbSources": "kb-13-hr-portal-access",
+      "autonomyGate": "Auto-resolved: deterministic gate passed and independent verifier confirmed every claim against SupportKB. Checked kb-13-hr-portal-access, which supports former employees accessing payslips for 24 months at alumni.homefixsupply.com using a personal email registered before departure, with payslips under My Documents. It also supports that the IT Service Desk cannot see or change payroll data and that payroll corrections go through the HR business partner. No unsupported claims or unanswered requests were found."
+    },
+    "tasks": [],
+    "info": "Job finished."
+  },
+  {
+    "ticket": "HF-3004",
+    "job": "3a84a144-5205-42c5-b8a0-9797f5d89593",
+    "state": "Running",
+    "out": null,
+    "tasks": [
+      {
+        "Id": 101475781,
+        "Title": "Review Draft Reply",
+        "Priority": "Medium",
+        "Status": "Pending",
+        "IsCompleted": false,
+        "Type": "QuickFormTask",
+        "AssignedToUser": {
+          "Name": "Johannes",
+          "Surname": "Reitermayer",
+          "UserName": "johannes.reitermayer@gmail.com",
+          "EmailAddress": "johannes.reitermayer@gmail.com",
+          "DisplayName": "Johannes Reitermayer",
+          "Key": "d6aae5e3-3c55-4bfb-b5f8-6b17248bca11",
+          "Type": null,
+          "AuthenticationSource": "local",
+          "Id": 0
+        }
+      }
+    ],
+    "info": "Job running in workflow-id: 3a84a144-5205-42c5-b8a0-9797f5d89593, attempt:1"
+  },
+  {
+    "ticket": "HF-3005",
+    "job": "8737bfb5-dbe9-4f83-82a3-9a112c460532",
+    "state": "Running",
+    "out": null,
+    "tasks": [
+      {
+        "Id": 101475779,
+        "Title": "Review Draft Reply",
+        "Priority": "Medium",
+        "Status": "Pending",
+        "IsCompleted": false,
+        "Type": "QuickFormTask",
+        "AssignedToUser": {
+          "Name": "Johannes",
+          "Surname": "Reitermayer",
+          "UserName": "johannes.reitermayer@gmail.com",
+          "EmailAddress": "johannes.reitermayer@gmail.com",
+          "DisplayName": "Johannes Reitermayer",
+          "Key": "d6aae5e3-3c55-4bfb-b5f8-6b17248bca11",
+          "Type": null,
+          "AuthenticationSource": "local",
+          "Id": 0
+        }
+      }
+    ],
+    "info": "Job running in workflow-id: 8737bfb5-dbe9-4f83-82a3-9a112c460532, attempt:1"
+  },
+  {
+    "ticket": "HF-3006",
+    "job": "a5a61222-f8c7-4a91-9a43-3c65a7fa69c1",
+    "state": "Running",
+    "out": null,
+    "tasks": [
+      {
+        "Id": 101475780,
+        "Title": "URGENT: Review Draft Reply (Critical/High impact)",
+        "Priority": "High",
+        "Status": "Pending",
+        "IsCompleted": false,
+        "Type": "QuickFormTask",
+        "AssignedToUser": {
+          "Name": "Johannes",
+          "Surname": "Reitermayer",
+          "UserName": "johannes.reitermayer@gmail.com",
+          "EmailAddress": "johannes.reitermayer@gmail.com",
+          "DisplayName": "Johannes Reitermayer",
+          "Key": "d6aae5e3-3c55-4bfb-b5f8-6b17248bca11",
+          "Type": null,
+          "AuthenticationSource": "local",
+          "Id": 0
+        }
+      }
+    ],
+    "info": "Job running in workflow-id: a5a61222-f8c7-4a91-9a43-3c65a7fa69c1, attempt:1"
+  },
+  {
+    "ticket": "HF-3007",
+    "job": "ad0995c8-014f-4a67-8315-89c0c3bf6a08",
+    "state": "Running",
+    "out": null,
+    "tasks": [
+      {
+        "Id": 101475782,
+        "Title": "Review Draft Reply",
+        "Priority": "Medium",
+        "Status": "Pending",
+        "IsCompleted": false,
+        "Type": "QuickFormTask",
+        "AssignedToUser": {
+          "Name": "Johannes",
+          "Surname": "Reitermayer",
+          "UserName": "johannes.reitermayer@gmail.com",
+          "EmailAddress": "johannes.reitermayer@gmail.com",
+          "DisplayName": "Johannes Reitermayer",
+          "Key": "d6aae5e3-3c55-4bfb-b5f8-6b17248bca11",
+          "Type": null,
+          "AuthenticationSource": "local",
+          "Id": 0
+        }
+      }
+    ],
+    "info": "Job running in workflow-id: ad0995c8-014f-4a67-8315-89c0c3bf6a08, attempt:1"
+  },
+  {
+    "ticket": "HF-3008",
+    "job": "8f3ff6f9-a17b-47cc-8ece-9ef4f75858f8",
+    "state": "Successful",
+    "out": {
+      "decision": "AutoSkipped",
+      "finalReply": "None - Auto-reply noise filtered",
+      "category": "Noise",
+      "priority": "Low",
+      "recommendedApproach": "No reply needed, close the ticket as automated noise; signal: the body states \u201cThis is an automated notification\u201d and \u201cDo not reply to this message.\u201d",
+      "reviewerNote": "",
+      "kbCovered": false,
+      "kbSources": "(none)",
+      "autonomyGate": "Auto-skipped: automated noise (confidence 0.99)"
+    },
+    "tasks": [],
+    "info": "Job finished."
+  }
+]

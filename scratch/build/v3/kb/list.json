@@ -1,0 +1,93 @@
+{
+  "Result": "Success",
+  "Code": "BucketFileList",
+  "Data": {
+    "Items": [
+      {
+        "FullPath": "kb-01-password-reset.txt",
+        "ContentType": "text/plain",
+        "Size": 868,
+        "LastModified": "2026-08-29T20:20:24.000Z"
+      },
+      {
+        "FullPath": "kb-02-vpn-setup.txt",
+        "ContentType": "text/plain",
+        "Size": 825,
+        "LastModified": "2026-08-29T20:20:27.000Z"
+      },
+      {
+        "FullPath": "kb-03-expense-reports.txt",
+        "ContentType": "text/plain",
+        "Size": 824,
+        "LastModified": "2026-08-29T20:20:29.000Z"
+      },
+      {
+        "FullPath": "kb-04-mfa-enrollment.txt",
+        "ContentType": "text/plain",
+        "Size": 737,
+        "LastModified": "2026-08-29T20:20:32.000Z"
+      },
+      {
+        "FullPath": "kb-05-software-requests.txt",
+        "ContentType": "text/plain",
+        "Size": 644,
+        "LastModified": "2026-08-29T20:20:34.000Z"
+      },
+      {
+        "FullPath": "kb-06-email-signature.txt",
+        "ContentType": "text/plain",
+        "Size": 594,
+        "LastModified": "2026-08-29T20:20:36.000Z"
+      },
+      {
+        "FullPath": "kb-07-printers.txt",
+        "ContentType": "text/plain",
+        "Size": 549,
+        "LastModified": "2026-08-29T20:20:39.000Z"
+      },
+      {
+        "FullPath": "kb-08-guest-wifi.txt",
+        "ContentType": "text/plain",
+        "Size": 508,
+        "LastModified": "2026-08-29T20:20:41.000Z"
+      },
+      {
+        "FullPath": "kb-09-laptop-hardware.txt",
+        "ContentType": "text/plain",
+        "Size": 703,
+        "LastModified": "2026-08-29T20:20:43.000Z"
+      },
+      {
+        "FullPath": "kb-10-phishing.txt",
+        "ContentType": "text/plain",
+        "Size": 604,
+        "LastModified": "2026-08-29T20:20:46.000Z"
+      },
+      {
+        "FullPath": "kb-11-onboarding.txt",
+        "ContentType": "text/plain",
+        "Size": 668,
+        "LastModified": "2026-08-29T20:20:48.000Z"
+      },
+      {
+        "FullPath": "kb-12-meeting-rooms.txt",
+        "ContentType": "text/plain",
+        "Size": 606,
+        "LastModified": "2026-08-29T20:20:50.000Z"
+      },
+      {
+        "FullPath": "kb-13-hr-portal-access.txt",
+        "ContentType": "text/plain",
+        "Size": 532,
+        "LastModified": "2026-08-29T20:20:53.000Z"
+      },
+      {
+        "FullPath": "kb-14-service-desk.txt",
+        "ContentType": "text/plain",
+        "Size": 617,
+        "LastModified": "2026-08-29T20:20:55.000Z"
+      }
+    ],
+    "ContinuationToken": ""
+  }
+}

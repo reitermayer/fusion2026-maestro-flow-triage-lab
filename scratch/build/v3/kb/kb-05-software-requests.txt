@@ -1,0 +1,10 @@
+HomeFix Supply IT Helpdesk — Requesting Software
+
+Approved software installs without a ticket: open Company Portal, search the Approved list, click Install. No admin rights are needed.
+
+Software not in the Approved list:
+1. Submit a Software Request in the IT catalog with a business justification.
+2. Requests under $500/year route to your manager; above that, to IT procurement.
+3. Security review takes 5 business days for new vendors.
+
+Never install software from the open internet on a company laptop; installs outside Company Portal are blocked by policy and generate a security alert. Browser extensions follow the same approval path.

@@ -1,0 +1,62 @@
+{
+  "docVersion": "1.0.0",
+  "resource": {
+    "name": "TriageTicketV3",
+    "kind": "process",
+    "type": "flow",
+    "apiVersion": "orchestrator.uipath.com/v1",
+    "projectKey": "3acfab75-3cad-4f0b-945b-7f8f4b9973b4",
+    "isOverridable": true,
+    "dependencies": [
+      {
+        "kind": "package",
+        "name": "TriageTicketV3"
+      }
+    ],
+    "runtimeDependencies": [
+      {
+        "bindingType": "index",
+        "bindingKey": "SupportKB",
+        "bindingValues": {
+          "name": {
+            "defaultValue": "SupportKB",
+            "isExpression": false
+          },
+          "folderPath": {
+            "defaultValue": "Shared",
+            "isExpression": false
+          }
+        },
+        "bindingMetadata": {
+          "bindingsVersion": "2.2",
+          "solutionsSupport": "true"
+        },
+        "resourceKind": "Index",
+        "resourceKey": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+        "resourceName": "SupportKB",
+        "folderKey": "38e61b75-2699-4b7e-bafb-e2656e4955c9"
+      }
+    ],
+    "folders": [
+      {
+        "fullyQualifiedName": "solution_folder"
+      }
+    ],
+    "spec": {
+      "runtimeProfile": "Standard",
+      "type": "Flow",
+      "name": "TriageTicketV3",
+      "package": {
+        "key": "1aaeff2f-7e78-42ee-a6b5-04b60c377a36"
+      },
+      "targetFrameworkValue": "Portable",
+      "retentionAction": "Delete",
+      "retentionPeriod": 30,
+      "staleRetentionAction": "Delete",
+      "staleRetentionPeriod": 180
+    },
+    "locks": [],
+    "key": "e7004037-bff0-42bc-90a7-b534236dab72",
+    "files": []
+  }
+}

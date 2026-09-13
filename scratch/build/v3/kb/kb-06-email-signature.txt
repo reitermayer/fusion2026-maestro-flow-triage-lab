@@ -1,0 +1,7 @@
+HomeFix Supply IT Helpdesk — Email and Signature Standards
+
+The corporate signature template is applied automatically by the mail gateway; you do not need to configure a local signature. To update the name, title, or phone number shown, edit your profile in the HR portal; changes propagate overnight.
+
+Shared mailboxes: request access through the IT catalog item "Shared Mailbox Access"; the mailbox owner approves, and access appears in Outlook within an hour. Do not share personal credentials to grant mailbox access.
+
+Attachment limit is 35 MB. For larger files use HomeFix Drive links.

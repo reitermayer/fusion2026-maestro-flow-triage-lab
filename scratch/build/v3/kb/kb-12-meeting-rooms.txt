@@ -1,0 +1,9 @@
+HomeFix Supply IT Helpdesk — Meeting Rooms and AV
+
+Book rooms directly in Outlook; every room calendar is named by site and capacity (e.g., "AUS-3F-Cedar (8)").
+
+Room panels: badge in to start an ad-hoc meeting; the panel shows the next 3 bookings. If the panel is dark, hold the power button under the display for 5 seconds.
+
+Video bars support one-touch join for Teams meetings booked with the room invited. For HDMI-only presenters, use the cable on the table; no drivers are needed on company laptops.
+
+Report AV faults with the QR code on the room panel; facilities triages within 4 business hours.

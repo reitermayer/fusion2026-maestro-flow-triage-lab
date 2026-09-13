@@ -1,0 +1,653 @@
+{
+ "A": {
+  "tasks": [
+   {
+    "Id": 101462893,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "65241d8c-5a0c-416c-9324-9714fd00e59e",
+    "CreatedTime": "2026-09-12T17:29:10.4709692Z",
+    "CompletedTime": "2026-09-12T18:22:37.7273376Z",
+    "ticket": "HF-1001",
+    "category": "Access",
+    "priority_field": "High",
+    "confidence": 0.96,
+    "note": null
+   },
+   {
+    "Id": 101462902,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "7c1d6e9c-7da7-4a1e-84ca-bbc6bcd87b3e",
+    "CreatedTime": "2026-09-12T17:29:54.1101683Z",
+    "CompletedTime": "2026-09-12T18:22:45.6914448Z",
+    "ticket": "HF-1002",
+    "category": "Network",
+    "priority_field": "Medium",
+    "confidence": 0.93,
+    "note": null
+   },
+   {
+    "Id": 101462904,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "ee02965a-b58e-46b1-8795-00c935296a20",
+    "CreatedTime": "2026-09-12T17:29:56.3791255Z",
+    "CompletedTime": "2026-09-12T18:22:50.7676533Z",
+    "ticket": "HF-1003",
+    "category": "Billing",
+    "priority_field": "Low",
+    "confidence": 0.96,
+    "note": null
+   },
+   {
+    "Id": 101462905,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Modify & Send",
+    "CreatorJobKey": "9a93a55b-6140-4d6c-9860-a5549755490f",
+    "CreatedTime": "2026-09-12T17:30:01.5899046Z",
+    "CompletedTime": "2026-09-12T18:25:52.9638227Z",
+    "ticket": "HF-1006",
+    "category": "Network",
+    "priority_field": "Critical",
+    "confidence": 0.72,
+    "note": null
+   },
+   {
+    "Id": 101462906,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "e8b754eb-e033-4962-8e59-693d7c6b9972",
+    "CreatedTime": "2026-09-12T17:30:02.4413734Z",
+    "CompletedTime": "2026-09-12T18:26:01.1948543Z",
+    "ticket": "HF-1005",
+    "category": "Software",
+    "priority_field": "Low",
+    "confidence": 0.73,
+    "note": null
+   },
+   {
+    "Id": 101462907,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "e68675bf-1dec-45e8-b852-7517aba13b69",
+    "CreatedTime": "2026-09-12T17:30:02.742253Z",
+    "CompletedTime": "2026-09-12T18:26:09.6948368Z",
+    "ticket": "HF-1004",
+    "category": "Other",
+    "priority_field": "Low",
+    "confidence": 0.92,
+    "note": null
+   },
+   {
+    "Id": 101462908,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Modify & Send",
+    "CreatorJobKey": "351f0d47-119b-4d5c-9695-1cf985274f33",
+    "CreatedTime": "2026-09-12T17:30:02.9602611Z",
+    "CompletedTime": "2026-09-12T18:26:41.7194872Z",
+    "ticket": "HF-1007",
+    "category": "Hardware",
+    "priority_field": "Medium",
+    "confidence": 0.86,
+    "note": null
+   },
+   {
+    "Id": 101462909,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Reject",
+    "CreatorJobKey": "dca71319-f916-4e57-baa2-431f08a0fd1c",
+    "CreatedTime": "2026-09-12T17:30:03.399419Z",
+    "CompletedTime": "2026-09-12T18:26:49.9185075Z",
+    "ticket": "HF-1008",
+    "category": "Other",
+    "priority_field": "Low",
+    "confidence": 0.87,
+    "note": null
+   }
+  ],
+  "err": null
+ },
+ "B": {
+  "tasks": [
+   {
+    "Id": 101474836,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "ce9c540e-fa75-448e-a6ea-932efc28f2e8",
+    "CreatedTime": "2026-09-13T12:38:36.6621571Z",
+    "CompletedTime": "2026-09-13T13:20:10.2434905Z",
+    "ticket": "HF-2001",
+    "category": "Access",
+    "priority_field": "Low",
+    "confidence": 0.88,
+    "note": "Approved as-is: grounded self-service reset steps; answers both the phone/off-network and the sync questions. Only follow up if he has no registered mobile number."
+   },
+   {
+    "Id": 101474837,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "3cc28f1c-83da-4956-b9bc-862a6e9984b5",
+    "CreatedTime": "2026-09-13T12:38:36.9026373Z",
+    "CompletedTime": "2026-09-13T13:20:16.2965176Z",
+    "ticket": "HF-2004",
+    "category": "Access",
+    "priority_field": "Low",
+    "confidence": 0.95,
+    "note": "Approved as-is: answers both the MFA phone switch and the returns@ shared mailbox request with concrete KB steps."
+   },
+   {
+    "Id": 101474838,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "f9a78d48-971c-4dad-b12a-5deefecaa8bb",
+    "CreatedTime": "2026-09-13T12:38:37.0641707Z",
+    "CompletedTime": "2026-09-13T13:20:20.8830959Z",
+    "ticket": "HF-2003",
+    "category": "Billing",
+    "priority_field": "Low",
+    "confidence": 0.86,
+    "note": "Approved as-is: accurate VP-approval path for reports over 90 days and the Thursday payout cycle. Internal: route to the expenses/finance queue, not IT app troubleshooting."
+   },
+   {
+    "Id": 101474839,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "e8a34ffa-556e-4b62-9fa3-e4acd4ef9c13",
+    "CreatedTime": "2026-09-13T12:38:37.6730583Z",
+    "CompletedTime": "2026-09-13T13:20:25.8624021Z",
+    "ticket": "HF-2002",
+    "category": "Software",
+    "priority_field": "Medium",
+    "confidence": 0.93,
+    "note": "Approved as-is: KB self-service fix via Company Portal plus fallback contacts. If she replies, confirm this is office FollowMe printing, not a warehouse label printer (Operations)."
+   },
+   {
+    "Id": 101474841,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Modify & Send",
+    "CreatorJobKey": "47552b74-b54a-4218-8e4f-dd523743aaa6",
+    "CreatedTime": "2026-09-13T12:38:39.6316192Z",
+    "CompletedTime": "2026-09-13T13:19:43.2908901Z",
+    "ticket": "HF-2005",
+    "category": "Software",
+    "priority_field": "Low",
+    "confidence": 0.76,
+    "note": "Rewritten: the draft told the requester we have no helpdesk article on this (internal KB gap) and restated install policy without a path forward. New draft gives concrete steps (Software Request with justification, name the tool, hold off meanwhile). Internal: route to endpoint management/security owner to decide on dual-boot + repartitioning; KB is silent on dual-boot."
+   },
+   {
+    "Id": 101474842,
+    "Title": "URGENT: Review Draft Reply (Critical/High impact)",
+    "Priority": "High",
+    "Status": "Completed",
+    "Action": "Modify & Send",
+    "CreatorJobKey": "2d1fcce2-f12b-49f9-892b-2f2a0a8e3121",
+    "CreatedTime": "2026-09-13T12:38:39.9843848Z",
+    "CompletedTime": "2026-09-13T13:20:05.6278107Z",
+    "ticket": "HF-2006",
+    "category": "Software",
+    "priority_field": "Critical",
+    "confidence": 0.82,
+    "note": "Rewritten: led with Critical ownership and a 30-minute first-update commitment (KB: High severity triaged within 30 min), removed the Concur portal link (useless while Concur returns 502), asked for user count, screenshot, and a test contact. Internal: page the Concur/vendor SaaS owner now, check vendor status, open an incident bridge; KB has no Concur outage runbook."
+   },
+   {
+    "Id": 101474844,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Modify & Send",
+    "CreatorJobKey": "623fd301-2cd8-432b-8f24-18464370bf47",
+    "CreatedTime": "2026-09-13T12:38:40.8157597Z",
+    "CompletedTime": "2026-09-13T13:19:17.9802426Z",
+    "ticket": "HF-2007",
+    "category": "Software",
+    "priority_field": "Low",
+    "confidence": 0.84,
+    "note": "Rewritten: the draft re-explained the Software Request process he already followed and warned about internet installs, without addressing the three-week delay or his Friday personal-card threat. New draft owns the delay and commits to an update before Friday. Internal: look up the original Software Request, identify manager approval vs new-vendor security review, nudge the approver; do not authorize personal-card reimbursement without Finance/Procurement."
+   }
+  ],
+  "err": null
+ },
+ "C": {
+  "tasks": [
+   {
+    "Id": 101475778,
+    "Title": "URGENT: Review Draft Reply (Critical/High impact)",
+    "Priority": "High",
+    "Status": "Pending",
+    "Action": null,
+    "CreatorJobKey": "3e857358-a941-4a0c-92c0-a960e8af0f37",
+    "CreatedTime": "2026-09-13T14:09:58.4127461Z",
+    "CompletedTime": null,
+    "ticket": "HF-3002",
+    "category": "Other",
+    "priority_field": "Critical",
+    "confidence": 0.91,
+    "note": null
+   },
+   {
+    "Id": 101475779,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Completed",
+    "Action": "Approve",
+    "CreatorJobKey": "8737bfb5-dbe9-4f83-82a3-9a112c460532",
+    "CreatedTime": "2026-09-13T14:10:06.1745403Z",
+    "CompletedTime": "2026-09-13T14:17:06.8349476Z",
+    "ticket": "HF-3005",
+    "category": "Billing",
+    "priority_field": "Low",
+    "confidence": 0.58,
+    "note": "Confirmed fail-safe trigger: SupportKB contains no policy for home internet reimbursement (kb-03 covers only expense filing and 90-day rules). Routing to Finance/HR to confirm remote stipend eligibility. Flagged for Knowledge Base expansion."
+   },
+   {
+    "Id": 101475780,
+    "Title": "URGENT: Review Draft Reply (Critical/High impact)",
+    "Priority": "High",
+    "Status": "Pending",
+    "Action": null,
+    "CreatorJobKey": "a5a61222-f8c7-4a91-9a43-3c65a7fa69c1",
+    "CreatedTime": "2026-09-13T14:10:06.3252108Z",
+    "CompletedTime": null,
+    "ticket": "HF-3006",
+    "category": "Hardware",
+    "priority_field": "Critical",
+    "confidence": 0.66,
+    "note": null
+   },
+   {
+    "Id": 101475781,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Pending",
+    "Action": null,
+    "CreatorJobKey": "3a84a144-5205-42c5-b8a0-9797f5d89593",
+    "CreatedTime": "2026-09-13T14:10:07.022053Z",
+    "CompletedTime": null,
+    "ticket": "HF-3004",
+    "category": "Access",
+    "priority_field": "Medium",
+    "confidence": 0.9,
+    "note": null
+   },
+   {
+    "Id": 101475782,
+    "Title": "Review Draft Reply",
+    "Priority": "Medium",
+    "Status": "Pending",
+    "Action": null,
+    "CreatorJobKey": "ad0995c8-014f-4a67-8315-89c0c3bf6a08",
+    "CreatedTime": "2026-09-13T14:10:07.2582057Z",
+    "CompletedTime": null,
+    "ticket": "HF-3007",
+    "category": "Hardware",
+    "priority_field": "Medium",
+    "confidence": 0.72,
+    "note": null
+   }
+  ],
+  "err": null
+ },
+ "jobs": {
+  "B": [
+   {
+    "ticket": "HF-2001",
+    "job": "ce9c540e-fa75-448e-a6ea-932efc28f2e8",
+    "state": "Successful",
+    "start": "2026-09-13T12:38:17.860Z",
+    "end": "2026-09-13T13:20:13.403Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Tomas,\n\nYou can reset your HomeFix network password from your phone without a company laptop. The self-service reset site works from any browser and off the company network.\n\n1. Go to reset.homefixsupply.com from your phone browser.\n2. Enter your employee email and select “Send verification code.”\n3. Enter the 6-digit code sent to your registered mobile number.\n4. Choose a new password with at least 14 characters, including at least one number and one symbol. It cannot match your last 10 passwords.\n\nAfter the reset, the new password syncs to email, VPN, and the HR portal within 5 minutes.\n\nIf you have not registered a mobile number, self-service reset will not work; please call the IT service desk at extension 4357 for identity verification.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Access",
+     "priority": "Low",
+     "recommendedApproach": "Approve the draft as-is; it answers the phone/off-network reset and sync questions using the password reset KB. No escalation is needed unless Tomas reports that he lacks a registered mobile number or cannot receive the verification code; in that case, direct him to the IT service desk at extension 4357 for identity verification. Verify only that the customer’s mobile number is registered if he follows up with a reset failure.",
+     "reviewerNote": "Approved as-is: grounded self-service reset steps; answers both the phone/off-network and the sync questions. Only follow up if he has no registered mobile number."
+    }
+   },
+   {
+    "ticket": "HF-2002",
+    "job": "e8a34ffa-556e-4b62-9fa3-e4acd4ef9c13",
+    "state": "Successful",
+    "start": "2026-09-13T12:38:18.350Z",
+    "end": "2026-09-13T13:20:28.573Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Aisha,\n\nI’m sorry the HomeFix-Print queue disappeared after your laptop update. You can get it back yourself without waiting for a technician:\n\n1. Open Company Portal on your company laptop.\n2. Reinstall the item named “FollowMe Print Queue.”\n3. Once it is installed, print to the queue named “HomeFix-Print.”\n4. Badge in at any office printer to release your job. Print jobs are held for 24 hours.\n\nIf the queue still does not appear after reinstalling it, please update this ticket or contact the Service Desk through help.homefixsupply.com. You can also call extension 4357 during staffed hours, 06:00–20:00 local time, Monday to Saturday.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Software",
+     "priority": "Medium",
+     "recommendedApproach": "Approve the draft as-is; it gives the KB-supported self-service fix and supported Service Desk contact options. No escalation is needed unless Aisha replies that the Company Portal reinstall fails or the queue still does not appear. Verify only whether this is an office FollowMe printing issue and not a warehouse label printer issue, since the KB says label printers are handled by Operations, not IT.",
+     "reviewerNote": "Approved as-is: KB self-service fix via Company Portal plus fallback contacts. If she replies, confirm this is office FollowMe printing, not a warehouse label printer (Operations)."
+    }
+   },
+   {
+    "ticket": "HF-2003",
+    "job": "f9a78d48-971c-4dad-b12a-5deefecaa8bb",
+    "state": "Successful",
+    "start": "2026-09-13T12:38:18.810Z",
+    "end": "2026-09-13T13:20:23.527Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Greg,\n\nThanks for reaching out. Concur rejects reports that are over 90 days old unless they have VP approval, so there may still be a path to reimbursement for the conference expense.\n\nPlease request VP approval for the expense report and include that approval with the report in Concur. Once a report is approved, standard reimbursements pay out on the next weekly cycle on Thursdays.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Billing",
+     "priority": "Low",
+     "recommendedApproach": "Approve the draft if the team is comfortable giving general VP-approval guidance; otherwise edit it to match the exact internal Concur approval workflow. Operationally, route or tag this for the expenses/finance queue rather than IT app troubleshooting, because the KB entitlement is policy-based: reports over 90 days old require VP approval and approved reports pay on the next Thursday cycle. Verify whether Greg already has VP approval or whether Finance needs to advise him on the required documentation before resubmission.",
+     "reviewerNote": "Approved as-is: accurate VP-approval path for reports over 90 days and the Thursday payout cycle. Internal: route to the expenses/finance queue, not IT app troubleshooting."
+    }
+   },
+   {
+    "ticket": "HF-2004",
+    "job": "3cc28f1c-83da-4956-b9bc-862a6e9984b5",
+    "state": "Successful",
+    "start": "2026-09-13T12:38:19.667Z",
+    "end": "2026-09-13T13:20:19.207Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Mei,\n\nYou’re right to plan ahead for both MFA and the returns@ mailbox.\n\n1. For your new phone, go to mfa.homefixsupply.com and enroll the new phone before wiping the old one. Install Microsoft Authenticator, scan the QR code shown on the enrollment page, and approve the test push notification.\n\n2. If the old phone has already been wiped, call the Service Desk at extension 4357. After identity verification, they can issue a 4-hour bypass code. Bypass codes are never sent by email.\n\n3. For the returns@ shared mailbox, please use the IT catalog item “Shared Mailbox Access.” The mailbox owner approves the request, and access should appear in Outlook within an hour. Please do not share personal credentials to grant mailbox access.\n\nBest,\nHomeFix Supply Support Team",
+     "category": "Access",
+     "priority": "Low",
+     "recommendedApproach": "Approve the draft as-is; it directly answers both questions using the KB. If Mei’s team needs all four people added, advise her or the mailbox owner to submit the IT catalog item “Shared Mailbox Access” for the four named users and verify the mailbox owner approval. The KB states access appears in Outlook within an hour after owner approval, and MFA bypass codes require a call to extension 4357 after identity verification.",
+     "reviewerNote": "Approved as-is: answers both the MFA phone switch and the returns@ shared mailbox request with concrete KB steps."
+    }
+   },
+   {
+    "ticket": "HF-2005",
+    "job": "47552b74-b54a-4218-8e4f-dd523743aaa6",
+    "state": "Successful",
+    "start": "2026-09-13T12:38:20.440Z",
+    "end": "2026-09-13T13:19:45.967Z",
+    "out": {
+     "decision": "Modify & Send",
+     "finalReply": "Hi Viktor,\n\nThanks for checking before changing any HomeFix laptops. Dual-boot and disk repartitioning on company laptops need a decision from our endpoint and security team, so I have routed your question to them to confirm whether it is permitted and which tooling, if any, is approved.\n\nTo get this moving:\n1. Submit a Software Request in the IT catalog for Ubuntu dual-boot, with the business justification: the GPU workloads your group needs to run, how many people and laptops are involved, and when you need it.\n2. Name the disk-partitioning tool you were planning to use in the same request, so it is reviewed at the same time.\n3. Until the review comes back, please don't repartition drives or install Ubuntu or partitioning tools from the internet. Installs outside Company Portal are blocked by policy and raise a security alert.\n\nWe'll get back to you with the team's decision and the approved setup for your GPU work.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Software",
+     "priority": "Low",
+     "recommendedApproach": "Approve the draft if you are comfortable escalating the policy question, since it accurately avoids inventing a dual-boot answer not present in SupportKB. Route the ticket to the endpoint management or security review owner to confirm whether dual-boot Ubuntu and disk repartitioning are permitted for company laptops. Verify whether Ubuntu or any partitioning tool is already listed in Company Portal; if not, advise the requester to submit a Software Request with business justification per the KB software request article.",
+     "reviewerNote": "Rewritten: the draft told the requester we have no helpdesk article on this (internal KB gap) and restated install policy without a path forward. New draft gives concrete steps (Software Request with justification, name the tool, hold off meanwhile). Internal: route to endpoint management/security owner to decide on dual-boot + repartitioning; KB is silent on dual-boot."
+    }
+   },
+   {
+    "ticket": "HF-2006",
+    "job": "2d1fcce2-f12b-49f9-892b-2f2a0a8e3121",
+    "state": "Successful",
+    "start": "2026-09-13T12:38:20.997Z",
+    "end": "2026-09-13T13:20:08.617Z",
+    "out": {
+     "decision": "Modify & Send",
+     "finalReply": "Hi Carla,\n\nWe have opened this as a Critical incident and escalated it to the on-call specialist team now. We understand the whole finance team has been getting a 502 error in Concur since 8am and that approvals for today's 6pm month-end close are blocked, and we are working against that deadline.\n\nWhat happens next:\n1. The on-call team is investigating the Concur outage, including whether it is a wider vendor-side incident.\n2. You will get a first status update from us within 30 minutes, and regular updates until Concur is working again.\n\nTo help the responders move faster, please reply with:\n- Roughly how many people are affected\n- A screenshot of the 502 error and the browser you are using\n- A direct phone number for a finance contact who can test with IT\n\nIf you need us urgently in the meantime, call the Service Desk at extension 4357 (HELP), staffed 06:00-20:00 local time, Monday to Saturday, and quote ticket HF-2006.\n\nWe own this ticket until it is resolved.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Software",
+     "priority": "Critical",
+     "recommendedApproach": "Escalate HF-2006 immediately to the application/on-call specialist team and page whoever owns Concur/vendor SaaS availability. Approve the draft as-is unless you want to add an internal incident bridge or phone number not listed in SupportKB; the KB only provides Service Desk extension 4357 and says High severity is triaged within 30 minutes during staffed hours, but it is silent on Concur-specific SLAs. Verify whether other finance users can reproduce the 502 and capture the affected user count, browser/error screenshot, and any Concur status/vendor incident information.",
+     "reviewerNote": "Rewritten: led with Critical ownership and a 30-minute first-update commitment (KB: High severity triaged within 30 min), removed the Concur portal link (useless while Concur returns 502), asked for user count, screenshot, and a test contact. Internal: page the Concur/vendor SaaS owner now, check vendor status, open an incident bridge; KB has no Concur outage runbook."
+    }
+   },
+   {
+    "ticket": "HF-2007",
+    "job": "623fd301-2cd8-432b-8f24-18464370bf47",
+    "state": "Successful",
+    "start": "2026-09-13T12:38:21.740Z",
+    "end": "2026-09-13T13:19:20.717Z",
+    "out": {
+     "decision": "Modify & Send",
+     "finalReply": null,
+     "category": "Software",
+     "priority": "Low",
+     "recommendedApproach": "Approve the draft with the ticket owner assigned, then check the original Software Request record to identify whether it is waiting on Owen’s manager approval or a new-vendor security review. If it is under $500/year, KB says it routes to the manager; nudge the manager or procurement owner as appropriate and add an internal note with the current approver. Verify whether the diagram tool is already in Company Portal’s Approved list and whether the vendor is new, because KB cites a 5-business-day security review only for new vendors. KB is silent on personal-card purchase reimbursement for software, so do not authorize expense reimbursement without Finance/Procurement confirmation.",
+     "reviewerNote": ""
+    }
+   },
+   {
+    "ticket": "HF-2008",
+    "job": "c9e9f997-d897-4abf-a2ad-b60bcfbf26ba",
+    "state": "Successful",
+    "start": "2026-09-13T12:38:22.270Z",
+    "end": "2026-09-13T12:38:32.390Z",
+    "out": {
+     "decision": "AutoSkipped",
+     "finalReply": "None - Auto-reply noise filtered",
+     "category": "Noise",
+     "priority": "Low",
+     "recommendedApproach": "No reply needed, close the ticket as automated noise; the signal is that it is a SupplyTech Weekly newsletter/marketing email with “read online or unsubscribe” language.",
+     "reviewerNote": ""
+    }
+   }
+  ],
+  "C": [
+   {
+    "ticket": "HF-3001",
+    "job": "77cea77d-f67c-40ab-8fcb-023fbaa53a2e",
+    "state": "Successful",
+    "start": "2026-09-13T14:09:36.340Z",
+    "end": "2026-09-13T14:10:08.563Z",
+    "out": {
+     "decision": "AutoResolved",
+     "finalReply": "Hi Nadia,\n\nYou can get the visiting contractor connected through guest Wi-Fi:\n\n1. Sponsor the guest at wifi.homefixsupply.com/guest.\n2. Have her join the “HomeFix-Guest” network and use the code she receives.\n3. Guest access provides internet access only and does not include internal HomeFix resources.\n\nThe standard guest code is valid for 24 hours, but access can be extended to 5 days for auditors and contractors by any people-manager, so it can cover her four-day visit.\n\nBest,\nHomeFix Supply Support Team",
+     "category": "Network",
+     "priority": "Low",
+     "recommendedApproach": "Approve the draft as-is because the retrieved guest Wi-Fi guidance directly answers both questions. No IT operational action is needed unless Nadia cannot access the guest sponsorship page or needs help identifying a people-manager to extend the code. Verify only whether Nadia or another onsite people-manager can apply the 5-day contractor extension.",
+     "reviewerNote": "",
+     "kbCovered": true,
+     "kbSources": "kb-08-guest-wifi",
+     "autonomyGate": "Auto-resolved: deterministic gate passed and independent verifier confirmed every claim against SupportKB. Checked kb-08-guest-wifi. The draft's guest sponsorship URL, HomeFix-Guest network, 24-hour code validity, internet-only limitation, and 5-day extension for auditors and contractors by any people-manager are all supported; the four-day visit is covered by the supported 5-day maximum."
+    }
+   },
+   {
+    "ticket": "HF-3002",
+    "job": "3e857358-a941-4a0c-92c0-a960e8af0f37",
+    "state": "Running",
+    "start": "2026-09-13T14:09:36.920Z",
+    "end": null,
+    "out": null
+   },
+   {
+    "ticket": "HF-3003",
+    "job": "d505adc6-b825-4175-b472-5e860852ecd4",
+    "state": "Successful",
+    "start": "2026-09-13T14:09:40.800Z",
+    "end": "2026-09-13T14:10:13.900Z",
+    "out": {
+     "decision": "AutoResolved",
+     "finalReply": "Hi Laura,\n\nYou can get your final payslips through the former employee portal rather than your disabled network account.\n\n1. Go to alumni.homefixsupply.com.\n2. Sign in using the personal email address you registered before leaving HomeFix.\n3. Open My Documents to find your payslips.\n\nFormer employees keep payslip access for 24 months. Please note that the IT Service Desk cannot see or change payroll data; payroll corrections go through your HR business partner.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Access",
+     "priority": "Low",
+     "recommendedApproach": "Approve the draft as-is; it answers the access path and avoids offering unsupported account reactivation. No operational staff action is needed unless Laura replies that her personal email was not registered or she needs a payroll correction; kb-13 says corrections go through the HR business partner and IT cannot see or change payroll data. Verify only that the ticket does not include a separate payroll correction request before closing.",
+     "reviewerNote": "",
+     "kbCovered": true,
+     "kbSources": "kb-13-hr-portal-access",
+     "autonomyGate": "Auto-resolved: deterministic gate passed and independent verifier confirmed every claim against SupportKB. Checked kb-13-hr-portal-access, which supports former employees accessing payslips for 24 months at alumni.homefixsupply.com using a personal email registered before departure, with payslips under My Documents. It also supports that the IT Service Desk cannot see or change payroll data and that payroll corrections go through the HR business partner. No unsupported claims or unanswered requests were found."
+    }
+   },
+   {
+    "ticket": "HF-3004",
+    "job": "3a84a144-5205-42c5-b8a0-9797f5d89593",
+    "state": "Running",
+    "start": "2026-09-13T14:09:41.513Z",
+    "end": null,
+    "out": null
+   },
+   {
+    "ticket": "HF-3005",
+    "job": "8737bfb5-dbe9-4f83-82a3-9a112c460532",
+    "state": "Successful",
+    "start": "2026-09-13T14:09:41.980Z",
+    "end": "2026-09-13T14:17:09.647Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Ingrid,\n\nThanks for reaching out. I understand you’re newly fully remote and want to know whether HomeFix reimburses part of home internet costs and how to claim it in Concur.\n\nI’m escalating this to a specialist so we can confirm the reimbursement eligibility and the correct Concur handling rather than point you to the wrong category.\n\nFor reference, expense reports are filed in Concur at expenses.homefixsupply.com. Once a report is approved, standard reimbursements pay on the next weekly cycle, which runs on Thursdays. Reports over 90 days old require VP approval.\n\nBest,\nHomeFix Supply Support Team",
+     "category": "Billing",
+     "priority": "Low",
+     "recommendedApproach": "Hold or edit the draft before sending, because it cannot answer the core eligibility and Concur-category questions from SupportKB. Route the ticket to the expenses/finance policy owner or appropriate reimbursement queue to confirm whether fully remote staff have a home internet reimbursement entitlement and how it should be claimed. Verify Ingrid’s remote-work status if needed; kb-03 only supports the Concur portal, weekly payout cycle, and VP approval requirement for reports over 90 days.",
+     "reviewerNote": "Confirmed fail-safe trigger: SupportKB contains no policy for home internet reimbursement (kb-03 covers only expense filing and 90-day rules). Routing to Finance/HR to confirm remote stipend eligibility. Flagged for Knowledge Base expansion.",
+     "kbCovered": false,
+     "kbSources": "kb-03-expense-reports",
+     "autonomyGate": "Not auto-resolved: confidence 0.58 is below 0.85 | agent did not mark the ticket as fully covered by SupportKB (kbCovered=false) | agent flagged KB gaps: Whether HomeFix reimburses any portion of home internet costs for fully remote staff; How to claim home internet reimbursement if eligible; Which Concur category should be used for home internet costs; Any eligibility rules, reimbursement amount, or documentation requirements for remote-staff internet reimbursement | resolution needs staff action (needsStaffAction=true) | draft contains wording that is not a self-contained answer: \"escalat\", \"specialist\""
+    }
+   },
+   {
+    "ticket": "HF-3006",
+    "job": "a5a61222-f8c7-4a91-9a43-3c65a7fa69c1",
+    "state": "Running",
+    "start": "2026-09-13T14:09:43.170Z",
+    "end": null,
+    "out": null
+   },
+   {
+    "ticket": "HF-3007",
+    "job": "ad0995c8-014f-4a67-8315-89c0c3bf6a08",
+    "state": "Running",
+    "start": "2026-09-13T14:09:43.540Z",
+    "end": null,
+    "out": null
+   },
+   {
+    "ticket": "HF-3008",
+    "job": "8f3ff6f9-a17b-47cc-8ece-9ef4f75858f8",
+    "state": "Successful",
+    "start": "2026-09-13T14:09:44.203Z",
+    "end": "2026-09-13T14:09:54.993Z",
+    "out": {
+     "decision": "AutoSkipped",
+     "finalReply": "None - Auto-reply noise filtered",
+     "category": "Noise",
+     "priority": "Low",
+     "recommendedApproach": "No reply needed, close the ticket as automated noise; signal: the body states “This is an automated notification” and “Do not reply to this message.”",
+     "reviewerNote": "",
+     "kbCovered": false,
+     "kbSources": "(none)",
+     "autonomyGate": "Auto-skipped: automated noise (confidence 0.99)"
+    }
+   }
+  ],
+  "A": [
+   {
+    "ticket": "HF-1001",
+    "job": "65241d8c-5a0c-416c-9324-9714fd00e59e",
+    "state": "Successful",
+    "start": "2026-09-12T17:28:52.263Z",
+    "end": "2026-09-12T18:22:40.520Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Rita,\n\nI’m sorry you’re locked out after mistyping your password and can’t remember the current one. You can reset your HomeFix network password from any browser, even off the network:\n\n1. Go to reset.homefixsupply.com.\n2. Enter your employee email and click “Send verification code.”\n3. Enter the 6-digit code sent to your registered mobile number.\n4. Choose a new password with at least 14 characters, including at least one number and one symbol. It cannot match your last 10 passwords.\n\nIf the account lockout was triggered after 5 failed attempts, it will clear automatically after 15 minutes. Once you reset the password, it should sync to email, VPN, and the HR portal within 5 minutes.\n\nIf you never registered a mobile number, the self-service reset will not work. Please call the IT service desk at extension 4357 so we can verify your identity and help you regain access.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Access",
+     "priority": "High"
+    }
+   },
+   {
+    "ticket": "HF-1002",
+    "job": "7c1d6e9c-7da7-4a1e-84ca-bbc6bcd87b3e",
+    "state": "Successful",
+    "start": "2026-09-12T17:29:38.770Z",
+    "end": "2026-09-12T18:22:48.620Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Marcus,\n\nThanks for letting us know GlobalProtect is stuck on “Connecting” while you’re on the hotel Wi-Fi.\n\nPlease try the following:\n\n1. If GlobalProtect has been on “Connecting” for more than two minutes, restart the PanGPS service from Task Manager.\n2. If that does not clear it, reboot the laptop and try connecting again.\n3. If the hotel or guest Wi-Fi is blocking the VPN tunnel, switch to a mobile hotspot and try the VPN connection from there.\n\nFor reference, the HomeFix VPN status icon turns blue when connected.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Network",
+     "priority": "Medium"
+    }
+   },
+   {
+    "ticket": "HF-1003",
+    "job": "ee02965a-b58e-46b1-8795-00c935296a20",
+    "state": "Successful",
+    "start": "2026-09-12T17:29:41.440Z",
+    "end": "2026-09-12T18:22:53.487Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Priya,\n\nThanks for checking before submitting. For the duplicate $84.20 client lunch showing in your Concur expense feed, please do not submit both lines.\n\n1. In Concur, mark the duplicate transaction line as \"Disputed - duplicate.\"\n2. Do not contact the bank yourself for this corporate-card duplicate.\n3. The duplicate should be removed from your Concur feed within 3 business days, and the bank will reverse the pending charge automatically.\n\nThis will help avoid any appearance of double-claiming while the duplicate is cleared.\n\nRegards,\nHomeFix Supply Support Team",
+     "category": "Billing",
+     "priority": "Low"
+    }
+   },
+   {
+    "ticket": "HF-1006",
+    "job": "9a93a55b-6140-4d6c-9860-a5549755490f",
+    "state": "Successful",
+    "start": "2026-09-12T17:29:44.350Z",
+    "end": "2026-09-12T18:25:55.620Z",
+    "out": {
+     "decision": "Modify & Send",
+     "finalReply": "High business impact: Hi Dave,We understand that all handheld scanners in the Rotterdam DC lost connection, outbound loading has stopped, and trucks are waiting at the dock.The knowledge base does not provide a scanner-specific recovery procedure for this issue, so we are escalating this to a specialist for urgent investigation rather than giving you unsupported steps.For live follow-up, the Service Desk can be reached at extension 4357 (HELP), staffed 06:00–20:00 local time, Monday to Saturday. The Rotterdam DC lobby walk-up desk is also available during business hours.Thank you for flagging the business impact clearly.HomeFix Supply Support Team. ",
+     "category": "Network",
+     "priority": "Critical"
+    }
+   },
+   {
+    "ticket": "HF-1005",
+    "job": "e8b754eb-e033-4962-8e59-693d7c6b9972",
+    "state": "Successful",
+    "start": "2026-09-12T17:29:42.917Z",
+    "end": "2026-09-12T18:26:03.893Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hello Elena,\n\nThank you for reaching out about syncing NetSuite with the HomeFix inventory API for real-time stock levels.\n\nI checked our available IT helpdesk guidance, and I do not see a documented supported integration path for NetSuite or published API rate limits for the HomeFix inventory API. Rather than give you incomplete or unsupported information, we’re escalating this to a specialist who can confirm the approved integration approach and any limits you should plan around.\n\nThey will review the request and follow up with the correct technical guidance.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Software",
+     "priority": "Low"
+    }
+   },
+   {
+    "ticket": "HF-1004",
+    "job": "e68675bf-1dec-45e8-b852-7517aba13b69",
+    "state": "Successful",
+    "start": "2026-09-12T17:29:41.583Z",
+    "end": "2026-09-12T18:26:12.800Z",
+    "out": {
+     "decision": "Approve",
+     "finalReply": "Hi Jonah,\n\nThanks for reaching out. For your hybrid schedule equipment and the auditor’s guest Wi-Fi access:\n\n1. Docks and monitors: each employee is entitled to one dock and up to two 27-inch monitors. You can order them through the IT catalog, and the request will require manager approval.\n\n2. Guest Wi-Fi: sponsor the auditor from wifi.homefixsupply.com/guest. She will receive a code for the \"HomeFix-Guest\" network. Guest access is internet-only and does not provide access to internal HomeFix resources.\n\n3. Duration: guest codes are normally valid for 24 hours, but access can be extended to 5 days for auditors and contractors by any people-manager. That should cover Tuesday through Thursday if the extension is applied.\n\nBest regards,\nHomeFix Supply Support Team",
+     "category": "Other",
+     "priority": "Low"
+    }
+   },
+   {
+    "ticket": "HF-1007",
+    "job": "351f0d47-119b-4d5c-9695-1cf985274f33",
+    "state": "Successful",
+    "start": "2026-09-12T17:29:45.877Z",
+    "end": "2026-09-12T18:26:44.630Z",
+    "out": {
+     "decision": "Modify & Send",
+     "finalReply": "soften the tone! Hi Sandra,I’m sorry your laptop replacement has been pushed back again, especially since the device is shutting down randomly during customer calls. I’ve noted the prior references HW-3321 and HW-3398 so the team can review the history together.Based on our hardware support guidance, in-warranty laptop faults should be handled through a Hardware Repair ticket, and loaner devices ship within 2 business days when repairs take longer than 3 days. Because this is the third delay on an active replacement and the timing concern is not covered by the standard guidance, we’re escalating this to a hardware specialist for review rather than giving you an unsupported estimate.If you are unable to work at all, please also call the Service Desk at extension 4357 during staffed hours so the ticket can be handled as High severity.Best regards,HomeFix Supply Support Team",
+     "category": "Hardware",
+     "priority": "Medium"
+    }
+   },
+   {
+    "ticket": "HF-1008",
+    "job": "dca71319-f916-4e57-baa2-431f08a0fd1c",
+    "state": "Successful",
+    "start": "2026-09-12T17:29:47.310Z",
+    "end": "2026-09-12T18:26:52.220Z",
+    "out": {
+     "decision": "Reject",
+     "finalReply": "Hello auto-reply@vendormail.example,\n\nWe received your automated out-of-office response regarding an order confirmation. This message does not describe an IT helpdesk issue or request, so no troubleshooting action is needed from HomeFix Supply IT Support at this time.\n\nIf you need help with a specific IT issue, please submit a new request with the details of the problem, and we’ll be glad to assist.\n\nThank you,\nHomeFix Supply Support Team",
+     "category": "Other",
+     "priority": "Low"
+    }
+   }
+  ]
+ }
+}

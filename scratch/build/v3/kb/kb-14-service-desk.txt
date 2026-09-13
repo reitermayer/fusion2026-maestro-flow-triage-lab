@@ -1,0 +1,10 @@
+HomeFix Supply IT Helpdesk — Contacting the Service Desk
+
+Channels:
+- IT catalog and ticket portal: help.homefixsupply.com (fastest for standard requests)
+- Phone: extension 4357 (HELP), staffed 06:00-20:00 local time, Monday to Saturday
+- Walk-up desks: Austin HQ 2F, Rotterdam DC lobby, staffed business hours
+
+Severity guide for tickets: use "High" only when you cannot work at all. Tickets are triaged within 4 business hours; High severity within 30 minutes during staffed hours.
+
+The service desk does not handle: payroll corrections (HR), label printers (Operations), or building access badges (Facilities).

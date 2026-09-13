@@ -1,0 +1,13 @@
+HomeFix Supply IT Helpdesk — Multi-Factor Authentication (MFA)
+
+All employees must enroll in MFA within 7 days of onboarding.
+
+Enrollment:
+1. Visit mfa.homefixsupply.com and sign in with your network password.
+2. Install the Microsoft Authenticator app on your phone.
+3. Scan the QR code shown on the enrollment page.
+4. Approve the test push notification.
+
+Changing phones: enroll the new phone from the same portal BEFORE wiping the old one. If you already wiped the old phone, the service desk can issue a 4-hour bypass code after identity verification (call extension 4357; bypass codes are never sent by email).
+
+Hardware tokens are available for warehouse staff without smartphones; managers request them through the IT catalog.

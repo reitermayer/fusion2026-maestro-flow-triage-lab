@@ -1,0 +1,22 @@
+{
+    "DocVersion": "1.0.0",
+    "StudioMinVersion": "2025.10.0",
+    "SolutionId": "b5a91aa2-b585-45c8-ad03-08df0f4a52c6",
+    "Projects": [
+        {
+            "Type": "Flow",
+            "ProjectRelativePath": "TriageTicketV1/project.uiproj",
+            "Id": "33c66f48-966c-48d0-9941-257bfc077be6"
+        },
+        {
+            "Type": "Flow",
+            "ProjectRelativePath": "TriageTicketV2/project.uiproj",
+            "Id": "8543f073-9087-4a28-9349-103eb7e60aa5"
+        },
+        {
+            "Type": "Flow",
+            "ProjectRelativePath": "TriageTicketV3/project.uiproj",
+            "Id": "3acfab75-3cad-4f0b-945b-7f8f4b9973b4"
+        }
+    ]
+}

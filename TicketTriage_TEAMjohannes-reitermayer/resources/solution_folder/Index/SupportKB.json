@@ -1,0 +1,38 @@
+{
+  "docVersion": "1.0.0",
+  "resource": {
+    "name": "SupportKB",
+    "kind": "index",
+    "apiVersion": "ecs.uipath.com/v2",
+    "isOverridable": true,
+    "dependencies": [
+      {
+        "kind": "Bucket",
+        "name": "SupportKBDocs"
+      }
+    ],
+    "runtimeDependencies": [],
+    "folders": [
+      {
+        "fullyQualifiedName": "solution_folder"
+      }
+    ],
+    "spec": {
+      "name": "SupportKB",
+      "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+      "storageBucketReference": {
+        "name": "SupportKBDocs",
+        "key": "c650edad-bf39-4529-b00c-7bb8055d7270",
+        "folderKey": "38e61b75-2699-4b7e-bafb-e2656e4955c9"
+      },
+      "fileNameGlob": "TXT",
+      "dataSourceType": "StorageBucket",
+      "includeSubfolders": true,
+      "ingestionType": "Advanced",
+      "encrypted": false
+    },
+    "locks": [],
+    "key": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+    "files": []
+  }
+}

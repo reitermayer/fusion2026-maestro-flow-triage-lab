@@ -1,0 +1,5 @@
+HomeFix Supply IT Helpdesk — Wi-Fi and Guest Access
+
+Employees: connect to the "HomeFix-Corp" network; company devices join automatically via certificate. Personal phones may join "HomeFix-BYOD" using your network credentials.
+
+Guests: sponsor a guest from wifi.homefixsupply.com/guest. The guest receives a code valid for 24 hours on the "HomeFix-Guest" network. Guest access covers internet only, no internal resources. Codes can be extended to 5 days for auditors and contractors by any people-manager.

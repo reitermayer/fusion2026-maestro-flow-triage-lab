@@ -1,0 +1,1728 @@
+{
+  "id": "d76a4577-a189-481a-9b6b-1b07d9f6398e",
+  "version": "1.9",
+  "name": "TriageTicketV1",
+  "runtime": "maestro",
+  "nodes": [
+    {
+      "id": "start",
+      "type": "core.trigger.manual",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "Support ticket received",
+        "icon": "play"
+      },
+      "inputs": {
+        "entryPointId": "21ba14cd-783d-421a-ba44-3c7da1efc322",
+        "isDefaultEntryPoint": true
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Data passed when manually triggering the process.",
+          "source": "null",
+          "var": "output"
+        }
+      }
+    },
+    {
+      "id": "triageAgent1",
+      "type": "uipath.agent.autonomous",
+      "typeVersion": "1.4",
+      "display": {
+        "label": "Classify & Draft Reply",
+        "icon": "autonomous-agent"
+      },
+      "inputs": {
+        "systemPrompt": "You are a support ticket triage specialist for HomeFix Supply's IT helpdesk. For one incoming ticket you do exactly two things: classify it, and draft a reply the customer could receive as-is once a human approves it.\n\nGrounding\nThe SupportKB context handle is your only source of product and policy knowledge. Search it for the specific problem described in the ticket before you write anything. Never state a setting, policy, entitlement, timeline, or troubleshooting step that you did not find in SupportKB. Do not fill gaps from general knowledge.\n\nCall SupportKB at most 3 times for this ticket. After the last call, stop retrieving and decide with the evidence you already have.\nIf the retrieved content does not cover a detail the customer asked about, say so in rationale, lower confidence, and still return every outputSchema field. Never end a run without a determination.\n\nClassification\ncategory is the nature of the problem and must be exactly one of: Access (logins, passwords, MFA, permissions), Hardware (physical devices, peripherals), Software (applications, installs, licences, errors), Network (connectivity, VPN, Wi-Fi), Billing (invoices, charges, subscriptions), Other (anything that fits none of the above).\npriority reflects business impact and blast radius, not the customer's tone, and must be exactly one of: Critical (many users blocked or a security incident), High (one user fully blocked with no workaround), Medium (degraded but workable, or a workaround exists), Low (a question, a request, or a cosmetic issue).\n\nDraft reply\nWrite draftReply as the complete message body only. No subject line, no placeholder brackets, no \"[insert X here]\". Open by addressing the customer by their name. Acknowledge the specific problem in their own terms. Give the concrete steps or answer that SupportKB supports, numbered when there is more than one. If SupportKB does not cover the issue, say plainly that you are escalating it to a specialist rather than inventing a fix. Close courteously and sign off as the HomeFix Supply Support Team. Keep it under 200 words in a professional, plain-spoken tone.\n\nOutput contract\nReturn every field of the output schema on every run: category, priority, draftReply, rationale, confidence. A human reviewer reads your output next and will approve, edit, or reject the draft. Write rationale for that reviewer in at most three sentences, and set confidence honestly so a low score signals that the draft needs their attention.",
+        "userPrompt": "Triage this support ticket.\n\nTicket ID: {{ $vars.start.output.ticketId }}\nCustomer name: {{ $vars.start.output.customerName }}\nSubject: {{ $vars.start.output.subject }}\n\nBody:\n{{ $vars.start.output.body }}",
+        "model": "gpt-5.5-2026-04-23",
+        "mode": "standard",
+        "temperature": 0,
+        "maxTokenPerResponse": 128000,
+        "maxIterations": 25,
+        "isConversational": false,
+        "guardrails": [],
+        "name": "Classify & Draft Reply",
+        "agentInputVariables": [
+          {
+            "id": "start__output__ticketId",
+            "type": "string",
+            "binding": "=$vars.start.output.ticketId",
+            "description": "Bound from $vars.start.output.ticketId"
+          },
+          {
+            "id": "start__output__subject",
+            "type": "string",
+            "binding": "=$vars.start.output.subject",
+            "description": "Bound from $vars.start.output.subject"
+          },
+          {
+            "id": "start__output__body",
+            "type": "string",
+            "binding": "=$vars.start.output.body",
+            "description": "Bound from $vars.start.output.body"
+          },
+          {
+            "id": "start__output__customerName",
+            "type": "string",
+            "binding": "=$vars.start.output.customerName",
+            "description": "Bound from $vars.start.output.customerName"
+          }
+        ],
+        "agentOutputVariables": [
+          {
+            "id": "category",
+            "type": "string"
+          },
+          {
+            "id": "priority",
+            "type": "string"
+          },
+          {
+            "id": "draftReply",
+            "type": "string"
+          },
+          {
+            "id": "rationale",
+            "type": "string"
+          },
+          {
+            "id": "confidence",
+            "type": "number"
+          }
+        ],
+        "source": "38b67540-ed7d-4b12-993c-a8e55aeab6e2"
+      },
+      "outputs": {
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error"
+        }
+      }
+    },
+    {
+      "id": "supportKbContext1",
+      "type": "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+      "typeVersion": "1.0.0",
+      "display": {
+        "label": "SupportKB",
+        "icon": "context"
+      },
+      "inputs": {
+        "source": "b933812c-2231-4a56-8f6f-3c771b08e559",
+        "id": "supportKbContext1",
+        "name": "SupportKB",
+        "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+        "referenceKey": "",
+        "indexName": "SupportKB",
+        "folderPath": "Shared",
+        "resultCount": 5,
+        "threshold": 0,
+        "retrievalMode": "semantic",
+        "query": {
+          "mode": "prompt",
+          "textValue": "",
+          "promptValue": "The support problem described in the ticket, phrased as a knowledge base search query",
+          "argumentPath": ""
+        },
+        "fileExtension": "All",
+        "folderPathPrefix": {
+          "mode": "text-builder",
+          "textValue": "",
+          "promptValue": "",
+          "argumentPath": ""
+        }
+      }
+    },
+    {
+      "id": "reviewDraftReply1",
+      "type": "uipath.human-in-the-loop.quick-form",
+      "typeVersion": "1.6",
+      "display": {
+        "label": "Review Draft Reply",
+        "icon": "users"
+      },
+      "inputs": {
+        "title": "Review Draft Reply",
+        "recipient": {
+          "channels": [
+            "ActionCenter"
+          ],
+          "connections": {},
+          "assignee": {
+            "type": "user",
+            "value": "johannes.reitermayer@gmail.com"
+          }
+        },
+        "priority": "Medium",
+        "schema": {
+          "schemaId": "757f844a-924f-4460-93eb-27e2ede2744a",
+          "fields": [
+            {
+              "id": "ticketid",
+              "label": "Ticket ID",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.ticketId"
+            },
+            {
+              "id": "customername",
+              "label": "Customer Name",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.customerName"
+            },
+            {
+              "id": "subject",
+              "label": "Subject",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.subject"
+            },
+            {
+              "id": "body",
+              "label": "Ticket Body",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.body"
+            },
+            {
+              "id": "category",
+              "label": "Category",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.triageAgent1.output.category"
+            },
+            {
+              "id": "priority",
+              "label": "Priority",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.triageAgent1.output.priority"
+            },
+            {
+              "id": "rationale",
+              "label": "Agent Rationale",
+              "type": "string",
+              "direction": "input",
+              "binding": "vars.triageAgent1.output.rationale"
+            },
+            {
+              "id": "confidence",
+              "label": "Confidence",
+              "type": "number",
+              "direction": "input",
+              "binding": "vars.triageAgent1.output.confidence"
+            },
+            {
+              "id": "draftreply",
+              "label": "Draft Reply",
+              "type": "string",
+              "direction": "inOut",
+              "binding": "vars.triageAgent1.output.draftReply",
+              "variable": "vars.draftReply"
+            }
+          ],
+          "outcomes": [
+            {
+              "id": "approve",
+              "name": "Approve",
+              "type": "string",
+              "isPrimary": true,
+              "action": "Continue"
+            },
+            {
+              "id": "modifyandsend",
+              "name": "Modify & Send",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            },
+            {
+              "id": "reject",
+              "name": "Reject",
+              "type": "string",
+              "isPrimary": false,
+              "action": "Continue"
+            }
+          ]
+        }
+      },
+      "outputs": {
+        "output": {
+          "type": "object",
+          "description": "Task result data",
+          "source": "=result",
+          "var": "output",
+          "properties": {
+            "draftreply": {
+              "type": "string"
+            },
+            "Action": {
+              "type": "string",
+              "enum": [
+                "Approve",
+                "Modify & Send",
+                "Reject"
+              ],
+              "default": "Approve"
+            }
+          }
+        },
+        "status": {
+          "type": "string",
+          "description": "Task completion status",
+          "source": "=result.Action",
+          "var": "status",
+          "enum": [
+            "Approve",
+            "Modify & Send",
+            "Reject"
+          ],
+          "default": "Approve"
+        }
+      }
+    },
+    {
+      "id": "end1",
+      "type": "core.control.end",
+      "typeVersion": "1.0",
+      "display": {
+        "label": "Decision Recorded",
+        "icon": "circle-check"
+      },
+      "inputs": {},
+      "outputs": {
+        "decision": {
+          "source": "=js:$vars.reviewDraftReply1.status",
+          "type": "string"
+        },
+        "finalReply": {
+          "source": "=js:$vars.reviewDraftReply1.output.draftreply",
+          "type": "string"
+        },
+        "category": {
+          "source": "=js:$vars.triageAgent1.output.category",
+          "type": "string"
+        },
+        "priority": {
+          "source": "=js:$vars.triageAgent1.output.priority",
+          "type": "string"
+        }
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_start_output_triageAgent1_input",
+      "sourceNodeId": "start",
+      "sourcePort": "output",
+      "targetNodeId": "triageAgent1",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_triageAgent1_context_supportKbContext1_input",
+      "sourceNodeId": "triageAgent1",
+      "sourcePort": "context",
+      "targetNodeId": "supportKbContext1",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_triageAgent1_success_reviewDraftReply1_input",
+      "sourceNodeId": "triageAgent1",
+      "sourcePort": "success",
+      "targetNodeId": "reviewDraftReply1",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_reviewDraftReply1_outcomeApprove_end1_input",
+      "sourceNodeId": "reviewDraftReply1",
+      "sourcePort": "outcome-approve",
+      "targetNodeId": "end1",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_reviewDraftReply1_outcomeModifyandsend_end1_input",
+      "sourceNodeId": "reviewDraftReply1",
+      "sourcePort": "outcome-modifyandsend",
+      "targetNodeId": "end1",
+      "targetPort": "input"
+    },
+    {
+      "id": "edge_reviewDraftReply1_outcomeReject_end1_input",
+      "sourceNodeId": "reviewDraftReply1",
+      "sourcePort": "outcome-reject",
+      "targetNodeId": "end1",
+      "targetPort": "input"
+    }
+  ],
+  "definitions": [
+    {
+      "nodeType": "core.trigger.manual",
+      "version": "1.0",
+      "category": "trigger",
+      "description": "Start the process manually",
+      "tags": [
+        "trigger",
+        "start",
+        "manual"
+      ],
+      "sortOrder": 80,
+      "display": {
+        "label": "Manual trigger",
+        "icon": "play",
+        "shape": "circle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "output",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              }
+            }
+          ],
+          "visible": true
+        }
+      ],
+      "model": {
+        "type": "bpmn:StartEvent",
+        "entryPointId": true
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "Data passed when manually triggering the process.",
+          "source": "null",
+          "var": "output"
+        }
+      },
+      "toolbarExtensions": {
+        "design": {
+          "actions": [
+            {
+              "id": "change-trigger-type",
+              "icon": "square-mouse-pointer",
+              "label": "Change trigger type"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "nodeType": "uipath.agent.autonomous",
+      "version": "1.4",
+      "category": "agent",
+      "description": "AI agent that completes tasks autonomously",
+      "tags": [
+        "agentic",
+        "ai",
+        "autonomous",
+        "agent"
+      ],
+      "sortOrder": 10,
+      "supportsErrorHandling": true,
+      "display": {
+        "label": "Autonomous agent",
+        "icon": "autonomous-agent",
+        "shape": "rectangle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "top",
+          "handles": [
+            {
+              "id": "memory",
+              "type": "source",
+              "handleType": "artifact",
+              "label": "Memory",
+              "showButton": true,
+              "constraints": {
+                "allowedTargets": [
+                  {
+                    "nodeType": "uipath.agent.resource.memory.*"
+                  }
+                ],
+                "maxConnections": 1,
+                "validationMessage": "Only Memory nodes can connect here",
+                "addNodePanel": {
+                  "searchScope": "deep",
+                  "searchProviders": [],
+                  "refreshOnFocus": "memory"
+                }
+              }
+            },
+            {
+              "id": "escalation",
+              "type": "source",
+              "handleType": "artifact",
+              "label": "Escalations",
+              "showButton": true,
+              "constraints": {
+                "allowedTargets": [
+                  {
+                    "nodeType": "uipath.agent.resource.escalation"
+                  },
+                  {
+                    "nodeType": "uipath.agent.resource.escalation.*"
+                  }
+                ],
+                "validationMessage": "Only Agent Escalation nodes can connect here",
+                "addNodePanel": {
+                  "searchScope": "deep",
+                  "searchProviders": []
+                }
+              }
+            }
+          ]
+        },
+        {
+          "position": "bottom",
+          "handles": [
+            {
+              "id": "context",
+              "type": "source",
+              "handleType": "artifact",
+              "label": "Context",
+              "showButton": true,
+              "constraints": {
+                "allowedTargets": [
+                  {
+                    "nodeType": "uipath.agent.resource.context.*"
+                  }
+                ],
+                "validationMessage": "Only Context resource nodes can connect here",
+                "addNodePanel": {
+                  "searchScope": "deep",
+                  "searchProviders": [],
+                  "refreshOnFocus": "context",
+                  "createNewActions": [
+                    {
+                      "label": "Create new Context",
+                      "icon": "plus",
+                      "description": "Opens in a new tab",
+                      "urlTemplate": "/{org}/agents_/indexes/add",
+                      "categoryId": "agent"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "id": "tool",
+              "type": "source",
+              "handleType": "artifact",
+              "label": "Tools",
+              "showButton": true,
+              "constraints": {
+                "allowedTargets": [
+                  {
+                    "nodeType": "uipath.agent.resource.tool.*"
+                  }
+                ],
+                "validationMessage": "Only Tool resource nodes can connect here",
+                "addNodePanel": {
+                  "searchScope": "deep",
+                  "searchProviders": [],
+                  "refreshOnFocus": "mcp",
+                  "createNewActions": [
+                    {
+                      "label": "Create new MCP server",
+                      "icon": "plus",
+                      "urlTemplate": "/{org}/{tenant}/orchestrator_/mcp",
+                      "categoryId": "agent.tool.mcp"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        },
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ]
+        },
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "success",
+              "type": "source",
+              "handleType": "output",
+              "isDefaultForType": true
+            },
+            {
+              "id": "error",
+              "label": "Error",
+              "type": "source",
+              "handleType": "output",
+              "visible": "{inputs.errorHandlingEnabled}",
+              "constraints": {
+                "maxConnections": 1
+              }
+            }
+          ]
+        }
+      ],
+      "form": {
+        "id": "settings-form",
+        "title": "Agent settings",
+        "metadata": {
+          "propertyPanel": {
+            "sectionTabs": {
+              "section-advanced": "advanced"
+            }
+          }
+        },
+        "mode": "onChange",
+        "reValidateMode": "onChange",
+        "sections": [
+          {
+            "id": "section-1",
+            "title": "Agent settings",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.mode",
+                "type": "custom",
+                "component": "agent-harness-picker",
+                "label": ""
+              },
+              {
+                "name": "inputs.model",
+                "type": "custom",
+                "component": "agent-model-picker",
+                "label": "Model",
+                "componentProps": {
+                  "placeholder": "gpt-4o-2024-11-20"
+                }
+              },
+              {
+                "name": "inputs.systemPrompt",
+                "type": "custom",
+                "component": "prompt-editor",
+                "label": "System prompt",
+                "componentProps": {
+                  "multiline": true,
+                  "minRows": 4,
+                  "maxRows": 20,
+                  "placeholder": "Enter the system prompt"
+                }
+              },
+              {
+                "name": "inputs.userPrompt",
+                "type": "custom",
+                "component": "prompt-editor",
+                "label": "User prompt",
+                "componentProps": {
+                  "multiline": true,
+                  "minRows": 3,
+                  "maxRows": 15,
+                  "placeholder": "Enter the user prompt"
+                }
+              }
+            ]
+          },
+          {
+            "id": "section-advanced",
+            "title": "Advanced settings",
+            "collapsible": true,
+            "defaultExpanded": false,
+            "fields": [
+              {
+                "name": "inputs.temperature",
+                "type": "slider",
+                "label": "Temperature",
+                "defaultValue": 0,
+                "min": 0,
+                "max": 1,
+                "step": 0.01
+              },
+              {
+                "name": "inputs.maxTokenPerResponse",
+                "type": "slider",
+                "label": "Maximum tokens per response",
+                "defaultValue": 16384,
+                "min": 0,
+                "step": 1,
+                "maxRef": {
+                  "fromField": "inputs.modelMaxTokens",
+                  "fallback": 16384
+                }
+              },
+              {
+                "name": "inputs.maxIterations",
+                "type": "slider",
+                "label": "Maximum iterations",
+                "defaultValue": 25,
+                "min": 1,
+                "max": 100,
+                "step": 1
+              }
+            ]
+          },
+          {
+            "id": "guardrails",
+            "collapsible": false,
+            "fields": [
+              {
+                "name": "inputs.guardrails",
+                "type": "custom",
+                "component": "guardrails-editor",
+                "label": "",
+                "componentProps": {
+                  "toolName": "Agent",
+                  "scope": "Agent"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "inputDefinition": {
+        "type": "object",
+        "properties": {
+          "systemPrompt": {
+            "type": "string",
+            "minLength": 1,
+            "errorMessage": {
+              "minLength": "System prompt is required"
+            }
+          },
+          "userPrompt": {
+            "type": "string",
+            "minLength": 1,
+            "errorMessage": {
+              "minLength": "User prompt is required"
+            }
+          },
+          "model": {
+            "type": "string",
+            "minLength": 1,
+            "errorMessage": {
+              "minLength": "Model is required"
+            }
+          },
+          "mode": {
+            "type": "string",
+            "enum": [
+              "standard",
+              "advanced"
+            ]
+          },
+          "temperature": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "maxTokenPerResponse": {
+            "type": "number",
+            "minimum": 0
+          },
+          "modelMaxTokens": {
+            "type": "number",
+            "minimum": 0
+          },
+          "maxIterations": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 100
+          },
+          "guardrails": {
+            "type": "array"
+          },
+          "agentInputVariables": {
+            "type": "array"
+          },
+          "agentOutputVariables": {
+            "type": "array"
+          }
+        },
+        "required": [
+          "systemPrompt",
+          "userPrompt",
+          "model"
+        ]
+      },
+      "inputDefaults": {
+        "systemPrompt": "You are an agentic assistant.",
+        "userPrompt": "What is the current date?",
+        "model": "gpt-4o-2024-11-20",
+        "mode": "standard",
+        "agentInputVariables": [],
+        "agentOutputVariables": [
+          {
+            "id": "content",
+            "type": "string"
+          }
+        ]
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "Agent response",
+          "var": "output",
+          "properties": {
+            "content": {
+              "type": "string",
+              "description": "The agent response text"
+            }
+          }
+        },
+        "error": {
+          "type": "object",
+          "description": "Error information if the node fails",
+          "source": "=Error",
+          "var": "error",
+          "schema": {
+            "$schema": "http://json-schema.org/draft-07/schema#",
+            "type": "object",
+            "required": [
+              "code",
+              "message",
+              "detail",
+              "category",
+              "status"
+            ],
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "Error code as a string"
+              },
+              "message": {
+                "type": "string",
+                "description": "High-level error message"
+              },
+              "detail": {
+                "type": "string",
+                "description": "Detailed error description"
+              },
+              "category": {
+                "type": "string",
+                "description": "Error category"
+              },
+              "status": {
+                "type": "integer",
+                "description": "HTTP status code"
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "model": {
+        "source": true,
+        "type": "bpmn:ServiceTask",
+        "serviceType": "Orchestrator.StartInlineAgentJob",
+        "version": "v2",
+        "context": [
+          {
+            "name": "_label",
+            "type": "string",
+            "value": ""
+          },
+          {
+            "name": "name",
+            "type": "string",
+            "value": ""
+          },
+          {
+            "name": "entryPoint",
+            "type": "string",
+            "value": ""
+          }
+        ]
+      },
+      "debug": {
+        "runtime": "bpmnEngine"
+      }
+    },
+    {
+      "nodeType": "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+      "version": "1.0.0",
+      "category": "agent",
+      "tags": [
+        "agent-context",
+        "index"
+      ],
+      "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+      "sortOrder": 510,
+      "display": {
+        "label": "SupportKB",
+        "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+        "icon": "context",
+        "shape": "circle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "top",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "artifact",
+              "constraints": {
+                "maxConnections": 1,
+                "allowedSources": [
+                  {
+                    "nodeType": "uipath.agent.autonomous",
+                    "handleId": "context"
+                  },
+                  {
+                    "nodeType": "uipath.agent.conversational",
+                    "handleId": "context"
+                  },
+                  {
+                    "nodeType": "uipath.agent.voice",
+                    "handleId": "context"
+                  }
+                ],
+                "validationMessage": "Only Agent's context handle can connect here"
+              }
+            }
+          ]
+        }
+      ],
+      "model": {
+        "source": true,
+        "bindings": {
+          "resource": "index",
+          "resourceKey": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+          "resourceSubType": null,
+          "entityKey": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+          "folderKey": "38e61b75-2699-4b7e-bafb-e2656e4955c9",
+          "folderPath": "Shared",
+          "values": [
+            {
+              "name": "name",
+              "propertyAttribute": "name",
+              "default": "SupportKB"
+            },
+            {
+              "name": "folderPath",
+              "propertyAttribute": "folderPath",
+              "default": "Shared"
+            }
+          ]
+        }
+      },
+      "form": {
+        "id": "context-index-form",
+        "title": "Context index",
+        "sections": [
+          {
+            "id": "index-settings",
+            "title": "Index settings",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs",
+                "type": "custom",
+                "component": "index-settings-editor",
+                "label": ""
+              }
+            ]
+          }
+        ]
+      },
+      "inputDefinition": {
+        "type": "object",
+        "properties": {
+          "indexId": {
+            "type": "string"
+          },
+          "indexName": {
+            "type": "string"
+          },
+          "folderKey": {
+            "type": "string"
+          },
+          "folderPath": {
+            "type": "string"
+          },
+          "retrievalMode": {
+            "type": "string"
+          },
+          "query": {
+            "type": "object"
+          },
+          "threshold": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "resultCount": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 40
+          },
+          "fileExtension": {
+            "type": "string"
+          },
+          "folderPathPrefix": {
+            "type": "object"
+          },
+          "citations": {
+            "type": "string"
+          },
+          "outputColumns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "webSearchGrounding": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "not": {
+                    "enum": [
+                      "deeprag",
+                      "batchtransform"
+                    ]
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "Query is required"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "const": "deeprag"
+                }
+              },
+              "required": [
+                "retrievalMode"
+              ]
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "DeepRAG task is required"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "const": "batchtransform"
+                }
+              },
+              "required": [
+                "retrievalMode"
+              ]
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "Batch transform task is required"
+                },
+                "outputColumns": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "description": {
+                        "type": "string",
+                        "minLength": 1,
+                        "errorMessage": "Description is required for every output column"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "description"
+                    ]
+                  },
+                  "errorMessage": {
+                    "minItems": "At least one output column is required"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "inputDefaults": {
+        "indexId": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+        "indexName": "SupportKB",
+        "folderKey": "38e61b75-2699-4b7e-bafb-e2656e4955c9",
+        "folderPath": "Shared",
+        "retrievalMode": "semantic",
+        "query": {
+          "mode": "prompt",
+          "textValue": "",
+          "promptValue": "The query for the Semantic strategy",
+          "argumentPath": ""
+        },
+        "threshold": 0,
+        "resultCount": 3,
+        "fileExtension": "All",
+        "folderPathPrefix": {
+          "mode": "text-builder",
+          "textValue": "",
+          "promptValue": "",
+          "argumentPath": ""
+        },
+        "citations": "enabled",
+        "outputColumns": [],
+        "webSearchGrounding": {
+          "value": "enabled"
+        }
+      }
+    },
+    {
+      "nodeType": "uipath.human-in-the-loop.quick-form",
+      "version": "1.6",
+      "category": "human-task",
+      "description": "Fast inline approvals with inline debug",
+      "tags": [
+        "human-task",
+        "hitl",
+        "human-in-the-loop",
+        "quick-form",
+        "approval"
+      ],
+      "sortOrder": 50,
+      "display": {
+        "label": "Quick Form",
+        "icon": "users",
+        "shape": "square"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ],
+          "visible": true
+        },
+        {
+          "position": "right",
+          "handles": [
+            {
+              "id": "completed",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              }
+            },
+            {
+              "id": "outcome-approve",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              },
+              "label": "Approve"
+            },
+            {
+              "id": "outcome-modifyandsend",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              },
+              "label": "Modify & Send"
+            },
+            {
+              "id": "outcome-reject",
+              "type": "source",
+              "handleType": "output",
+              "showButton": true,
+              "constraints": {
+                "forbiddenTargetCategories": [
+                  "trigger"
+                ]
+              },
+              "label": "Reject"
+            }
+          ],
+          "visible": true
+        }
+      ],
+      "model": {
+        "type": "bpmn:UserTask",
+        "serviceType": "Actions.HITL"
+      },
+      "inputDefaults": {
+        "schema": {
+          "fields": [
+            {
+              "id": "comments",
+              "type": "string",
+              "label": "Comments",
+              "direction": "output"
+            }
+          ],
+          "outcomes": [
+            {
+              "id": "submit",
+              "name": "Submit",
+              "type": "string",
+              "isPrimary": true,
+              "action": "Continue"
+            }
+          ]
+        },
+        "recipient": {
+          "channels": [
+            "Email",
+            "ActionCenter"
+          ],
+          "connections": {},
+          "assignee": {
+            "type": "user"
+          }
+        }
+      },
+      "outputDefinition": {
+        "output": {
+          "type": "object",
+          "description": "Task result data",
+          "source": "=result",
+          "var": "output"
+        },
+        "status": {
+          "type": "string",
+          "description": "Task completion status (completed, cancelled, timeout)",
+          "source": "=result.Action",
+          "var": "status"
+        }
+      },
+      "form": {
+        "id": "hitl-quick-form-properties",
+        "title": "Quick Form Task Configuration",
+        "sections": [
+          {
+            "id": "assignment",
+            "title": "Assignment criteria",
+            "collapsible": false,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.recipient",
+                "type": "custom",
+                "component": "hitl-assignee-selector",
+                "label": "",
+                "description": ""
+              }
+            ]
+          },
+          {
+            "id": "schema",
+            "title": "Schema",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.schema",
+                "type": "custom",
+                "component": "hitl-schema-editor",
+                "label": "Task Schema",
+                "description": "Define the input and output parameters for this task"
+              }
+            ]
+          },
+          {
+            "id": "delivery",
+            "title": "Delivery channels",
+            "collapsible": false,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.recipient",
+                "type": "custom",
+                "component": "hitl-channel-selector",
+                "label": "Delivery Channels",
+                "description": "Select where the task should be sent"
+              }
+            ]
+          },
+          {
+            "id": "additional-properties",
+            "title": "Additional properties",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs.title",
+                "type": "text",
+                "label": "Task title"
+              },
+              {
+                "name": "inputs.priority",
+                "type": "select",
+                "label": "Priority",
+                "options": [
+                  {
+                    "label": "Low",
+                    "value": "Low"
+                  },
+                  {
+                    "label": "Medium",
+                    "value": "Medium"
+                  },
+                  {
+                    "label": "High",
+                    "value": "High"
+                  }
+                ]
+              },
+              {
+                "name": "inputs.labels",
+                "type": "text",
+                "label": "Labels",
+                "placeholder": "Comma-separated (e.g. finance,approval)"
+              },
+              {
+                "name": "inputs.memorySpace",
+                "type": "custom",
+                "component": "hitl-memory-space-picker",
+                "label": "Memory space",
+                "description": "Attach a memory space so this task's inputs and outputs are written to it"
+              }
+            ]
+          }
+        ]
+      },
+      "runtimeConstraints": {
+        "exclude": [
+          "api-function"
+        ]
+      }
+    },
+    {
+      "nodeType": "core.control.end",
+      "version": "1.0",
+      "category": "control-flow",
+      "description": "Mark the end of a process path",
+      "tags": [
+        "control-flow",
+        "end",
+        "finish",
+        "complete"
+      ],
+      "sortOrder": 66,
+      "display": {
+        "label": "End",
+        "icon": "circle-check",
+        "shape": "circle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "left",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "input"
+            }
+          ]
+        }
+      ],
+      "model": {
+        "type": "bpmn:EndEvent"
+      }
+    }
+  ],
+  "variables": {
+    "globals": [
+      {
+        "id": "ticketId",
+        "direction": "in",
+        "type": "string",
+        "description": "Support ticket identifier",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "subject",
+        "direction": "in",
+        "type": "string",
+        "description": "Ticket subject line",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "body",
+        "direction": "in",
+        "type": "string",
+        "description": "Ticket body text",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "customerName",
+        "direction": "in",
+        "type": "string",
+        "description": "Name of the customer who raised the ticket",
+        "triggerNodeId": "start"
+      },
+      {
+        "id": "decision",
+        "direction": "out",
+        "type": "string",
+        "description": "Reviewer decision: Approve, Modify & Send, or Reject"
+      },
+      {
+        "id": "finalReply",
+        "direction": "out",
+        "type": "string",
+        "description": "The reply text as approved or edited by the reviewer"
+      },
+      {
+        "id": "category",
+        "direction": "out",
+        "type": "string",
+        "description": "Ticket category assigned by the agent"
+      },
+      {
+        "id": "priority",
+        "direction": "out",
+        "type": "string",
+        "description": "Ticket priority assigned by the agent"
+      }
+    ],
+    "nodes": [
+      {
+        "id": "start.output",
+        "type": "object",
+        "description": "Data passed when manually triggering the process.",
+        "binding": {
+          "nodeId": "start",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "triageAgent1.output",
+        "type": "object",
+        "description": "Agent response",
+        "binding": {
+          "nodeId": "triageAgent1",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "triageAgent1.error",
+        "type": "object",
+        "description": "Error information if the node fails",
+        "binding": {
+          "nodeId": "triageAgent1",
+          "outputId": "error"
+        }
+      },
+      {
+        "id": "reviewDraftReply1.output",
+        "type": "object",
+        "description": "Task result data",
+        "binding": {
+          "nodeId": "reviewDraftReply1",
+          "outputId": "output"
+        }
+      },
+      {
+        "id": "reviewDraftReply1.status",
+        "type": "string",
+        "description": "Task completion status",
+        "binding": {
+          "nodeId": "reviewDraftReply1",
+          "outputId": "status"
+        }
+      },
+      {
+        "id": "end1.decision",
+        "type": "string",
+        "binding": {
+          "nodeId": "end1",
+          "outputId": "decision"
+        }
+      },
+      {
+        "id": "end1.finalReply",
+        "type": "string",
+        "binding": {
+          "nodeId": "end1",
+          "outputId": "finalReply"
+        }
+      },
+      {
+        "id": "end1.category",
+        "type": "string",
+        "binding": {
+          "nodeId": "end1",
+          "outputId": "category"
+        }
+      },
+      {
+        "id": "end1.priority",
+        "type": "string",
+        "binding": {
+          "nodeId": "end1",
+          "outputId": "priority"
+        }
+      }
+    ]
+  },
+  "layout": {
+    "nodes": {
+      "start": {
+        "position": {
+          "x": 0,
+          "y": 0
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "triageAgent1": {
+        "position": {
+          "x": 192,
+          "y": -96
+        },
+        "size": {
+          "width": 288,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "supportKbContext1": {
+        "position": {
+          "x": 240,
+          "y": 96
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      },
+      "reviewDraftReply1": {
+        "position": {
+          "x": 576,
+          "y": -48
+        },
+        "size": {
+          "width": 96,
+          "height": 128
+        },
+        "collapsed": false
+      },
+      "end1": {
+        "position": {
+          "x": 880,
+          "y": -32
+        },
+        "size": {
+          "width": 96,
+          "height": 96
+        },
+        "collapsed": false
+      }
+    }
+  }
+}

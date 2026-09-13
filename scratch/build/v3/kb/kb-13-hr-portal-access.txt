@@ -1,0 +1,7 @@
+HomeFix Supply IT Helpdesk — HR Portal and Payslip Access
+
+The HR portal (people.homefixsupply.com) uses your network sign-in. Payslips, tax documents, and leave balances live under "My Documents".
+
+Access from personal devices is allowed through the browser with MFA; no VPN required.
+
+Former employees keep payslip access for 24 months at alumni.homefixsupply.com using a personal email registered before departure. The IT service desk cannot see or change payroll data; payroll corrections go through your HR business partner.

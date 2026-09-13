@@ -1,0 +1,202 @@
+[
+  {
+    "ticket": "HF-2001",
+    "resp": {
+      "Result": "Success",
+      "Code": "JobStarted",
+      "Data": {
+        "Jobs": [
+          {
+            "Key": "ce9c540e-fa75-448e-a6ea-932efc28f2e8",
+            "State": "Pending",
+            "ProcessName": "TriageTicketV2",
+            "ReleaseKey": "",
+            "Source": "Manual",
+            "Type": "Unattended",
+            "Priority": "Normal",
+            "HostMachineName": "",
+            "MachineKey": "",
+            "StartTime": "",
+            "EndTime": "",
+            "CreationTime": "2026-09-13T12:38:16.480Z"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ticket": "HF-2002",
+    "resp": {
+      "Result": "Success",
+      "Code": "JobStarted",
+      "Data": {
+        "Jobs": [
+          {
+            "Key": "e8a34ffa-556e-4b62-9fa3-e4acd4ef9c13",
+            "State": "Pending",
+            "ProcessName": "TriageTicketV2",
+            "ReleaseKey": "",
+            "Source": "Manual",
+            "Type": "Unattended",
+            "Priority": "Normal",
+            "HostMachineName": "",
+            "MachineKey": "",
+            "StartTime": "",
+            "EndTime": "",
+            "CreationTime": "2026-09-13T12:38:17.190Z"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ticket": "HF-2003",
+    "resp": {
+      "Result": "Success",
+      "Code": "JobStarted",
+      "Data": {
+        "Jobs": [
+          {
+            "Key": "f9a78d48-971c-4dad-b12a-5deefecaa8bb",
+            "State": "Pending",
+            "ProcessName": "TriageTicketV2",
+            "ReleaseKey": "",
+            "Source": "Manual",
+            "Type": "Unattended",
+            "Priority": "Normal",
+            "HostMachineName": "",
+            "MachineKey": "",
+            "StartTime": "",
+            "EndTime": "",
+            "CreationTime": "2026-09-13T12:38:17.873Z"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ticket": "HF-2004",
+    "resp": {
+      "Result": "Success",
+      "Code": "JobStarted",
+      "Data": {
+        "Jobs": [
+          {
+            "Key": "3cc28f1c-83da-4956-b9bc-862a6e9984b5",
+            "State": "Pending",
+            "ProcessName": "TriageTicketV2",
+            "ReleaseKey": "",
+            "Source": "Manual",
+            "Type": "Unattended",
+            "Priority": "Normal",
+            "HostMachineName": "",
+            "MachineKey": "",
+            "StartTime": "",
+            "EndTime": "",
+            "CreationTime": "2026-09-13T12:38:18.537Z"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ticket": "HF-2005",
+    "resp": {
+      "Result": "Success",
+      "Code": "JobStarted",
+      "Data": {
+        "Jobs": [
+          {
+            "Key": "47552b74-b54a-4218-8e4f-dd523743aaa6",
+            "State": "Pending",
+            "ProcessName": "TriageTicketV2",
+            "ReleaseKey": "",
+            "Source": "Manual",
+            "Type": "Unattended",
+            "Priority": "Normal",
+            "HostMachineName": "",
+            "MachineKey": "",
+            "StartTime": "",
+            "EndTime": "",
+            "CreationTime": "2026-09-13T12:38:19.230Z"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ticket": "HF-2006",
+    "resp": {
+      "Result": "Success",
+      "Code": "JobStarted",
+      "Data": {
+        "Jobs": [
+          {
+            "Key": "2d1fcce2-f12b-49f9-892b-2f2a0a8e3121",
+            "State": "Pending",
+            "ProcessName": "TriageTicketV2",
+            "ReleaseKey": "",
+            "Source": "Manual",
+            "Type": "Unattended",
+            "Priority": "Normal",
+            "HostMachineName": "",
+            "MachineKey": "",
+            "StartTime": "",
+            "EndTime": "",
+            "CreationTime": "2026-09-13T12:38:19.987Z"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ticket": "HF-2007",
+    "resp": {
+      "Result": "Success",
+      "Code": "JobStarted",
+      "Data": {
+        "Jobs": [
+          {
+            "Key": "623fd301-2cd8-432b-8f24-18464370bf47",
+            "State": "Pending",
+            "ProcessName": "TriageTicketV2",
+            "ReleaseKey": "",
+            "Source": "Manual",
+            "Type": "Unattended",
+            "Priority": "Normal",
+            "HostMachineName": "",
+            "MachineKey": "",
+            "StartTime": "",
+            "EndTime": "",
+            "CreationTime": "2026-09-13T12:38:20.657Z"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "ticket": "HF-2008",
+    "resp": {
+      "Result": "Success",
+      "Code": "JobStarted",
+      "Data": {
+        "Jobs": [
+          {
+            "Key": "c9e9f997-d897-4abf-a2ad-b60bcfbf26ba",
+            "State": "Pending",
+            "ProcessName": "TriageTicketV2",
+            "ReleaseKey": "",
+            "Source": "Manual",
+            "Type": "Unattended",
+            "Priority": "Normal",
+            "HostMachineName": "",
+            "MachineKey": "",
+            "StartTime": "",
+            "EndTime": "",
+            "CreationTime": "2026-09-13T12:38:21.303Z"
+          }
+        ]
+      }
+    }
+  }
+]

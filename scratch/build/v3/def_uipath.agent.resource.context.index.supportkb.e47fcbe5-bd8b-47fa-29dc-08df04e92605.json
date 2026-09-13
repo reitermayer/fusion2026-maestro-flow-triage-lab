@@ -1,0 +1,394 @@
+{
+  "Result": "Success",
+  "Code": "NodeGetSuccess",
+  "Data": {
+    "Node": {
+      "nodeType": "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+      "version": "1.0.0",
+      "category": "agent",
+      "tags": [
+        "agent-context",
+        "index"
+      ],
+      "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+      "sortOrder": 510,
+      "display": {
+        "label": "SupportKB",
+        "description": "HomeFix Supply IT helpdesk knowledge base (14 articles) for the Fusion Triage Lab",
+        "icon": "context",
+        "shape": "circle"
+      },
+      "handleConfiguration": [
+        {
+          "position": "top",
+          "handles": [
+            {
+              "id": "input",
+              "type": "target",
+              "handleType": "artifact",
+              "constraints": {
+                "maxConnections": 1,
+                "allowedSources": [
+                  {
+                    "nodeType": "uipath.agent.autonomous",
+                    "handleId": "context"
+                  },
+                  {
+                    "nodeType": "uipath.agent.conversational",
+                    "handleId": "context"
+                  },
+                  {
+                    "nodeType": "uipath.agent.voice",
+                    "handleId": "context"
+                  }
+                ],
+                "validationMessage": "Only Agent's context handle can connect here"
+              }
+            }
+          ]
+        }
+      ],
+      "model": {
+        "source": true
+      },
+      "form": {
+        "id": "context-index-form",
+        "title": "Context index",
+        "sections": [
+          {
+            "id": "index-settings",
+            "title": "Index settings",
+            "collapsible": true,
+            "defaultExpanded": true,
+            "fields": [
+              {
+                "name": "inputs",
+                "type": "custom",
+                "component": "index-settings-editor",
+                "label": ""
+              }
+            ]
+          }
+        ]
+      },
+      "inputDefinition": {
+        "type": "object",
+        "properties": {
+          "indexId": {
+            "type": "string"
+          },
+          "indexName": {
+            "type": "string"
+          },
+          "folderKey": {
+            "type": "string"
+          },
+          "folderPath": {
+            "type": "string"
+          },
+          "retrievalMode": {
+            "type": "string"
+          },
+          "query": {
+            "type": "object"
+          },
+          "threshold": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1
+          },
+          "resultCount": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 40
+          },
+          "fileExtension": {
+            "type": "string"
+          },
+          "folderPathPrefix": {
+            "type": "object"
+          },
+          "citations": {
+            "type": "string"
+          },
+          "outputColumns": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "webSearchGrounding": {
+            "type": "object",
+            "properties": {
+              "value": {
+                "type": "string"
+              }
+            }
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "not": {
+                    "enum": [
+                      "deeprag",
+                      "batchtransform"
+                    ]
+                  }
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "Query is required"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "const": "deeprag"
+                }
+              },
+              "required": [
+                "retrievalMode"
+              ]
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "DeepRAG task is required"
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "retrievalMode": {
+                  "const": "batchtransform"
+                }
+              },
+              "required": [
+                "retrievalMode"
+              ]
+            },
+            "then": {
+              "properties": {
+                "query": {
+                  "oneOf": [
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "prompt"
+                        },
+                        "promptValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "promptValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "text-builder"
+                        },
+                        "textValue": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "textValue"
+                      ]
+                    },
+                    {
+                      "properties": {
+                        "mode": {
+                          "const": "variable"
+                        },
+                        "argumentPath": {
+                          "type": "string",
+                          "minLength": 1
+                        }
+                      },
+                      "required": [
+                        "mode",
+                        "argumentPath"
+                      ]
+                    }
+                  ],
+                  "errorMessage": "Batch transform task is required"
+                },
+                "outputColumns": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string",
+                        "minLength": 1
+                      },
+                      "description": {
+                        "type": "string",
+                        "minLength": 1,
+                        "errorMessage": "Description is required for every output column"
+                      }
+                    },
+                    "required": [
+                      "name",
+                      "description"
+                    ]
+                  },
+                  "errorMessage": {
+                    "minItems": "At least one output column is required"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "inputDefaults": {
+        "indexId": "e47fcbe5-bd8b-47fa-29dc-08df04e92605",
+        "indexName": "SupportKB",
+        "folderKey": "38e61b75-2699-4b7e-bafb-e2656e4955c9",
+        "folderPath": "Shared",
+        "retrievalMode": "semantic",
+        "query": {
+          "mode": "prompt",
+          "textValue": "",
+          "promptValue": "The query for the Semantic strategy",
+          "argumentPath": ""
+        },
+        "threshold": 0,
+        "resultCount": 3,
+        "fileExtension": "All",
+        "folderPathPrefix": {
+          "mode": "text-builder",
+          "textValue": "",
+          "promptValue": "",
+          "argumentPath": ""
+        },
+        "citations": "enabled",
+        "outputColumns": [],
+        "webSearchGrounding": {
+          "value": "enabled"
+        }
+      }
+    }
+  }
+}

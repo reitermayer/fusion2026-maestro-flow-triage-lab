@@ -1,0 +1,109 @@
+{
+  "Result": "Success",
+  "Code": "RecordList",
+  "Data": {
+    "Items": [
+      {
+        "TicketId": "HF-2001",
+        "Subject": "Password expires while I'm on leave",
+        "Body": "I got the 14-day password expiry reminder but I'll be on parental leave when it lapses. Can I reset it early from my phone without a company laptop, and will that sync everywhere?",
+        "CustomerName": "Tomas Lindqvist",
+        "CreateTime": "2026-08-30T05:59:41.8778133+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "Id": "9c80e2a5-2aed-4f3a-8fde-01a051409435",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "UpdateTime": "2026-08-30T05:59:41.8778133+00:00"
+      },
+      {
+        "TicketId": "HF-2002",
+        "Subject": "HomeFix-Print queue disappeared",
+        "Body": "After the last laptop update the HomeFix-Print queue vanished from my printers list, so I can't badge-print anything. How do I get it back without waiting for a technician?",
+        "CustomerName": "Aisha Bello",
+        "CreateTime": "2026-08-30T05:59:41.8778133+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "Id": "3205c725-a0c3-485b-a01d-01a051409436",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "UpdateTime": "2026-08-30T05:59:41.8778133+00:00"
+      },
+      {
+        "TicketId": "HF-2003",
+        "Subject": "Old expense report rejected - over 90 days",
+        "Body": "I found a conference expense from last quarter that never got filed, and Concur rejected my report saying it's too old. Is there any way to still get reimbursed?",
+        "CustomerName": "Greg Stanton",
+        "CreateTime": "2026-08-30T05:59:41.8778133+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "Id": "02562e34-09c9-4734-9dd2-01a051409437",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "UpdateTime": "2026-08-30T05:59:41.8778133+00:00"
+      },
+      {
+        "TicketId": "HF-2004",
+        "Subject": "New phone MFA + shared mailbox for team",
+        "Body": "Two things: I'm switching phones this weekend, what do I need to do so MFA keeps working? And my team just took over the returns@ mailbox, how do the four of us get access without sharing a password?",
+        "CustomerName": "Mei Chen",
+        "CreateTime": "2026-08-30T05:59:41.8778133+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "Id": "7c0fe96a-b8ce-4d37-b50b-01a051409438",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "UpdateTime": "2026-08-30T05:59:41.8778133+00:00"
+      },
+      {
+        "TicketId": "HF-2005",
+        "Subject": "Dual-boot Linux on company laptop for data science",
+        "Body": "Our data science group wants to dual-boot Ubuntu on HomeFix laptops for GPU workloads. Is dual-boot supported, and is there an approved disk-partitioning tool we should use?",
+        "CustomerName": "Viktor Hansen",
+        "CreateTime": "2026-08-30T05:59:41.8778133+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "Id": "db6356ba-4520-41fb-a891-01a051409439",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "UpdateTime": "2026-08-30T05:59:41.8778133+00:00"
+      },
+      {
+        "TicketId": "HF-2006",
+        "Subject": "Concur down for all of finance, month-end close TODAY",
+        "Body": "The entire finance team gets a 502 error opening Concur since 8am. Month-end close is due today at 6pm and nothing can be approved. This is blocking the close, please treat as critical.",
+        "CustomerName": "Carla Reyes",
+        "CreateTime": "2026-08-30T05:59:41.8778133+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "Id": "b39e5ecc-58a0-46ac-b615-01a05140943a",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "UpdateTime": "2026-08-30T05:59:41.8778133+00:00"
+      },
+      {
+        "TicketId": "HF-2007",
+        "Subject": "Software request stuck three weeks - unacceptable",
+        "Body": "My request for the diagram tool has been sitting in approval for three weeks with zero updates. This is unacceptable for a $200 license. If it isn't sorted by Friday I'll buy it on my own card and expense it.",
+        "CustomerName": "Owen Marsh",
+        "CreateTime": "2026-08-30T05:59:41.8778133+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "Id": "70b177fc-559f-4cda-9c7a-01a05140943b",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "UpdateTime": "2026-08-30T05:59:41.8778133+00:00"
+      },
+      {
+        "TicketId": "HF-2008",
+        "Subject": "SupplyTech Weekly: 10 warehouse trends for 2027",
+        "Body": "Welcome to this week's edition of SupplyTech Weekly! In this issue: ten warehouse automation trends to watch in 2027, plus an exclusive interview. Read online or unsubscribe below.",
+        "CustomerName": "news@supplytechweekly.example",
+        "CreateTime": "2026-08-30T05:59:41.8778133+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "Id": "ffd10ff1-4d3a-4ce5-a87b-01a05140943c",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "UpdateTime": "2026-08-30T05:59:41.8778133+00:00"
+      }
+    ],
+    "TotalCount": 8,
+    "HasNextPage": false,
+    "CurrentPage": 1,
+    "TotalPages": 1,
+    "SupportsPageJump": true
+  }
+}

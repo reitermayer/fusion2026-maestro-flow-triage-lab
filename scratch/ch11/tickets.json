@@ -1,0 +1,109 @@
+{
+  "Result": "Success",
+  "Code": "RecordList",
+  "Data": {
+    "Items": [
+      {
+        "TicketId": "HF-3001",
+        "Subject": "Wifi code for visiting contractor",
+        "Body": "A contractor is onsite with us for the next four days and needs internet for her demo laptop. How do I get her connected and can the access cover her whole visit?",
+        "CustomerName": "Nadia Osei",
+        "UpdateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "Id": "118493ad-664b-49e5-822d-01a05140a131",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f"
+      },
+      {
+        "TicketId": "HF-3002",
+        "Subject": "Suspicious email pretending to be IT",
+        "Body": "I received an email claiming to be from IT support asking me to verify my password via a link. I have NOT clicked anything. What's the right way to report this so others don't fall for it?",
+        "CustomerName": "Ben Whitfield",
+        "UpdateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "Id": "cf39f48e-b670-43c3-a1d8-01a05140a132",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f"
+      },
+      {
+        "TicketId": "HF-3003",
+        "Subject": "Former employee needs last two payslips",
+        "Body": "I left HomeFix in June and need my final two payslips for a mortgage application. My network account is disabled. How do I get these documents?",
+        "CustomerName": "Laura Jimenez",
+        "UpdateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "Id": "7327f061-e879-426e-a634-01a05140a133",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f"
+      },
+      {
+        "TicketId": "HF-3004",
+        "Subject": "Day 4 and still missing ERP access + design software",
+        "Body": "I started Monday and still can't open the ERP or install the design tool my manager said was pre-approved. Two questions: how do I get the ERP access sorted, and where do I install approved software from?",
+        "CustomerName": "Sam Torres",
+        "UpdateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "Id": "1449c399-de8a-4ae0-8aa0-01a05140a134",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f"
+      },
+      {
+        "TicketId": "HF-3005",
+        "Subject": "Home internet reimbursement for remote staff",
+        "Body": "I'm fully remote as of this month. Does HomeFix reimburse a portion of home internet costs, and if so how do I claim it? I couldn't find anything in Concur categories.",
+        "CustomerName": "Ingrid Vollan",
+        "UpdateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "Id": "831bd2e1-0a9a-433a-afa9-01a05140a135",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f"
+      },
+      {
+        "TicketId": "HF-3006",
+        "Subject": "Badge readers down at Austin HQ, exec visit at 2pm",
+        "Body": "Both badge readers at the Austin HQ main entrance stopped working and employees are queued outside. We have a customer executive visit at 2pm today. Need this fixed or a workaround immediately.",
+        "CustomerName": "Marcus Webb",
+        "UpdateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "Id": "b51afbb0-8a2e-4337-8e09-01a05140a136",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f"
+      },
+      {
+        "TicketId": "HF-3007",
+        "Subject": "Cedar room AV failed during customer demo again",
+        "Body": "The video bar in AUS-3F-Cedar dropped the call twice during a customer demo this month. Sales is furious. If this room can't be fixed properly I want it escalated to whoever owns AV, not another reboot.",
+        "CustomerName": "Denise Cole",
+        "UpdateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "Id": "2f45b4e3-13d4-4d34-89d1-01a05140a137",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f"
+      },
+      {
+        "TicketId": "HF-3008",
+        "Subject": "Scheduled maintenance notification - HR portal",
+        "Body": "This is an automated notification. The HR portal will undergo scheduled maintenance on Saturday from 02:00 to 04:00 UTC. No action is required. Do not reply to this message.",
+        "CustomerName": "noreply@homefixsupply.example",
+        "UpdateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "UpdatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreatedBy": "ddc92f26-1880-4703-89c5-902d81cdbe5f",
+        "CreateTime": "2026-08-30T05:59:45.2011045+00:00",
+        "Id": "01523c65-89e7-48e8-9c4a-01a05140a138",
+        "RecordOwner": "ddc92f26-1880-4703-89c5-902d81cdbe5f"
+      }
+    ],
+    "TotalCount": 8,
+    "HasNextPage": false,
+    "CurrentPage": 1,
+    "TotalPages": 1,
+    "SupportsPageJump": true
+  }
+}

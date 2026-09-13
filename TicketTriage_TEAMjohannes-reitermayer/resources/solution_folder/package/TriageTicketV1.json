@@ -1,0 +1,23 @@
+{
+  "docVersion": "1.0.0",
+  "resource": {
+    "name": "TriageTicketV1",
+    "kind": "package",
+    "apiVersion": "orchestrator.uipath.com/v1",
+    "projectKey": "33c66f48-966c-48d0-9941-257bfc077be6",
+    "isOverridable": true,
+    "dependencies": [],
+    "runtimeDependencies": [],
+    "folders": [
+      {
+        "fullyQualifiedName": "solution_folder"
+      }
+    ],
+    "spec": {
+      "name": "TriageTicketV1"
+    },
+    "locks": [],
+    "key": "4222afa2-f2cc-4fad-9f35-a7974a5af557",
+    "files": []
+  }
+}
