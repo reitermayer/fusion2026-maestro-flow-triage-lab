@@ -8,6 +8,73 @@ This document tracks all differences, deviations, and gaps between the Product M
 
 ---
 
+## Executive Summary & Briefing for Product Management
+
+This section provides an executive synthesis of our end-to-end laboratory findings, comparing empirical runtime and telemetry data against Tuan's original course runbook ([`fusion-triage-lab-runbook-2026-09-09.md`](fusion-triage-lab-runbook-2026-09-09.md)).
+
+### 1. Empirical Results vs. Runbook Assumptions
+
+#### The V3 Touchpoint Count: 5 Touches vs. Tuan's "3 or 4"
+- **Tuan's Assumption:** Runbook Step 11 & 12 state: *"Checkpoint: 8 -> 7 -> 3 or 4. Score: 3-4 touches."*
+- **Empirical Measured Result:** **5 human touches** (37.5% reduction vs. V1).
+- **Causal Analysis:** The deterministic safety gate refused autonomy for two edge cases as designed:
+  1. **`HF-3004` (Missing ERP Access):** High confidence (0.90) and documented onboarding policy, but flagged `needsStaffAction = true`. Granting ERP access requires human IT admin action. Auto-sending a reply saying *"We know how to do this!"* without filing the internal ticket would leave the new hire stranded. The safety gate correctly intervened.
+  2. **`HF-3007` (Cedar Room AV Failure):** Model confidence was 0.72 (< 0.85) and `SupportKB` lacked an escalation dispatch runbook for recurring hardware failures. The safety gate caught the gap and routed to a human.
+- **Product Recommendation:** To reach 3 or 4 touches, do **NOT** lower the 0.85 confidence threshold or bypass `needsStaffAction`. Instead, expand `SupportKB` with missing runbooks (`kb-12-meeting-rooms` and `kb-03-expense-reimbursement`). This proves to attendees that enterprise autonomy is earned through knowledge governance, not loose prompt tuning.
+
+#### Instant Zero-Touch Closures
+- **Tuan's Assumption:** Runbook Step 11 states: *"auto-resolved tickets finish in 6-16 s, noise auto-closes"*.
+- **Empirical Job Telemetry (Orchestrator API):**
+  - `HF-2008` (Batch B noise): **10.1 seconds** (`Successful`).
+  - `HF-3008` (Batch C noise): **10.8 seconds** (`Successful`).
+  - `HF-3001` (Batch C contractor Wi-Fi auto-resolved): **32.2 seconds** (`Successful`).
+  - `HF-3003` (Batch C payslips auto-resolved): **33.1 seconds** (`Successful`).
+- **Conclusion:** Noise filtering is instantaneous (~10s). Verifier-governed auto-resolution completes in ~30s with complete verification against `SupportKB`.
+
+---
+
+### 2. Workshop Timing Benchmark: Estimates vs. Measured Reality
+
+Extracted from Claude Code session logs (`~/.claude/projects/...`):
+
+| Chapter / Step | Tuan's Runbook Assumption | Measured Agent Duration | Reality Check & Recommendation |
+| :--- | :---: | :---: | :--- |
+| **Ch 2: Preflight** | 2-3 min | **5.0 min** | Token file refreshes + querying all 24 records took ~5 min. |
+| **Ch 3: Build V1** | 4-6 min | **7.8 - 9.8 min** | **Underestimated by 3-4 min.** Scaffolding, authoring, validating, and linking takes ~80 turns. |
+| **Ch 4: Deploy V1** | 2-3 min | **2-3 min** | **Spot on.** Designer wizard + deployment log took ~2.5 min. |
+| **Ch 5: Run Batch A** | ~1 min start (20-50s tasks) | **67 seconds** | **Spot on.** Dispatched 8 jobs; settled in 67s. |
+| **Ch 6: Review & Traces** | ~10 min human + ~1 min agent | **~10 min human + < 1 min agent** | **Spot on.** Trace feedback calls executed in < 30 seconds. |
+| **Ch 7: Build V2** | 4-6 min | **6.4 - 9.4 min** | Mining 8 tasks + updating routing switch took 6-9 min. |
+| **Ch 8: Run Batch B** | ~2 min | **3.8 min** | Patching release overwrites + dispatching 8 jobs took 3.8 min. |
+| **Ch 9: Delegate Review** | **~1 min** | **4.7 min** | **Significantly underestimated.** Reading 7 tasks, cross-referencing KB, and rewriting 3 drafts took 43 turns. |
+| **Ch 10: Build V3** | 4-6 min | **12.4 min** | **Major discrepancy.** 15 nodes, 2 agents, 2 JS safety scripts, and 14 KB runbooks took 88 tool turns. |
+| **Ch 11: Run Batch C** | ~1 min | **2.2 min** | Very close. Zero-touch jobs finished in 11s, 27s, 33s. |
+| **Ch 12: Scoreboard** | 3-5 min | **4.8 min** | **Spot on.** Live API telemetry extraction + markdown scoreboard generation took 4.8 min. |
+
+#### Agenda Recommendation for Tuan:
+In a live workshop, attendees may become anxious if an agent takes 8-12 minutes when the slide promised "4-6 min". We recommend adjusting slide expectations:
+- **Chapter 3:** *"Agent works 7-9 min - discuss V1 requirements with your partner"*
+- **Chapter 10:** *"Agent works 10-12 min - coffee / group discussion break"*
+Pure agent execution across the Golden Path requires **~45 minutes**, and human actions (deploying in browser, reading tasks, clicking approve) take **~30-35 minutes**, totaling **~75-80 minutes** of hands-on activity.
+
+---
+
+### 3. Model Economics & Token Telemetry (Anthropic Claude Code)
+
+Empirical consumption metrics across the full workshop delivery:
+
+- **Golden Path (Single Clean Pass, Chapters 2-12):**
+  - **Agent Turns / API Calls:** **551 turns**
+  - **Output Tokens Generated:** **643,634 tokens**
+  - **Prompt Cache Reads:** **58,904,123 tokens** (Prompt caching saved ~90% of latency and API costs!)
+  - **Pure Agent Execution Time:** **45.0 minutes**
+- **Full Laboratory R&D (All 15 Iterations & Test Suites):**
+  - **Total Output Tokens:** **1,380,682 tokens**
+  - **Total Cache Reads:** **119,179,744 tokens**
+  - **Total Run Time:** **199.9 minutes** (~3.3 hours)
+
+---
+
 ## Chapter Overview & Status Matrix
 
 | Chapter | Title | PM Materials Reviewed | Status | Deviations Identified |
