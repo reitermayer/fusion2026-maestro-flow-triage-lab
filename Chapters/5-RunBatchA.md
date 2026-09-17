@@ -242,7 +242,18 @@ Follow these steps to navigate to Action Center and verify your pending tasks:
 
 ### 5.4 Triage Decision Guide: Reviewing Batch A
 
-When reviewing each task in Action Center, evaluate the AI draft against the customer inquiry. Below is the recommended triage decision, rationale, and exact modified draft for each ticket:
+When reviewing each task in Action Center, evaluate the AI draft against the customer inquiry.
+
+> [!IMPORTANT]
+> **Student Action Required: Do NOT Blindly Click "Approve" 8 Times!**  
+> Switch to your browser tab at Action Center. You must review all 8 tasks under **My Tasks** individually:
+> - **4 Inquiries to Approve (`HF-1001` through `HF-1004`):** These have accurate KB grounding. Click **Approve**.
+> - **3 Inquiries to Modify & Send (`HF-1005`, `HF-1006`, `HF-1007`):** The AI draft missed critical operational details or SLAs. **Edit the draft in the form** (copy the suggested text from the table below), then click **Modify & Send**.
+> - **1 Inquiry to Reject (`HF-1008`):** This is automated vendor out-of-office noise. Click **Reject** so no reply is sent.
+> 
+> These 8 human decisions establish your **Baseline Score: 8 human touches for 8 tickets (100% human touch rate)**. In Chapters 7–11, you will teach the agent to automate clear cases and cut human touches drastically.
+
+Below is the recommended triage decision, rationale, and exact modified draft for each ticket:
 
 | Task ID | Ticket ID | Customer & Subject | AI Conf | Decision | Suggested Action / Modified Draft Text | Rationale |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
