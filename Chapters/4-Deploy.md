@@ -77,16 +77,28 @@ If you proceed with **Pack only**, the package publishes to the tenant feed, but
 
 To complete the full deployment including folder setup, resource provisioning, and runtime activation, you have two options depending on room configuration:
 
+> [!TIP]
+> **The Workshop Versioning Convention (`1.0.1` == V1):**  
+> Throughout this lab, we standardize the solution release versions to cleanly align each patch number with the flow generation. This avoids package feed collisions if `1.0.0` was already created during scaffolding or testing, and makes releases simple to track across all three batches:
+>
+> | Generation | Flow Process | Deployed Release Version | Alignment |
+> | :--- | :--- | :--- | :--- |
+> | **V1: Baseline** | `TriageTicketV1` | **`1.0.1`** | Ends in **.1** (Batch A) |
+> | **V2: Decision Mining** | `TriageTicketV2` | **`1.0.2`** | Ends in **.2** (Batch B) |
+> | **V3: Earned Autonomy** | `TriageTicketV3` | **`1.0.3`** | Ends in **.3** (Batch C) |
+>
+> In the Deploy wizard, verify or set the **Version** field to **`1.0.1`** for this initial V1 deployment.
+
 #### Option A: Deploy to Personal Workspace (Autonomous Path)
 If tenant permissions on `Shared` have not been modified by a TA/Admin:
 1. In the Deploy wizard, keep **Pack to** set to **Personal**.
-2. Verify the **Version** field (e.g. `1.0.0`, or bump to `1.0.1` if `1.0.0` was already published).
+2. Set the **Version** field to **`1.0.1`** (or `1.0.0` if no prior publish exists).
 3. Click the blue **Deploy** button.
 
 #### Option B: Deploy to Shared (If TA/Admin Granted Permissions)
 If the workshop administrator granted `Folders.Create` permissions to the `Automation Developers` group on the `Shared` folder:
 1. Switch **Pack to** to **Shared**.
-2. Verify the **Version** field (`1.0.1`).
+2. Set the **Version** field to **`1.0.1`**.
 3. Click **Deploy**.
 
 ---

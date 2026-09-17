@@ -138,6 +138,10 @@ flowchart LR
    - If prompted with a name collision on an existing folder, set the deployment and solution folder name to `TicketTriage_TEAM<firstname>-<lastname> 8`.
    - Verify the version bumps from `1.0.2` to **`1.0.3`**.
 
+   > [!TIP]
+   > **Version Alignment Reminder (`1.0.3` == V3):**  
+   > Bumping the version to **`1.0.3`** aligns with generation **V3** (ending in `.3`), following the workshop convention established in [Chapter 4](4-Deploy.md#23-step-3-deploy-to-personal-workspace-or-shared-if-admin-configured).
+
 ![Studio Web Deploy Folder 8 to 1.0.3](Images/StudioWeb-Deploy-Folder8-1.0.3.png)
 
 5. Click **Deploy** and monitor the activation log until all 5 steps complete with green checkmarks:

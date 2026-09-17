@@ -178,6 +178,10 @@ After Claude Code finishes uploading, deployment is performed in the **Studio We
    - **Target Folder:** Select the same location you used in Chapter 4 (e.g. **Personal** workspace).
    - **Version:** Bump the version to **`1.0.2`** (incrementing from `1.0.1`).
 
+   > [!TIP]
+   > **Version Alignment Reminder (`1.0.2` == V2):**  
+   > Bumping the version to **`1.0.2`** aligns with generation **V2** (ending in `.2`), following the workshop convention established in [Chapter 4](4-Deploy.md#23-step-3-deploy-to-personal-workspace-or-shared-if-admin-configured).
+
 ![Studio Web Deploy Pack and Upgrade to 1.0.2](Images/StudioWeb-Deploy-PackUpgrade-1.0.2.png)
 
 5. **Click Deploy and Monitor the Pipeline:**  
