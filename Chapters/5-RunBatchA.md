@@ -10,7 +10,7 @@ You will query the 8 tickets stored in the shared **`TicketsV1`** entity, launch
 
 | Step | Action | Description / Deliverable |
 | :--- | :--- | :--- |
-| **1. Parameter Discovery** | Resolve Process & Ticket Keys | Inspect deployed process keys and query Data Fabric records |
+| **1. Parameter Discovery (Optional)** | Inspect Process & Ticket Keys | Optional peek under the hood at process keys and Data Fabric records |
 | **2. Prompt Execution** | Send Run Batch A Prompt | Instruct Claude Code to launch all 8 jobs and monitor task creation |
 | **3. Settlement Polling** | Understand Settlement Signal | Why the agent polls Action Center tasks rather than Orchestrator job state |
 | **4. Checkpoint & Triage** | Verify & Review Action Center Tasks | Confirm 8 tasks under "My tasks" and follow triage guidelines for each decision |
@@ -32,9 +32,12 @@ flowchart TD
 
 ---
 
-## 2. Parameter Discovery: Flow Process & Data Fabric Records
+## 2. Parameter Discovery: Flow Process & Data Fabric Records (Optional / Informational)
 
 Before executing the batch, understand the two data sources your agent coordinates:
+
+> [!TIP]
+> **This Section is Optional:** You do not need to execute these inspection commands yourself. When you send the prompt in Section 3, Claude Code discovers the process keys and queries the Data Fabric tickets automatically. This section is provided so you understand what data sources your agent coordinates behind the scenes.
 
 > [!IMPORTANT]
 > **Key Naming Convention: Data Fabric Entities vs Maestro Flows**
