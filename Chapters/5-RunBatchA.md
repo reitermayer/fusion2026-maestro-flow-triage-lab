@@ -78,7 +78,9 @@ You can view these keys via the UiPath CLI:
 
 ### 2.2 Query Tickets from Data Fabric (`TicketsV1`)
 
-In Chapter 2, you verified that the shared entity **`TicketsV1`** contains 8 records.
+In [Chapter 2 (Section 3)](2-Preflight.md#3-first-prompt-verify-shared-workshop-resources), Claude Code verified during the preflight check that the shared entity **`TicketsV1`** exists and holds 8 records.
+
+Before executing the batch, you can inspect the actual ticket records yourself from the terminal to see what fields your flow will process.
 
 The UiPath CLI command `uip df records list <id>` strictly requires the entity's unique **UUID (`Id`)**, rather than its human-readable display name string (`TicketsV1`). You can inspect the records using either dynamic discovery or direct ID:
 
