@@ -128,14 +128,27 @@ Ensure your terminal is inside your interactive **Claude Code** session.
 
 ### Option 1: Tuan's Original Slide Baseline
 ```text
-Run every ticket in the shared TicketsV1 entity through my deployed flow, one job each. Flows start with uip maestro flow process run <processKey> <folderKey> --release-key <releaseKey>, not with jobs start. The batch is settled when every instance is either Completed or has an open Action Center task - check that, don't wait on job state.
+Run every ticket in the shared TicketsV1 entity through my deployed flow, one job each.
+
+Flows start with uip maestro flow process run <processKey> <folderKey> --release-key <releaseKey>, not with jobs start.
+
+The batch is settled when every instance is either Completed or has an open Action Center task - check that, don't wait on job state.
 ```
 
 ### Option 2: Optimized Prompt (Recommended)
 This version instructs Claude Code to dynamically discover your deployed process keys and inspect Data Fabric automatically:
 
 ```text
-Discover my deployed flow process TriageTicketV1 using uip or processes list to get its processKey, folderKey, and releaseKey (Key). Query all 8 ticket records from the shared Data Fabric entity TicketsV1 (extracting ticketId, subject, body, customerName). Run every ticket through the flow using uip maestro flow process run <processKey> <folderKey> --release-key <releaseKey> --inputs '{"ticketId":"...","subject":"...","body":"...","customerName":"..."}'. The batch is settled when every instance is either Completed or has an open Action Center task (poll uip tasks list until 8 tasks are open or instances reach the review node; do not poll job state). Report the job keys, execution progress, and task confirmation.
+Discover my deployed flow process TriageTicketV1 using uip or processes list to get its processKey, folderKey, and releaseKey (Key).
+
+Query all 8 ticket records from the shared Data Fabric entity TicketsV1 (extracting ticketId, subject, body, customerName).
+
+Run every ticket through the flow using:
+uip maestro flow process run <processKey> <folderKey> --release-key <releaseKey> --inputs '{"ticketId":"...","subject":"...","body":"...","customerName":"..."}'
+
+The batch is settled when every instance is either Completed or has an open Action Center task (poll uip tasks list until 8 tasks are open or instances reach the review node; do not poll job state).
+
+Report the job keys, execution progress, and task confirmation.
 ```
 
 > [!TIP]

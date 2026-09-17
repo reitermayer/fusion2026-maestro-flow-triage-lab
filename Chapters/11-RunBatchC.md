@@ -78,7 +78,9 @@ Ensure your terminal is inside your interactive **Claude Code** session in your 
 
 ### Option 1: Baseline Prompt
 ```text
-Before running anything, check the V3 release's index ResourceOverwrites and patch folderPath to "Shared" if it points at my team folder. Then run every ticket in the shared TicketsV3 entity through V3, one job each, and report when every instance is Completed or has an open task.
+Before running anything, check the V3 release's index ResourceOverwrites and patch folderPath to "Shared" if it points at my team folder.
+
+Then run every ticket in the shared TicketsV3 entity through V3, one job each, and report when every instance is Completed or has an open task.
 ```
 
 ---

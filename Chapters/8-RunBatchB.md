@@ -99,7 +99,9 @@ Ensure your terminal is inside your interactive **Claude Code** session in your 
 This is the concise prompt from Tuan's slide:
 
 ```text
-Before running anything, check the V2 release's index ResourceOverwrites and patch folderPath to "Shared" if it points at my team folder. Then run every ticket in the shared TicketsV2 entity through V2, one job each, and report when every instance is Completed or has an open task.
+Before running anything, check the V2 release's index ResourceOverwrites and patch folderPath to "Shared" if it points at my team folder.
+
+Then run every ticket in the shared TicketsV2 entity through V2, one job each, and report when every instance is Completed or has an open task.
 ```
 
 ---
