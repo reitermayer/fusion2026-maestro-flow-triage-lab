@@ -36,6 +36,14 @@ flowchart TD
 
 Before executing the batch, understand the two data sources your agent coordinates:
 
+> [!IMPORTANT]
+> **Key Naming Convention: Data Fabric Entities vs Maestro Flows**
+> It is easy to confuse the flow names with the dataset names because both use V1, V2, and V3:
+> - **`TicketsV1` / `TicketsV2` / `TicketsV3`**: These are the shared **Data Fabric Entities** (tables in Data Fabric holding 8 customer support tickets each).
+> - **`TriageTicketV1` / `TriageTicketV2` / `TriageTicketV3`**: These are the **Maestro Flow Processes** (the automation workflows you build and deploy in Orchestrator).
+>
+> The flow does *not* query Data Fabric internally. Instead, Claude Code reads the 8 records from the shared Data Fabric entity (**`TicketsV1`**) and passes each record as input arguments into your deployed flow (**`TriageTicketV1`**).
+
 ### 2.1 Discover Deployed Process Keys
 
 To start a Maestro Flow, three keys are required:

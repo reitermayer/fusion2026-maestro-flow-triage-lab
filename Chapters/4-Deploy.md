@@ -81,11 +81,11 @@ To complete the full deployment including folder setup, resource provisioning, a
 > **The Workshop Versioning Convention (`1.0.1` == V1):**  
 > Throughout this lab, we standardize the solution release versions to cleanly align each patch number with the flow generation. This avoids package feed collisions if `1.0.0` was already created during scaffolding or testing, and makes releases simple to track across all three batches:
 >
-> | Generation | Flow Process | Deployed Release Version | Alignment |
-> | :--- | :--- | :--- | :--- |
-> | **V1: Baseline** | `TriageTicketV1` | **`1.0.1`** | Ends in **.1** (Batch A) |
-> | **V2: Decision Mining** | `TriageTicketV2` | **`1.0.2`** | Ends in **.2** (Batch B) |
-> | **V3: Earned Autonomy** | `TriageTicketV3` | **`1.0.3`** | Ends in **.3** (Batch C) |
+> | Generation | Flow Process (Maestro) | Data Fabric Entity (Dataset) | Deployed Release Version | Alignment |
+> | :--- | :--- | :--- | :--- | :--- |
+> | **V1: Baseline** | `TriageTicketV1` | **`TicketsV1`** (Batch A) | **`1.0.1`** | Ends in **.1** |
+> | **V2: Decision Mining** | `TriageTicketV2` | **`TicketsV2`** (Batch B) | **`1.0.2`** | Ends in **.2** |
+> | **V3: Earned Autonomy** | `TriageTicketV3` | **`TicketsV3`** (Batch C) | **`1.0.3`** | Ends in **.3** |
 >
 > In the Deploy wizard, verify or set the **Version** field to **`1.0.1`** for this initial V1 deployment.
 
