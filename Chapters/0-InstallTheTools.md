@@ -188,7 +188,7 @@ npm install -g @uipath/cli
 
 ---
 
-### 2.2 UiPath Agent Skills
+### 2.2 UiPath Agent Skills (Claude Code Plugin)
 
 Skills are instruction packages that teach AI coding agents how to build UiPath automations using `uip`. While **tools** (`uip tools`) extend the CLI with new commands, **skills** (`uip skills`) extend your AI coding agent with UiPath domain knowledge and decision rules.
 
@@ -197,18 +197,47 @@ Skills are instruction packages that teach AI coding agents how to build UiPath 
 - [Skills Concepts & Installation](https://docs.uipath.com/uipath-cli/standalone/latest/user-guide/concepts-skills)
 
 #### Test if Skills are Installed
-List the installed skills to confirm registration with your agent:
+Verify that the UiPath skills plugin is installed and active with your agent:
 
 ```powershell
+# For Claude Code (3rd command in README.md checklist):
+claude plugin list
+
+# Or via the UiPath CLI:
 uip skills list
 ```
 
-If your agent skills are already installed and listed (e.g. `uipath-platform`, `uipath-rpa`, etc.), proceed to project setup. If no skills are listed or you need to configure your agent, install them below.
+*Expected output for Claude Code (`claude plugin list`):*
+```text
+Installed plugins:
+
+❯ uipath@uipath-marketplace
+  Status: ✔ enabled
+```
+
+If the plugin is enabled and skills are listed, proceed to project setup. If not listed or you need to configure your agent, install them below.
 
 #### Install Skills for your AI Coding Agent
 
+##### Claude Code Setup (Two Equivalent Methods)
+You can install and enable the skills plugin for Claude Code using either of the following commands—both accomplish the exact same registration:
+
+**Method 1: Native Claude Plugin Manager**
+```powershell
+claude plugin marketplace add https://github.com/UiPath/skills.git
+claude plugin install uipath@uipath-marketplace
+```
+
+**Method 2: Via UiPath CLI**
+```powershell
+uip skills install --agent claude
+```
+
+> [!NOTE]
+> `uip skills install --agent claude` and the native `claude plugin install` commands achieve the same result: both enable the `uipath@uipath-marketplace` plugin verified by `claude plugin list` (the 3rd command in the [README.md verification checklist](../README.md#quick-verification-checklist)).
+
 ##### Supported Agents
-The CLI supports the following coding agents:
+The UiPath CLI also supports installing skills across multiple coding agents:
 
 | Agent | Flag Value | Install Scope |
 | :--- | :--- | :--- |
@@ -220,14 +249,6 @@ The CLI supports the following coding agents:
 | **Gemini CLI** | `gemini` | Global or Local (`--local`) |
 | **OpenCode** | `opencode` | Global or Local (`--local`) |
 | **UiPath Autopilot** | `autopilot` | Global or Local (`--local`) |
-
-##### Installation Command
-To install skills for your specific agent, pass the `--agent` flag:
-
-```powershell
-# Install skills for Claude Code:
-uip skills install --agent claude
-```
 
 > [!TIP]
 > - **Auto-detection:** If you omit `--agent`, `uip skills install` interactively prompts you to choose among all detected coding agents on your machine.
