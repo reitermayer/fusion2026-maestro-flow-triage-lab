@@ -70,11 +70,36 @@ You can view these keys via the UiPath CLI:
 
 ### 2.2 Query Tickets from Data Fabric (`TicketsV1`)
 
-In Chapter 2, you verified that the shared entity **`TicketsV1`** contains 8 records:
+In Chapter 2, you verified that the shared entity **`TicketsV1`** contains 8 records.
+
+The UiPath CLI command `uip df records list <id>` strictly requires the entity's unique **UUID (`Id`)**, rather than its human-readable display name string (`TicketsV1`). You can inspect the records using either dynamic discovery or direct ID:
+
+#### Method A: Dynamic Query by Entity Name (Recommended)
+Use built-in JMESPath filtering (`--output-filter`) to resolve the entity ID dynamically and query its records in a single command without hardcoding any GUID:
+
+- **Bash / Zsh (macOS / Linux):**
+  ```bash
+  ! uip df records list $(uip df entities list --include-folders --output-filter "[?Name=='TicketsV1'].Id | [0]" --output plain)
+  ```
+
+- **PowerShell (Windows):**
+  ```powershell
+  ! uip df records list (uip df entities list --include-folders --output-filter "[?Name=='TicketsV1'].Id | [0]" --output plain)
+  ```
+
+> [!TIP]
+> Append `--output table` to the end of either command to render the records in an easy-to-read tabular format.
+
+#### Method B: Direct Query via Resolved Entity ID
+On the workshop tenant (`uipathlabsworkshop/MVPSummit26`), `TicketsV1` was assigned entity ID `8d3f6ef9-37a4-f111-9b32-000d3a69a13b`:
 
 ```text
 ! uip df records list 8d3f6ef9-37a4-f111-9b32-000d3a69a13b
 ```
+
+> [!NOTE]
+> **How Claude Code Queries Dynamically:**
+> When you run the batch prompt in Section 3, you do not need to provide the entity GUID. Claude Code automatically calls `uip df entities list`, matches `Name == 'TicketsV1'`, extracts its `Id`, and fetches all 8 records dynamically.
 
 Each record contains the 4 fields expected by `TriageTicketV1`:
 - **`TicketId`**: Unique ticket identifier (`HF-1001` through `HF-1008`).

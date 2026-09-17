@@ -70,7 +70,13 @@ Look at the `ResourceOverwrites` array in the JSON response:
 
 ## 2. Batch B Data Analysis (`TicketsV2`)
 
-Batch B consists of 8 customer tickets stored in the `TicketsV2` Data Fabric entity (`Id: 9b3f6ef9-37a4-f111-9b32-000d3a69a13b`). These tickets were specifically designed to test the three routing paths introduced in `TriageTicketV2`:
+Batch B consists of 8 customer tickets stored in the `TicketsV2` Data Fabric entity (`Id: 9b3f6ef9-37a4-f111-9b32-000d3a69a13b`). You can query the records dynamically by name using:
+
+```bash
+! uip df records list $(uip df entities list --include-folders --output-filter "[?Name=='TicketsV2'].Id | [0]" --output plain)
+```
+
+These tickets were specifically designed to test the three routing paths introduced in `TriageTicketV2`:
 
 | Ticket ID | Customer Name | Subject | Ticket Nature | Expected V2 Routing Path | Expected Human Touch |
 | :--- | :--- | :--- | :--- | :--- | :--- |

@@ -51,7 +51,13 @@ Verify that the `ResourceOverwrites` block points `SupportKB` to `Shared`:
 
 ## 2. Batch C Data Analysis & Live Autonomy Routing
 
-Batch C contains 8 support tickets stored in Data Fabric entity **`TicketsV3`** (`Id: a93f6ef9-37a4-f111-9b32-000d3a69a13b`). Here is the empirical routing breakdown from our live run:
+Batch C contains 8 support tickets stored in Data Fabric entity **`TicketsV3`** (`Id: a93f6ef9-37a4-f111-9b32-000d3a69a13b`). You can query the records dynamically by name using:
+
+```bash
+! uip df records list $(uip df entities list --include-folders --output-filter "[?Name=='TicketsV3'].Id | [0]" --output plain)
+```
+
+Here is the empirical routing breakdown from our live run:
 
 | Ticket ID | Customer Name | Subject | Grounding Source | Live V3 Routing | Action Center Task & Gate Reason |
 | :--- | :--- | :--- | :--- | :--- | :--- |
