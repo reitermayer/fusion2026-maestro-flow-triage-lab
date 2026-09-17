@@ -535,7 +535,7 @@ From Tuan's slide **`5 · Run batch A`** (Allocated time: `0:22`, `~1 min to sta
 #### 4. Checkpoint Verification Criteria (100% Match)
 - **Status:** **Identical**
 - **Baseline Requirement:** 8 review tasks appear in Action Center under "My tasks" (assigned to the user's email). Dry run benchmark: 21-52 seconds per job to task, whole batch settled in ~67 seconds.
-- **Live Test Benchmark:** In our live execution, all 8 jobs started and all 8 review tasks were generated and assigned to `johannes.reitermayer@gmail.com` in approximately 45 seconds.
+- **Live Test Benchmark:** In our live execution, all 8 jobs started and all 8 review tasks were generated and assigned to `user@example.com` in approximately 45 seconds.
 
 ---
 

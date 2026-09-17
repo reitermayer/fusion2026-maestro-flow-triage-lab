@@ -165,14 +165,14 @@ You can verify that all 8 tasks exist and are assigned to you by querying Action
 *Expected Output Sample:*
 ```text
 Total tasks created: 8
-Task 101462893: Title="Review Draft Reply", Status=Pending, AssignedTo=johannes.reitermayer@gmail.com
-Task 101462902: Title="Review Draft Reply", Status=Pending, AssignedTo=johannes.reitermayer@gmail.com
-Task 101462904: Title="Review Draft Reply", Status=Pending, AssignedTo=johannes.reitermayer@gmail.com
-Task 101462905: Title="Review Draft Reply", Status=Pending, AssignedTo=johannes.reitermayer@gmail.com
-Task 101462906: Title="Review Draft Reply", Status=Pending, AssignedTo=johannes.reitermayer@gmail.com
-Task 101462907: Title="Review Draft Reply", Status=Pending, AssignedTo=johannes.reitermayer@gmail.com
-Task 101462908: Title="Review Draft Reply", Status=Pending, AssignedTo=johannes.reitermayer@gmail.com
-Task 101462909: Title="Review Draft Reply", Status=Pending, AssignedTo=johannes.reitermayer@gmail.com
+Task 101462893: Title="Review Draft Reply", Status=Pending, AssignedTo=user@example.com
+Task 101462902: Title="Review Draft Reply", Status=Pending, AssignedTo=user@example.com
+Task 101462904: Title="Review Draft Reply", Status=Pending, AssignedTo=user@example.com
+Task 101462905: Title="Review Draft Reply", Status=Pending, AssignedTo=user@example.com
+Task 101462906: Title="Review Draft Reply", Status=Pending, AssignedTo=user@example.com
+Task 101462907: Title="Review Draft Reply", Status=Pending, AssignedTo=user@example.com
+Task 101462908: Title="Review Draft Reply", Status=Pending, AssignedTo=user@example.com
+Task 101462909: Title="Review Draft Reply", Status=Pending, AssignedTo=user@example.com
 ```
 
 ---
@@ -190,7 +190,7 @@ Follow these steps to navigate to Action Center and verify your pending tasks:
 3. **Confirm 8 Pending Tasks:**
    Check the summary KPI tiles (Marker 3):
    - **Pending Tasks: 8** confirms that all 8 flow jobs successfully generated review tasks.
-   - **Unassigned Tasks: 0** confirms that every task was assigned directly to your account (`johannes.reitermayer@gmail.com`), rather than falling into an unassigned pool.
+   - **Unassigned Tasks: 0** confirms that every task was assigned directly to your account (`user@example.com`), rather than falling into an unassigned pool.
    - The **Tasks by Type** donut chart confirms all 8 items are interactive `QuickForm` tasks.
 
 ![Action Center Overview - 8 Pending Tasks](Images/ActionCenter-Overview-PendingTasks.png)

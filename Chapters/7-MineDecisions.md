@@ -239,7 +239,7 @@ uip or processes list --folder-key <yourFolderKey>
       "Description": "",
       "IsLatestVersion": true,
       "FolderKey": "ecd0827e-fc8c-49b7-953d-3f05c1661066",
-      "FolderPath": "johannes.reitermayer@gmail.com's workspace/TicketTriage_TEAMjohannes-reitermayer 6"
+      "FolderPath": "user@example.com's workspace/TicketTriage_TEAMjohannes-reitermayer 6"
     },
     {
       "Key": "6642A090-706A-4A43-9AB4-DBD901F09DC8",
@@ -249,7 +249,7 @@ uip or processes list --folder-key <yourFolderKey>
       "Description": "",
       "IsLatestVersion": true,
       "FolderKey": "ecd0827e-fc8c-49b7-953d-3f05c1661066",
-      "FolderPath": "johannes.reitermayer@gmail.com's workspace/TicketTriage_TEAMjohannes-reitermayer 6"
+      "FolderPath": "user@example.com's workspace/TicketTriage_TEAMjohannes-reitermayer 6"
     }
   ]
 }

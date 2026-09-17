@@ -414,7 +414,7 @@
           "connections": {},
           "assignee": {
             "type": "user",
-            "value": "johannes.reitermayer@gmail.com"
+            "value": "user@example.com"
           }
         },
         "priority": "High",
@@ -601,7 +601,7 @@
           "connections": {},
           "assignee": {
             "type": "user",
-            "value": "johannes.reitermayer@gmail.com"
+            "value": "user@example.com"
           }
         },
         "priority": "Medium",
@@ -788,7 +788,7 @@
           "connections": {},
           "assignee": {
             "type": "user",
-            "value": "johannes.reitermayer@gmail.com"
+            "value": "user@example.com"
           }
         },
         "priority": "Medium",

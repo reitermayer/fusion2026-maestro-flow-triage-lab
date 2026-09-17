@@ -65,9 +65,9 @@ Queries your active login token and Identity Server profile. It provides distinc
   "Data": {
     "IdentityType": "User",
     "UserId": "d6aae5e3-3c55-4bfb-b5f8-6b17248bca11",
-    "Name": "johannes.reitermayer@gmail.com",
-    "Username": "johannes.reitermayer@gmail.com",
-    "Email": "johannes.reitermayer@gmail.com",
+    "Name": "user@example.com",
+    "Username": "user@example.com",
+    "Email": "user@example.com",
     "FirstName": "Johannes",
     "LastName": "Reitermayer"
   }
@@ -88,9 +88,9 @@ Queries the **Orchestrator** service on your tenant. It returns your user record
   "Code": "User",
   "Data": {
     "Key": "d6aae5e3-3c55-4bfb-b5f8-6b17248bca11",
-    "UserName": "johannes.reitermayer@gmail.com",
+    "UserName": "user@example.com",
     "FullName": "Johannes Reitermayer",
-    "Email": "johannes.reitermayer@gmail.com",
+    "Email": "user@example.com",
     "Type": "DirectoryUser",
     "IsActive": true
   }
@@ -231,7 +231,7 @@ I have built, validated, and uploaded your Maestro Flow solution:
    - Trigger: Input variables ticketId, subject, body, customerName configured
    - Agent: Ticket classifier and reply drafter grounded in Shared/SupportKB
    - Review Task: Action Center QuickForm task created with outcomes [Approve, Modify & Send, Reject]
-   - Assignee: User (johannes.reitermayer@uipath.com)
+   - Assignee: User (user@example.com)
    - End: Flow termination node connected
 
 3. Verification & Lifecycle:

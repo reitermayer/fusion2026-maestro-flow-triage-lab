@@ -5,7 +5,7 @@ BUILD = r"C:\Users\jre\triage-lab-TEAMjohannes-reitermayer\scratch\build"
 AGENT_ID = "38b67540-ed7d-4b12-993c-a8e55aeab6e2"
 CTX_TYPE = "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605"
 CTX_RES = str(uuid.uuid4())
-ASSIGNEE = "johannes.reitermayer@gmail.com"
+ASSIGNEE = "user@example.com"
 
 flow_path = os.path.join(ROOT, "TriageTicketV1.flow")
 flow = json.load(open(flow_path, encoding="utf-8"))

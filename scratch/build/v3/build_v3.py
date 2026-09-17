@@ -33,7 +33,7 @@ FLOW_PATH = os.path.join(ROOT, "TriageTicketV3.flow")
 
 CTX_TYPE = "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605"
 MODEL = "gpt-5.5-2026-04-23"          # same GA model as V1/V2 so batches stay comparable
-ASSIGNEE = "johannes.reitermayer@gmail.com"
+ASSIGNEE = "user@example.com"
 
 # Inline agent project ids from `uip agent init --inline-in-flow` (2026-09-13).
 DRAFTER_ID = "bf42e911-6500-4286-918b-2644bbfd096c"

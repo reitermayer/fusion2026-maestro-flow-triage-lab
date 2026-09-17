@@ -160,7 +160,7 @@ In Claude Code or your PowerShell terminal, execute:
       "Comment": "Every draft should come with a recommended approach for the reviewer. When a customer threatens escalation, the agent should propose an explicit action (e.g. approve expedited loaner) instead of a passive draft.",
       "IsPositive": false,
       "FolderKey": "f15d2bb8-1c03-4408-a5d2-2a9c2b244ed9",
-      "UserEmail": "johannes.reitermayer@gmail.com"
+      "UserEmail": "user@example.com"
     },
     {
       "Id": "33753ae0-b644-4b3c-b073-7e7cb7b0893e",
@@ -168,7 +168,7 @@ In Claude Code or your PowerShell terminal, execute:
       "Comment": "The auto-reply is noise that never needed review. Automated vendor out-of-office notifications should be filtered out upfront and never create Action Center review tasks.",
       "IsPositive": false,
       "FolderKey": "f15d2bb8-1c03-4408-a5d2-2a9c2b244ed9",
-      "UserEmail": "johannes.reitermayer@gmail.com"
+      "UserEmail": "user@example.com"
     },
     {
       "Id": "75c053c0-65b8-43b7-af43-c98ab1b2b1e4",
@@ -176,7 +176,7 @@ In Claude Code or your PowerShell terminal, execute:
       "Comment": "The outage ticket should have been treated as urgent. A warehouse scanning stoppage with trucks waiting at the dock requires urgent handling and immediate escalation, not standard triage.",
       "IsPositive": false,
       "FolderKey": "f15d2bb8-1c03-4408-a5d2-2a9c2b244ed9",
-      "UserEmail": "johannes.reitermayer@gmail.com"
+      "UserEmail": "user@example.com"
     }
   ]
 }

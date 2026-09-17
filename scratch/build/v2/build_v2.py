@@ -20,7 +20,7 @@ FLOW_PATH = os.path.join(ROOT, "TriageTicketV2.flow")
 
 CTX_TYPE = "uipath.agent.resource.context.index.supportkb.e47fcbe5-bd8b-47fa-29dc-08df04e92605"
 MODEL = "gpt-5.5-2026-04-23"          # same GA model as V1 so Batch B is comparable
-ASSIGNEE = "johannes.reitermayer@gmail.com"
+ASSIGNEE = "user@example.com"
 
 UUID_RE = re.compile(r"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$")
 agent_dirs = [d for d in os.listdir(ROOT) if UUID_RE.match(d) and os.path.isdir(os.path.join(ROOT, d))]

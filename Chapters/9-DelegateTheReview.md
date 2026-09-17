@@ -71,7 +71,7 @@ Do I need to assign the tasks before completing them?
 - **Why it works seamlessly here:** In Chapter 7, when `TriageTicketV2.flow` was authored, both the `urgentReview` and `standardReview` task nodes configured the assignee dynamically:
   ```json
   "assignee": {
-    "value": "johannes.reitermayer@gmail.com"
+    "value": "user@example.com"
   }
   ```
 - Because every task was assigned directly to your email upon creation, the tasks are **already yours**. Claude Code executes commands using your active login profile, meaning it can call `uip tasks complete` immediately without an intermediate `uip tasks assign` call.

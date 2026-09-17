@@ -148,7 +148,7 @@ You can also verify your deployment directly from your terminal or Claude Code s
   "Data": [
     {
       "Name": "TicketTriage_TEAMjohannes-reitermayer 7",
-      "Path": "johannes.reitermayer@gmail.com's workspace/TicketTriage_TEAMjohannes-reitermayer 7",
+      "Path": "user@example.com's workspace/TicketTriage_TEAMjohannes-reitermayer 7",
       "Type": "Solution",
       "ParentKey": "3a9abdba-5525-4636-8d61-cc4e5efde96e"
     }
