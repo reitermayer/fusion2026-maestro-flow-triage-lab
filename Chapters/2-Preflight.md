@@ -33,6 +33,35 @@ New-Item -ItemType Directory -Force .claude | Out-Null; @{ permissions = @{ allo
 > - `Skill(uipath:*)`: Authorizes all UiPath agent skills.
 > - `Read(~/.uipath/**)` and `Read(//**/.uipath/**)`: Authorizes reading local skill documentation and reference guides in `~/.uipath/.skills/` without triggering non-workspace file access prompts.
 
+#### Verify Pre-Authorization Settings
+
+##### Method 1: Inspect the Settings File (Terminal)
+Verify that `.claude/settings.local.json` was generated properly:
+
+```powershell
+Get-Content .claude/settings.local.json
+```
+
+*Expected output:*
+```json
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(uip *)",
+      "Bash(uip *)",
+      "Skill(uipath:*)",
+      "Read(~/.uipath/**)",
+      "Read(//**/.uipath/**)"
+    ]
+  }
+}
+```
+
+##### Method 2: Check Active Permissions Inside Claude Code
+Once Claude Code is launched (Section 1.2):
+- Type `/permissions` to view all active allow rules and confirm `uip *` and `Skill(uipath:*)` are enabled.
+- Type `/config` to confirm that `local: .claude/settings.local.json` is loaded as an active settings source.
+
 ### 1.2 Launch Claude Code
 
 Ensure your terminal is operating inside your team workspace directory (`triage-lab-TEAM<firstname>-<lastname>`), then start your AI coding agent:
