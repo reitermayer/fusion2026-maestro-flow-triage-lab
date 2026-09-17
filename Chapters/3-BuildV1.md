@@ -12,7 +12,7 @@ The flow receives an incoming customer support ticket, invokes an autonomous age
 | :--- | :--- | :--- |
 | **1. Session Check** | Verify Workspace & Agent | Confirm Claude Code is active in your team directory |
 | **2. Prompt Execution** | Discover Identity & Send Prompt | Run `! uip user` and send Build V1 prompt |
-| **3. Parallel Reading** | Read Ahead for Step 5 | Review deployment preparation while the agent runs (4-6 min) |
+| **3. Parallel Reading** | Read Ahead for Chapter 4 | Review deployment preparation while the agent runs (4-6 min) |
 | **4. Checkpoint** | Validate & Inspect | Verify designer URL, index link, assignee, and canvas nodes |
 
 ---
@@ -121,7 +121,18 @@ You can prompt Claude Code using either of two verified prompt patterns:
 
 
 #### Option A: Standard Unified Port (Recommended for Beginners)
-This pattern wires the task's engine-standard `completed` port to the End node with `action: "Continue"`. Studio Web visually converges all three outcomes into the single sequence flow entering `Decision Recorded`:
+This is the simplest, standard prompt pattern. It wires the task's engine-standard `completed` exit port to the End node with `action: "Continue"`.
+
+```text
+[ Review Task ] ──(completed wire)─────────► [ End Node ]
+  ├─ Approve        (active wire)
+  ├─ Modify & Send  ⚠️ (cosmetic warning on canvas)
+  └─ Reject         ⚠️ (cosmetic warning on canvas)
+```
+
+> [!NOTE]
+> **Why Studio Web Shows a Warning in Option A:**  
+> The flow executes 100% correctly at runtime. However, Studio Web's visual designer expects every outcome button to have its own downstream connection. Because only a single wire is drawn, Studio Web displays a cosmetic yellow warning triangle (⚠️ *"Outcome without downstream nodes"*) on `Modify & Send` and `Reject`. If you don't mind this cosmetic canvas badge, Option A is the easiest prompt.
 
 ```text
 Build a Maestro Flow solution TicketTriage_TEAM<firstname>-<lastname> (derive my firstname and lastname from uip user to match my workspace folder, and look up my email with uip or users current; don't ask me for them) with a flow TriageTicketV1. It takes a support ticket (ticketId, subject, body, customerName) as inputs. An agent classifies it and drafts a reply grounded in the existing SupportKB index in the Shared folder, declaring typed output variables for category, priority, draftReply, rationale, and confidence. An Action Center task assigned to me lets me Approve, Modify & Send, or Reject, with draftReply configured as an editable inOut field, connecting the task's completed port to the End node so all outcomes flow to End and the decision is always recorded in the flow outputs. The End node returns decision (from task status), finalReply, category, and priority. Validate it, refresh the solution resources so the index links up, and upload it to Studio Web.
@@ -129,18 +140,72 @@ Build a Maestro Flow solution TicketTriage_TEAM<firstname>-<lastname> (derive my
 
 #### Option B: Multi-Outcome Handle Patch (Advanced Canvas Styling)
 
-> [!NOTE]
-> **Why This Version Works (For Workshop Attendees):**
-> On the Studio Web canvas, attendees often wonder why `Modify & Send` and `Reject` show yellow warning triangles (*"Outcome without downstream nodes"*) when only a single wire is drawn from `Approve`.
-> 
-> In Maestro Flow's engine schema, the Quick Form node only declares a single right-hand exit handle: `completed`. If an edge tries to bind to an undeclared handle such as `outcome-approve`, the CLI validator (`uip maestro flow validate`) rejects the flow with:
-> ```text
-> Edge references undeclared source handle "outcome-approve"
-> ```
-> 
-> **How the patch solves this:**
-> Maestro Flow permits local handle declarations within the `.flow` JSON file's `definitions` block. This version instructs the agent to register `outcome-approve`, `outcome-modifyandsend`, and `outcome-reject` next to `completed` inside `definitions`. Because the handles are formally declared, `flow validate` passes with zero errors, and Studio Web draws three distinct parallel wires from each button directly into `Decision Recorded` (`end1`), eliminating all canvas warning badges.
+If you want a **100% clean visual canvas** in Studio Web with zero warning badges, Option B instructs the agent to draw 3 distinct parallel wires from each button directly into the End node.
 
+```text
+[ Review Task ] ──(outcome-approve)────────► [ End Node ]
+                ──(outcome-modifyandsend)──► [ End Node ]
+                ──(outcome-reject)─────────► [ End Node ]
+```
+
+##### Deep Dive: How the Handle Patch Works
+
+In Maestro Flow's official engine schema, the Quick Form node only declares a single right-hand exit handle: `completed`. If an edge naively tries to bind to an undeclared handle such as `outcome-approve`, the CLI validator (`uip maestro flow validate`) rejects the flow with:
+```text
+Edge references undeclared source handle "outcome-approve"
+```
+
+To eliminate both the CLI error and the Studio Web warning, Option B instructs Claude Code to apply a two-part patch inside the `.flow` JSON file:
+
+###### Part 1: The Handle Definition Patch
+Under the `.flow` file's `definitions` block for the Quick Form node, Claude registers custom output handles next to `completed`:
+
+**Before (Default Template):**
+```json
+"handles": [
+  { "id": "completed", "type": "source", "handleType": "output" }
+]
+```
+
+**After (The Patch):**
+```json
+"handles": [
+  { "id": "completed", "type": "source", "handleType": "output" },
+  { "id": "outcome-approve", "type": "source", "handleType": "output", "label": "Approve" },
+  { "id": "outcome-modifyandsend", "type": "source", "handleType": "output", "label": "Modify & Send" },
+  { "id": "outcome-reject", "type": "source", "handleType": "output", "label": "Reject" }
+]
+```
+
+###### Part 2: The Wire (Edges) Patch
+Because the handles are now officially declared in `definitions`, Claude can safely draw three separate wires to `end1` in the flow's `edges` list:
+
+```json
+[
+  {
+    "sourceNodeId": "reviewDraftReply1",
+    "sourcePort": "outcome-approve",
+    "targetNodeId": "end1",
+    "targetPort": "input"
+  },
+  {
+    "sourceNodeId": "reviewDraftReply1",
+    "sourcePort": "outcome-modifyandsend",
+    "targetNodeId": "end1",
+    "targetPort": "input"
+  },
+  {
+    "sourceNodeId": "reviewDraftReply1",
+    "sourcePort": "outcome-reject",
+    "targetNodeId": "end1",
+    "targetPort": "input"
+  }
+]
+```
+
+**Result:** `flow validate` passes with zero errors, and Studio Web draws three distinct parallel wires from each button directly into `Decision Recorded` (`end1`), eliminating all canvas warning badges.
+
+##### The Option B Prompt
 ```text
 Build a Maestro Flow solution TicketTriage_TEAM<firstname>-<lastname> (derive my firstname and lastname from uip user to match my workspace folder, and look up my email with uip or users current; don't ask me for them) with a flow TriageTicketV1. It takes a support ticket (ticketId, subject, body, customerName) as inputs. An agent classifies it and drafts a reply grounded in the existing SupportKB index in the Shared folder, declaring typed output variables for category, priority, draftReply, rationale, and confidence. An Action Center task assigned to me lets me Approve, Modify & Send, or Reject, with draftReply configured as an editable inOut field, and all three outcomes set to action "Continue". Wire each outcome handle (outcome-approve, outcome-modifyandsend, outcome-reject) to the End node, and declare each handle next to "completed" in the flow's definitions entry for the Quick Form node so the flow validates and every outcome connects to End. The End node returns decision (from task status), finalReply, category, and priority. Format and validate the flow, refresh the solution resources so the index links up, and upload it to Studio Web.
 ```
@@ -165,13 +230,14 @@ While the agent runs (typically **4 to 6 minutes**), here is what Claude Code pe
 3. **Scaffolds Flow:** Runs `uip maestro flow init TriageTicketV1` inside the solution directory.
 
 ### 3.2 Node Composition & Wiring
-1. **Trigger Node:** Declares flow input variables (`ticketId`, `subject`, `body`, `customerName`).
-2. **Autonomous Agent Node:** Configures an inline agent node with system instructions to classify tickets and draft grounded customer responses, attaching the `SupportKB` knowledge index from the `Shared` folder.
-3. **Action Center Task Node:** Configures a human review task:
-   - Assignee configured as `type: "user"` using your retrieved email address.
-   - Three form action buttons / outcomes added: `Approve`, `Modify & Send`, and `Reject`.
-4. **End Node / Output Routing:**
-   Wires the task node's `completed` source port directly to the single End node. With all outcomes set to `action: "Continue"`, every decision flows to End, where expressions dynamically capture `$vars.reviewDraft1.status` (`decision`) and `$vars.reviewDraft1.output.draftreply` (`finalReply`).
+1. **Assembles the Pipeline:** Writes the JSON definitions for the 4 core nodes (Trigger, Autonomous Agent, Quick Form Review Task, and End) into `TriageTicketV1.flow`.
+2. **Injects Dynamic Identity & Grounding:** Sets the task assignee to your authenticated email and attaches the `SupportKB` index binding.
+3. **Wires Node Connections & Handles:**
+   - Connects Trigger ➡️ Agent ➡️ Action Center Review Task.
+   - For the review task's exit edges:
+     - **Option A:** Wires the standard `completed` port to `end1`.
+     - **Option B:** Patches the 3 outcome handles (`outcome-approve`, `outcome-modifyandsend`, `outcome-reject`) into node definitions and wires each individually into `end1`.
+4. **Maps Dynamic Outputs:** Binds expressions in the End node to capture `$vars.reviewDraft1.status` (`decision`), `$vars.reviewDraft1.output.draftreply` (`finalReply`), `category`, and `priority`.
 
 ### 3.3 Validation, Resource Linking & Upload
 1. **Flow Validation:** Runs `uip maestro flow validate` to ensure node wiring, schema types, and edge connections comply with the Maestro specification.
@@ -211,8 +277,8 @@ While Claude Code scaffolds the solution, builds the flow JSON, and syncs resour
 >   *(It must report "Imported 1", NOT "Created", confirming it linked to the existing shared index).*
 > - In the Action Center task node recipient, the assignee type is set to **`"user"`** with your email address (not the default `"group"`).
 > - **Studio Web Outcome Connections:** In the Studio Web designer, the Quick Form card displays all three outcomes: `Approve`, `Modify & Send`, and `Reject`:
->   - **With Option A (Unified Port):** When the edge is wired from `completed` to `end1`, Studio Web renders all three outcome labels branching out and converging cleanly into the single sequence flow line entering `Decision Recorded` (with zero warning badges).
->   - **With Option B (Handle Patch):** When all three handles are declared in `definitions` (`outcome-approve`, `outcome-modifyandsend`, `outcome-reject`) and wired individually, Studio Web draws three distinct parallel wires from each button directly to `Decision Recorded`.
+>   - **With Option A (Unified Port):** Draws a single sequence flow line entering `Decision Recorded`. The flow executes properly at runtime, but `Modify & Send` and `Reject` display cosmetic yellow warning badges on the visual canvas.
+>   - **With Option B (Handle Patch):** Draws three distinct parallel wires from each button directly to `Decision Recorded`, eliminating all canvas warning badges.
 >   - In both options, all outcomes specify `action: "Continue"`, guaranteeing that every human reviewer action completes the task and delivers the decision and reply to the End node.
 
 
@@ -224,7 +290,7 @@ When Claude Code finishes, it presents a completion summary similar to:
 I have built, validated, and uploaded your Maestro Flow solution:
 
 1. Solution & Flow Created:
-   - Solution: TicketTriage_TEAMjohannes-reitermayer
+   - Solution: TicketTriage_TEAM<firstname>-<lastname>
    - Flow: TriageTicketV1
 
 2. Flow Node Configuration:
@@ -247,11 +313,11 @@ https://staging.uipath.com/uipathlabsworkshop/MVPSummit26/studio_/?flowId=...
 
 1. Click the designer URL returned by the agent, or navigate via **Product Launcher** (9 dots icon) > **More** > **Studio Web**.
 2. Locate and open `TriageTicketV1`.
-3. Verify the visual sequence on the canvas:
-   - **Trigger Node** with inputs defined.
-   - **Agent Node** with a knowledge attachment referencing `SupportKB`.
-   - **Review Task Node** assigned to your user email, displaying `Approve`, `Modify & Send`, and `Reject` buttons.
-   - **End Node**.
+3. Verify the visual layout on the canvas:
+   - Confirm the 4 nodes appear in linear order: **Trigger** ➡️ **Agent** ➡️ **Review Task** ➡️ **End**.
+   - Check the **Agent Node** to confirm `SupportKB` is linked under knowledge attachments.
+   - Confirm the **Review Task Node** displays `Approve`, `Modify & Send`, and `Reject` buttons assigned to your user account.
+   - Inspect the wires entering the **End Node** (a single wire with cosmetic warnings in Option A, or three parallel wires with zero warnings in Option B).
 
 ---
 
